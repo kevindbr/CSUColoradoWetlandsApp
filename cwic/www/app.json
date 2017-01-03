@@ -1,0 +1,72 @@
+{
+   "name": "CWIC",
+   "indexHtmlPath": "index.html",
+   "url": null,
+   "js": [
+      {
+         "path": "touch/sencha-touch.js",
+         "x-bootstrap": true
+      },
+      {
+         "path": "bootstrap.js",
+         "x-bootstrap": true
+      },
+      {
+         "path": "app.js",
+         "bundle": true,
+         "update": "delta"
+      },
+      {
+         "path": "app/Util/Cwic.js"
+      },
+      {
+         "path": "app/Util/Data.js"
+      },
+      {
+         "path": "app/Util/Glossary.js"
+      },
+      {
+         "path": "app/Util/init.js"
+      }
+   ],
+   "css": [
+      {
+         "update": "delta",
+         "platform": [
+            "phone",
+            "tablet",
+            "desktop"
+         ],
+         "theme": "Default",
+         "path": "theme/sencha-touch-b6e7e8c8-aceb-41e8-9576-2f0aeb085d83.css",
+         "_architect_active_theme": true
+      },
+      {
+         "path": "resources/css/style.css"
+      },
+      {
+         "path": "resources/css/esri.css"
+      }
+   ],
+   "appCache": {
+      "cache": [
+         "index.html"
+      ],
+      "network": [
+         "*"
+      ],
+      "fallback": []
+   },
+   "resources": [
+      "resources/images",
+      "resources/icons",
+      "resources/startup"
+   ],
+   "ignore": [
+      ".svn$"
+   ],
+   "archivePath": "archive",
+   "requires": [],
+   "id": "8c4554ac-f794-4c4e-899d-920dcfd1357b",
+   "classpath": "${app.dir}/app,${app.dir}/app/Util/"
+}
