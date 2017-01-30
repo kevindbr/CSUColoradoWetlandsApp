@@ -1,0 +1,104 @@
+/*Classes for cover page */
+.home
+{
+    background: url(../images/cover.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: rgba(0,98,37,1);
+}
+.coverTitle
+{
+    background-color: white;
+    opacity: 0.80;
+    text-align: center;
+    font-weight: bold;
+    font-size: 125%;
+    padding-top: 10px;
+}
+/*Classes for text*/
+em { font-style: italic }
+strong { font-size: 125% }
+.subheading
+{
+    font-weight: bold;
+}
+.heading
+{
+    font-weight: bold;
+    font-size: 1.2em;    
+}
+.photoLabel
+{
+	text-align: center;
+    background-color: white;
+}
+.sm
+{
+    font-size: 0.8em;
+    padding-bottom: 10px;
+}
+.smTitle
+{
+    font-size: 1.0em;
+}
+li
+{
+    list-style: disc none inside !important;
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+li.acknow
+{
+    line-height: 85% !important;
+}
+p.scientificName
+{
+    font-size: 1.5em;
+    color: white;
+}
+
+/*Classes for images*/ 
+img.listImg
+{
+	height: 75px;
+}
+img.iconImg
+{
+	height: 50px;
+}
+
+/*Classes for tables*/
+td.listName
+{
+	padding-left: 5px;
+    font-size: 0.7em;
+}
+table.introTable, th.introTable, td.introTable 
+{
+    border: 1px solid black;
+    padding-left: 5px;
+    padding-right: 5px;
+    line-height: 85% !important;
+    font-size: 0.9em;    
+}
+
+/*Classes for divs*/
+div.header
+{
+	/*background-color: green; */
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+div.lv1
+{
+	background-color: green;
+    padding-left: 8px;
+}
+div.lv2
+{
+	/*background-color: green; */
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
