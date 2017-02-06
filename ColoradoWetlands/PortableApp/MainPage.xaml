@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+					   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+					   x:Class="PortableApp.MainPage"
+             Padding="0"
+             Title="Colorado Wetlands App">
+
+  <ContentPage.Content>  
+    <AbsoluteLayout>
+      <Image AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" Source="bg1.png" Aspect="AspectFill"/>
+      <BoxView BackgroundColor="Gray" AbsoluteLayout.LayoutBounds="0,0,1,50" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" />
+      <Label Text="Colorado Wetlands App" FontSize="20" HorizontalTextAlignment="Center" FontAttributes="Bold"
+                AbsoluteLayout.LayoutBounds=".5,.03,1,.1" AbsoluteLayout.LayoutFlags="All"
+                LineBreakMode="WordWrap" />
+      <Button Text="Introduction" AbsoluteLayout.LayoutBounds=".5,.3,.7,.07" AbsoluteLayout.LayoutFlags="All" BorderWidth="1" BorderRadius="5" />
+      <Button Text="Wetland Plants" AbsoluteLayout.LayoutBounds=".5,.4,.7,.07" AbsoluteLayout.LayoutFlags="All" BorderWidth="1" BorderRadius="5" />
+      <Button Text="Wetland Maps" AbsoluteLayout.LayoutBounds=".5,.5,.7,.07" AbsoluteLayout.LayoutFlags="All" BorderWidth="1" BorderRadius="5" />
+      <Button Text="Wetland Types" AbsoluteLayout.LayoutBounds=".5,.6,.7,.07" AbsoluteLayout.LayoutFlags="All" BorderWidth="1" BorderRadius="5" />
+      <Button Text="Acknowledgements" AbsoluteLayout.LayoutBounds=".5,.7,.7,.07" AbsoluteLayout.LayoutFlags="All" BorderWidth="1" BorderRadius="5" />
+      <BoxView BackgroundColor="Gray" AbsoluteLayout.LayoutBounds="0,1,1,70" AbsoluteLayout.LayoutFlags="XProportional,YProportional,WidthProportional" />
+      <Label Text="Sponsors" FontSize="20" HorizontalTextAlignment="Center" FontAttributes="Bold"
+                AbsoluteLayout.LayoutBounds=".5,1,1,.1" AbsoluteLayout.LayoutFlags="All"
+                LineBreakMode="WordWrap" />
+    </AbsoluteLayout>
+  </ContentPage.Content>
+
+</ContentPage>
