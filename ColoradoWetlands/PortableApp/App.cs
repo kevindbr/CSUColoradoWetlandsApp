@@ -9,28 +9,12 @@ namespace PortableApp
 {
     public class App : Application
     {
-        //public static PlantRepository PlantRepo { get; private set; }
+        public static PlantRepository PlantRepo { get; private set; }
 
         public App(string dbPath)
         {
-            // The root page of your application
-            //var content = new ContentPage
-            //{
-            //    Title = "Colorado Wetlands",
-            //    Content = new StackLayout
-            //    {
-            //        VerticalOptions = LayoutOptions.Center,
-            //        Children = {
-            //            new Label {
-            //                HorizontalTextAlignment = TextAlignment.Center,
-            //                Text = "Colorado Wetlands App"
-            //            }
-            //        }
-            //    }
-            //};
-            //PlantRepo = new PlantRepository(dbPath);
-
-            this.MainPage = new MainPage();
+            PlantRepo = new PlantRepository(dbPath);
+            this.MainPage = new NavigationPage (new MainPage(dbPath));
         }
 
         protected override void OnStart()

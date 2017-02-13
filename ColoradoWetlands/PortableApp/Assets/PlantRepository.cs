@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using PortableApp.Models;
 using SQLite;
+using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace PortableApp
 {
@@ -11,18 +13,21 @@ namespace PortableApp
 	{
         // establish SQLite connection
         private SQLiteConnection conn;
+        private SQLiteAsyncConnection connAsync;
         public string StatusMessage { get; set; }
 
 		public PlantRepository(string dbPath)
 		{
             // Initialize a new SQLiteConnection
             conn = new SQLiteConnection(dbPath);
-            
+            connAsync = new SQLiteAsyncConnection(dbPath);
+
             // Create the Plant table
             conn.CreateTable<Plant>();
+            connAsync.CreateTableAsync<Plant>().Wait();
 		}
 
-		public void AddNewPlant(string commonName)
+		public async Task AddNewPlantAsync(string commonName)
 		{
 			int result = 0;
 			try
@@ -32,7 +37,7 @@ namespace PortableApp
 					throw new Exception("Valid Common Name required");
 
                 // insert a new plant into the Plant table
-                result = conn.Insert(new Plant { CommonName = commonName });
+                result = await connAsync.InsertAsync(new Plant { CommonName = commonName });
 
 				StatusMessage = string.Format("{0} record(s) added [CommonName: {1})", result, commonName);
 			}
@@ -43,10 +48,16 @@ namespace PortableApp
 
 		}
 
-		public List<Plant> GetAllPlants()
-		{
-			// return a list of plants saved to the Plant table in the database
-            return conn.Table<Plant>().ToList();
-		}
-	}
+        public IEnumerable<Plant> GetAllPlants()
+        {
+            // return a list of plants saved to the Plant table in the database
+            return (from p in conn.Table<Plant>() select p).ToList();
+        }
+
+        public async Task<List<Plant>> GetAllPlantsAsync()
+        {
+            // return a list of plants saved to the Plant table in the database
+            return await connAsync.Table<Plant>().ToListAsync();
+        }
+    }
 }
