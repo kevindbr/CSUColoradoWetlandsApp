@@ -48,10 +48,10 @@ namespace PortableApp
 
 		}
 
-        public IEnumerable<Plant> GetAllPlants()
+        public List<Plant> GetAllPlants()
         {
             // return a list of plants saved to the Plant table in the database
-            return (from p in conn.Table<Plant>() select p).ToList();
+            return conn.Table<Plant>().ToList();
         }
 
         public async Task<List<Plant>> GetAllPlantsAsync()

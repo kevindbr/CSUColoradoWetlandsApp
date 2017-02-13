@@ -48,7 +48,7 @@ namespace PortableApp
 
         }
 
-        public IEnumerable<PlantType> GetAllPlantTypes()
+        public List<PlantType> GetAllPlantTypes()
         {
             // return a list of plants saved to the Plant table in the database
             return (from p in conn.Table<PlantType>() select p).ToList();

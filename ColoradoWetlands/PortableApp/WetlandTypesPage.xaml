@@ -14,27 +14,13 @@
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
-    <Entry x:Name="newPlantType"
-     Placeholder="Enter name" />
-    <Button Text="Add Plant"
-            Grid.Row="1"
-            Clicked="OnNewButtonClicked" />
 
-    <Label x:Name="statusMessage"
-           Grid.Row="2" />
-
-    <Button Text="Get All Plant Types"
-            Grid.Row="3"
-            Clicked="OnGetButtonClicked" />
-
-    <ListView x:Name="plantTypesList"
-              Grid.Row="4">
+    <ListView x:Name="plantTypesList" Grid.Row="4">
       <ListView.ItemTemplate>
         <DataTemplate>
           <ViewCell Height="30">
             <StackLayout Padding="5">
-              <Label
-                Text="{Binding Title}" />
+              <Label Text="{Binding Title}" />
             </StackLayout>
           </ViewCell>
         </DataTemplate>
