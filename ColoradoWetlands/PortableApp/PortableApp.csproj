@@ -38,6 +38,9 @@
     <Compile Include="App.cs" />
     <Compile Include="Assets\PlantTypeRepository.cs" />
     <Compile Include="Assets\PlantRepository.cs" />
+    <Compile Include="DetailPage.xaml.cs">
+      <DependentUpon>DetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EmbeddedImageResourceExtension.cs" />
     <Compile Include="HTMLPage.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -116,6 +119,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WetlandTypesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

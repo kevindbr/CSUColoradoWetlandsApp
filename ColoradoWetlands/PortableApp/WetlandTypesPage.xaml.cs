@@ -16,6 +16,17 @@ namespace PortableApp
             plantTypesList.ItemsSource = plantTypes;
         }
 
+        async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (plantTypesList.SelectedItem != null)
+            {
+                var detailPage = new DetailPage();
+                detailPage.BindingContext = e.SelectedItem as PlantType;
+                plantTypesList.SelectedItem = null;
+                await Navigation.PushModalAsync(detailPage);
+            }
+        }
+
         //public async void OnNewButtonClicked(object sender, EventArgs args)
         //{
         //    statusMessage.Text = "";

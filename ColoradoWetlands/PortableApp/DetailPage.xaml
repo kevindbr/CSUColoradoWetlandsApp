@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="PortableApp.DetailPage">
+  <ContentPage.Padding>
+    <OnPlatform x:TypeArguments="Thickness" iOS="0,40,0,0" />
+  </ContentPage.Padding>
+  <ContentPage.Content BackgroundColor="#000000">
+    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+      <StackLayout Orientation="Horizontal">
+        <Label Text="{Binding Description}" FontSize="Medium" FontAttributes="Bold" />
+      </StackLayout>
+      <Button x:Name="dismissButton" Text="Dismiss" Clicked="OnDismissButtonClicked" />
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

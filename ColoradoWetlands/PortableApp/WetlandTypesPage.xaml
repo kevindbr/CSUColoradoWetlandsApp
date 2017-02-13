@@ -15,7 +15,7 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <ListView x:Name="plantTypesList" Grid.Row="4">
+    <ListView x:Name="plantTypesList" ItemSelected="OnItemSelected" Grid.Row="4">
       <ListView.ItemTemplate>
         <DataTemplate>
           <ViewCell Height="30">
