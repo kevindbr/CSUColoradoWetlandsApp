@@ -20,10 +20,10 @@ namespace PortableApp
         {
             if (plantsList.SelectedItem != null)
             {
-                var detailPage = new WetlandTypesDetailPage();
-                detailPage.BindingContext = e.SelectedItem as WetlandType;
+                var detailPage = new PortableApp.Views.WetlandPlantDetailPage();
+                detailPage.BindingContext = e.SelectedItem as WetlandPlant;
                 plantsList.SelectedItem = null;
-                await Navigation.PushModalAsync(detailPage);
+                await Navigation.PushAsync(detailPage);
             }
         }
 

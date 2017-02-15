@@ -38,6 +38,15 @@
     <Compile Include="App.cs" />
     <Compile Include="Assets\WetlandTypeRepository.cs" />
     <Compile Include="Assets\WetlandPlantRepository.cs" />
+    <Compile Include="Views\WetlandPlantImagesPage.xaml.cs">
+      <DependentUpon>WetlandPlantImagesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WetlandPlantInfoPage.xaml.cs">
+      <DependentUpon>WetlandPlantInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WetlandPlantDetailPage.xaml.cs">
+      <DependentUpon>WetlandPlantDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WetlandTypesDetailPage.xaml.cs">
       <DependentUpon>WetlandTypesDetailPage.xaml</DependentUpon>
     </Compile>
@@ -131,6 +140,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Images\cover-thumb.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\WetlandPlantDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\WetlandPlantInfoPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\WetlandPlantImagesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
