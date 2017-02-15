@@ -1,45 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PortableApp.WetlandPlantsPage">
-  <Grid Padding="5" RowSpacing="1" ColumnSpacing="1" BackgroundColor="Default">
-
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*" />
-    </Grid.ColumnDefinitions>
-    <Entry x:Name="newPlant"
-     Placeholder="Enter name" />
-    <Button Text="Add Plant"
-            Grid.Row="1"
-            Clicked="OnNewButtonClicked" />
-
-    <Label x:Name="statusMessage"
-           Grid.Row="2" />
-
-    <Button Text="Get All Plants"
-            Grid.Row="3"
-            Clicked="OnGetButtonClicked" />
-
-    <ListView x:Name="plantsList"
-              Grid.Row="4">
-      <ListView.ItemTemplate>
-        <DataTemplate>
-          <ViewCell Height="30">
-            <StackLayout Padding="5">
-              <Label
-                Text="{Binding CommonName}" />
-            </StackLayout>
-          </ViewCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
-
-  </Grid>
+             xmlns:local="clr-namespace:PortableApp;assembly=PortableApp"
+             x:Class="PortableApp.WetlandPlantsPage"
+             Title="Wetland Plants">
+  <ContentPage.Content>
+    <StackLayout>
+      <SearchBar x:Name="search" Placeholder="Search" />
+               <!--SearchCommandParameter="{Binding Text, Source={x:Reference search}}"-->  
+      <ListView x:Name="plantsList" ItemSelected="OnItemSelected" RowHeight="70" >
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ImageCell ImageSource="{local:ImageResource PortableApp.Resources.Images.cover-thumb.jpg}" Text="{Binding CommonName}" Detail="Detail text" />   
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </StackLayout>
+  </ContentPage.Content>
 </ContentPage>

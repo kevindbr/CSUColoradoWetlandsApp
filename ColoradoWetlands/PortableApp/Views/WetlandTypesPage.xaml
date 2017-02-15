@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PortableApp.WetlandTypesPage">
+             x:Class="PortableApp.WetlandTypesPage"
+             Title="Wetland Types">
   <Grid Padding="5" RowSpacing="1" ColumnSpacing="1" BackgroundColor="Default">
 
     <Grid.RowDefinitions>
@@ -15,7 +16,7 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <ListView x:Name="plantTypesList" ItemSelected="OnItemSelected" Grid.Row="4">
+    <ListView x:Name="wetlandTypesList" ItemSelected="OnItemSelected" Grid.Row="4">
       <ListView.ItemTemplate>
         <DataTemplate>
           <ViewCell Height="30">

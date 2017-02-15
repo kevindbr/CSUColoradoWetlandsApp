@@ -9,25 +9,25 @@ using Xamarin.Forms;
 namespace PortableApp
 {
 
-    public class PlantRepository
+    public class WetlandPlantRepository
 	{
         // establish SQLite connection
         private SQLiteConnection conn;
         private SQLiteAsyncConnection connAsync;
         public string StatusMessage { get; set; }
 
-		public PlantRepository(string dbPath)
+		public WetlandPlantRepository(string dbPath)
 		{
             // Initialize a new SQLiteConnection
             conn = new SQLiteConnection(dbPath);
             connAsync = new SQLiteAsyncConnection(dbPath);
 
-            // Create the Plant table
-            conn.CreateTable<Plant>();
-            connAsync.CreateTableAsync<Plant>().Wait();
+            // Create the Wetland Plant table
+            conn.CreateTable<WetlandPlant>();
+            connAsync.CreateTableAsync<WetlandPlant>().Wait();
 		}
 
-		public async Task AddNewPlantAsync(string commonName)
+		public async Task AddNewWetlandPlantAsync(string commonName)
 		{
 			int result = 0;
 			try
@@ -37,7 +37,7 @@ namespace PortableApp
 					throw new Exception("Valid Common Name required");
 
                 // insert a new plant into the Plant table
-                result = await connAsync.InsertAsync(new Plant { CommonName = commonName });
+                result = await connAsync.InsertAsync(new WetlandPlant { CommonName = commonName });
 
 				StatusMessage = string.Format("{0} record(s) added [CommonName: {1})", result, commonName);
 			}
@@ -48,16 +48,16 @@ namespace PortableApp
 
 		}
 
-        public List<Plant> GetAllPlants()
+        public List<WetlandPlant> GetAllWetlandPlants()
         {
-            // return a list of plants saved to the Plant table in the database
-            return conn.Table<Plant>().ToList();
+            // return a list of Wetlandplants saved to the WetlandPlant table in the database
+            return (from p in conn.Table<WetlandPlant>() select p).ToList();
         }
 
-        public async Task<List<Plant>> GetAllPlantsAsync()
+        public async Task<List<WetlandPlant>> GetAllWetlandPlantsAsync()
         {
-            // return a list of plants saved to the Plant table in the database
-            return await connAsync.Table<Plant>().ToListAsync();
+            // return a list of plants saved to the Wetland Plant table in the database
+            return await connAsync.Table<WetlandPlant>().ToListAsync();
         }
     }
 }

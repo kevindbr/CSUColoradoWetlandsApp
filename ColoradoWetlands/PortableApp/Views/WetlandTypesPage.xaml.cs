@@ -12,17 +12,17 @@ namespace PortableApp
         public WetlandTypesPage()
         {
             InitializeComponent();
-            ObservableCollection<PlantType> plantTypes = new ObservableCollection<PlantType>(App.PlantTypeRepo.GetAllPlantTypes());
-            plantTypesList.ItemsSource = plantTypes;
+            ObservableCollection<WetlandType> wetlandTypes = new ObservableCollection<WetlandType>(App.WetlandTypeRepo.GetAllWetlandTypes());
+            wetlandTypesList.ItemsSource = wetlandTypes;
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if (plantTypesList.SelectedItem != null)
+            if (wetlandTypesList.SelectedItem != null)
             {
                 var detailPage = new WetlandTypesDetailPage();
-                detailPage.BindingContext = e.SelectedItem as PlantType;
-                plantTypesList.SelectedItem = null;
+                detailPage.BindingContext = e.SelectedItem as WetlandType;
+                wetlandTypesList.SelectedItem = null;
                 await Navigation.PushModalAsync(detailPage);
             }
         }

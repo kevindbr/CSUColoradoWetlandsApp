@@ -9,25 +9,25 @@ using Xamarin.Forms;
 namespace PortableApp
 {
 
-    public class PlantTypeRepository
+    public class WetlandTypeRepository
 	{
         // establish SQLite connection
         private SQLiteConnection conn;
         private SQLiteAsyncConnection connAsync;
         public string StatusMessage { get; set; }
 
-        public PlantTypeRepository(string dbPath)
+        public WetlandTypeRepository(string dbPath)
         {
             // Initialize a new SQLiteConnection
             conn = new SQLiteConnection(dbPath);
             connAsync = new SQLiteAsyncConnection(dbPath);
 
             // Create the Plant table
-            conn.CreateTable<PlantType>();
-            connAsync.CreateTableAsync<PlantType>().Wait();
+            conn.CreateTable<WetlandType>();
+            connAsync.CreateTableAsync<WetlandType>().Wait();
         }
 
-        public async Task AddNewPlantTypeAsync(string title)
+        public async Task AddNewWetlandTypeAsync(string title)
         {
             int result = 0;
             try
@@ -36,8 +36,8 @@ namespace PortableApp
                 if (string.IsNullOrEmpty(title))
                     throw new Exception("Valid Title required");
 
-                // insert a new plant type into the Plant Type table
-                result = await connAsync.InsertAsync(new PlantType { Title = title });
+                // insert a new plant type into the Wetland Type table
+                result = await connAsync.InsertAsync(new WetlandType { Title = title });
 
                 StatusMessage = string.Format("{0} record(s) added [Title: {1})", result, title);
             }
@@ -48,16 +48,16 @@ namespace PortableApp
 
         }
 
-        public List<PlantType> GetAllPlantTypes()
+        public List<WetlandType> GetAllWetlandTypes()
         {
             // return a list of plants saved to the Plant table in the database
-            return (from p in conn.Table<PlantType>() select p).ToList();
+            return (from p in conn.Table<WetlandType>() select p).ToList();
         }
 
-        public async Task<List<PlantType>> GetAllPlantTypesAsync()
+        public async Task<List<WetlandType>> GetAllWetlandTypesAsync()
         {
             // return a list of plants saved to the Plant table in the database
-            return await connAsync.Table<PlantType>().ToListAsync();
+            return await connAsync.Table<WetlandType>().ToListAsync();
         }
     }
 }

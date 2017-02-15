@@ -9,13 +9,13 @@ namespace PortableApp
 {
     public class App : Application
     {
-        public static PlantRepository PlantRepo { get; private set; }
-        public static PlantTypeRepository PlantTypeRepo { get; private set; }
+        public static WetlandPlantRepository WetlandPlantRepo { get; private set; }
+        public static WetlandTypeRepository WetlandTypeRepo { get; private set; }
 
         public App(string dbPath)
         {
-            PlantRepo = new PlantRepository(dbPath);
-            PlantTypeRepo = new PlantTypeRepository(dbPath);
+            WetlandPlantRepo = new WetlandPlantRepository(dbPath);
+            WetlandTypeRepo = new WetlandTypeRepository(dbPath);
             this.MainPage = new NavigationPage (new MainPage(dbPath));
         }
 

@@ -2,8 +2,8 @@
 
 namespace PortableApp.Models
 {
-    [Table("plant_types")]
-    public class PlantType
+    [Table("wetland_types")]
+    public class WetlandType
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
