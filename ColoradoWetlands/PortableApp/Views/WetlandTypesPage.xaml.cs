@@ -20,7 +20,7 @@ namespace PortableApp
         {
             if (plantTypesList.SelectedItem != null)
             {
-                var detailPage = new DetailPage();
+                var detailPage = new WetlandTypesDetailPage();
                 detailPage.BindingContext = e.SelectedItem as PlantType;
                 plantTypesList.SelectedItem = null;
                 await Navigation.PushModalAsync(detailPage);

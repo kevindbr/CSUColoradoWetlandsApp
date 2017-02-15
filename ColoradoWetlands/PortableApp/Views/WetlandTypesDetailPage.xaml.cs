@@ -3,9 +3,9 @@ using Xamarin.Forms;
 
 namespace PortableApp
 {
-    public partial class DetailPage : ContentPage
+    public partial class WetlandTypesDetailPage : ContentPage
     {
-        public DetailPage()
+        public WetlandTypesDetailPage()
         {
             InitializeComponent();
         }
