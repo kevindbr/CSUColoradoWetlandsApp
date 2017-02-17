@@ -5,7 +5,7 @@ using PortableApp.Models;
 using Xamarin.Forms;
 
 namespace PortableApp
-{
+{ 
     public partial class WetlandPlantsPage : ContentPage
     {
 
@@ -20,8 +20,9 @@ namespace PortableApp
         {
             if (plantsList.SelectedItem != null)
             {
-                var detailPage = new PortableApp.Views.WetlandPlantDetailPage();
-                detailPage.BindingContext = e.SelectedItem as WetlandPlant;
+                var selectedItem = e.SelectedItem as WetlandPlant;
+                var detailPage = new PortableApp.Views.WetlandPlantDetailPage(selectedItem.Id);
+                detailPage.BindingContext = selectedItem;
                 plantsList.SelectedItem = null;
                 await Navigation.PushAsync(detailPage);
             }

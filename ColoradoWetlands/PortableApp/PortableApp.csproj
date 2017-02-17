@@ -36,8 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Assets\WetlandPlantImageRepository.cs" />
     <Compile Include="Assets\WetlandTypeRepository.cs" />
     <Compile Include="Assets\WetlandPlantRepository.cs" />
+    <Compile Include="Models\WetlandPlantImage.cs" />
     <Compile Include="Views\WetlandPlantImagesPage.xaml.cs">
       <DependentUpon>WetlandPlantImagesPage.xaml</DependentUpon>
     </Compile>
@@ -158,6 +160,13 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\Plants\Plant2\cover.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\Plants\Plant1\ACCA4_1.jpg" />
+    <EmbeddedResource Include="Resources\Images\Plants\Plant1\ACCA4_2.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />

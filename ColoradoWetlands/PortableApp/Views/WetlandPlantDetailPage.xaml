@@ -3,7 +3,7 @@
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
             xmlns:local="clr-namespace:PortableApp;assembly=PortableApp" 
             x:Class="PortableApp.Views.WetlandPlantDetailPage">
-  <NavigationPage Title="Images">
+  <NavigationPage Title="Images" Text="{PlantId}">
     <x:Arguments>
       <local:Views.WetlandPlantImagesPage />
     </x:Arguments>

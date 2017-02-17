@@ -1,8 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:PortableApp;assembly=PortableApp"
-             x:Class="PortableApp.Views.WetlandPlantImagesPage"
-             Title="{Binding CommonName}">
-  <Label Text="Images" VerticalOptions="Center" HorizontalOptions="Center" />
-</ContentPage>
+
+<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:local="clr-namespace:PortableApp;assembly=PortableApp"
+              x:Class="PortableApp.Views.WetlandPlantImagesPage"
+              Title="{Binding CommonName}">
+  <CarouselPage.ItemTemplate>
+    <DataTemplate>
+      <ContentPage>
+        <ContentPage.Padding>
+          <OnPlatform x:TypeArguments="Thickness" iOS="0,40,0,0" Android="0,40,0,0" />
+        </ContentPage.Padding>
+        <StackLayout>
+          <Label Text="{Binding ImageCredit}" FontSize="Medium" HorizontalOptions="Center" />
+          <Image Source="{Binding ImageSource}" />
+        </StackLayout>
+      </ContentPage>
+    </DataTemplate>
+  </CarouselPage.ItemTemplate>
+</CarouselPage>
