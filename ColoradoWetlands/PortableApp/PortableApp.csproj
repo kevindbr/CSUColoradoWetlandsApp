@@ -113,11 +113,7 @@
     <EmbeddedResource Include="Views\HTML\Acknowledgements.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\cover.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\CNHP.png" />
-    <EmbeddedResource Include="Resources\Icons\CSU.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\EPA.png" />
@@ -139,9 +135,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\cover-thumb.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\WetlandPlantDetailPage.xaml">
@@ -167,6 +160,30 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Images\Plants\Plant1\ACCA4_1.jpg" />
     <EmbeddedResource Include="Resources\Images\Plants\Plant1\ACCA4_2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Icon-Small-40%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Icon-Small%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Icon-Small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Icon-60%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Icon%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\CSU.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
