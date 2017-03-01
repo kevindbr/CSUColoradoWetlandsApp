@@ -8,7 +8,7 @@
 
   <ContentPage.Content>  
     <AbsoluteLayout>
-      <Image Source="{local:ImageResource PortableApp.Resources.Images.background.png}" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" Aspect="AspectFill" />
+      <Image Source="{local:ImageResource PortableApp.Resources.Images.background.jpg}" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" Aspect="AspectFill" />
       <Button Text="Introduction" Clicked="ToIntroduction" BackgroundColor="#77000000" TextColor="White" AbsoluteLayout.LayoutBounds=".5,.25,300,40" AbsoluteLayout.LayoutFlags="PositionProportional" BorderRadius="5" />
       <Button Text="Wetland Plants" Clicked="ToWetlandPlants" BackgroundColor="#77000000" TextColor="White" AbsoluteLayout.LayoutBounds=".5,.35,300,40" AbsoluteLayout.LayoutFlags="PositionProportional" BorderRadius="5" />
       <Button Text="Wetland Maps" BackgroundColor="#77000000" TextColor="White" AbsoluteLayout.LayoutBounds=".5,.45,300,40" AbsoluteLayout.LayoutFlags="PositionProportional" BorderRadius="5" />
