@@ -42,7 +42,17 @@
 		<string>Icon-Small.png</string>
 		<string>Icon-Small@2x.png</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Fonts/Montserrat-Light.ttf</string>
+		<string>Fonts/Montserrat-Medium.ttf</string>
+		<string>Fonts/Arimo-Regular.ttf</string>
+		<string>Fonts/Arimo-Bold.ttf</string>
+		<string>Fonts/Arimo-Italic.ttf</string>
+	</array>
 	<key>CFBundleShortVersionString</key>
 	<string></string>
+	<key>UIMainStoryboardFile</key>
+	<string>LaunchScreen</string>
 </dict>
 </plist>
