@@ -44,6 +44,7 @@
     <Compile Include="Models\WetlandPlantImage.cs" />
     <Compile Include="ViewHelpers.cs" />
     <Compile Include="Views\MainPage.cs" />
+    <Compile Include="Views\TransparentWebView.cs" />
     <Compile Include="Views\WetlandPlantImagesPage.xaml.cs">
       <DependentUpon>WetlandPlantImagesPage.xaml</DependentUpon>
     </Compile>
@@ -57,10 +58,7 @@
       <DependentUpon>WetlandTypesDetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmbeddedImageResourceExtension.cs" />
-    <Compile Include="HTMLPage.cs" />
-    <Compile Include="Views\MainPage1.xaml.cs">
-      <DependentUpon>MainPage1.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Views\HTMLPage.cs" />
     <Compile Include="Models\WetlandType.cs" />
     <Compile Include="Models\WetlandPlant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -103,12 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\MainPage1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\HTML\Introduction.html" />
@@ -190,13 +182,19 @@
     <EmbeddedResource Include="Resources\Images\background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\wetlands_logo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="App.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\back_arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\Co_Logo_40.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\menu_icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />

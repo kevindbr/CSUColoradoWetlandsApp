@@ -16,9 +16,9 @@ namespace PortableApp
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Add header to inner container
-            Image header = ConstructHeader();
+            Grid navigationBar = ConstructNavigationBar("COLORADO WETLANDS", false, false, true);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
-            innerContainer.Children.Add(header, 0, 0);
+            innerContainer.Children.Add(navigationBar, 0, 0);
 
             // Add empty space
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -29,7 +29,8 @@ namespace PortableApp
                 Style = Application.Current.Resources["semiTransparentButton"] as Style,
                 Text = "INTRODUCTION"
             };
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            introductionButton.Clicked += ToIntroduction;
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
             innerContainer.Children.Add(introductionButton, 0, 2);
 
             Button wetlandPlantsButton = new Button
@@ -37,7 +38,8 @@ namespace PortableApp
                 Style = Application.Current.Resources["semiTransparentButton"] as Style,
                 Text = "WETLAND PLANTS"
             };
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            wetlandPlantsButton.Clicked += ToWetlandPlants;
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
             innerContainer.Children.Add(wetlandPlantsButton, 0, 3);
 
             Button wetlandMapsButton = new Button
@@ -45,7 +47,8 @@ namespace PortableApp
                 Style = Application.Current.Resources["semiTransparentButton"] as Style,
                 Text = "WETLAND MAPS"
             };
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            wetlandMapsButton.Clicked += ToWetlandMaps;
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
             innerContainer.Children.Add(wetlandMapsButton, 0, 4);
 
             Button wetlandTypesButton = new Button
@@ -53,7 +56,8 @@ namespace PortableApp
                 Style = Application.Current.Resources["semiTransparentButton"] as Style,
                 Text = "WETLAND TYPES"
             };
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            wetlandTypesButton.Clicked += ToWetlandTypes;
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
             innerContainer.Children.Add(wetlandTypesButton, 0, 5);
 
             Button acknowledgementsButton = new Button
@@ -61,7 +65,8 @@ namespace PortableApp
                 Style = Application.Current.Resources["semiTransparentButton"] as Style,
                 Text = "ACKNOWLEDGEMENTS"
             };
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            acknowledgementsButton.Clicked += ToAcknowledgements;
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
             innerContainer.Children.Add(acknowledgementsButton, 0, 6);
 
             // Add empty space

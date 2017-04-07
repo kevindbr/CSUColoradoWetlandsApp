@@ -8,7 +8,7 @@
       <!--Set Styles for StaticResource semiTransparentButton, which is used all over the app-->
 
       <Style x:Key="semiTransparentButton" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="#55000000" />
+        <Setter Property="BackgroundColor" Value="#66000000" />
         <Setter Property="TextColor" Value="White" />
         <Setter Property="FontSize" Value="15" />
         <Setter Property="Margin" Value="20, 0, 20, 0" />

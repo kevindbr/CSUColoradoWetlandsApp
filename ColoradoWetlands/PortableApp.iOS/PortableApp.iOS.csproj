@@ -91,22 +91,23 @@
     <Compile Include="FileAccessHelper.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="TransparentWebViewRenderer.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Default-568h%402x.png" />
-    <BundleResource Include="Resources\Default-Portrait.png" />
-    <BundleResource Include="Resources\Default-Portrait%402x.png" />
-    <BundleResource Include="Resources\Default.png" />
     <BundleResource Include="Resources\Default%402x.png" />
+    <BundleResource Include="Resources\Default-568h%402x.png" />
+    <BundleResource Include="Resources\Default-Portrait%402x.png" />
+    <BundleResource Include="Resources\Default-Portrait.png" />
+    <BundleResource Include="Resources\Default.png" />
     <BundleResource Include="Resources\Fonts\Arimo-Bold.ttf" />
     <BundleResource Include="Resources\Fonts\Arimo-Italic.ttf" />
     <BundleResource Include="Resources\Fonts\Arimo-Regular.ttf" />
     <BundleResource Include="Resources\Fonts\Montserrat-Light.ttf" />
     <BundleResource Include="Resources\Fonts\Montserrat-Medium.ttf" />
+  </ItemGroup>
+  <ItemGroup>
     <BundleResource Include="Resources\Icon-60%403x.png" />
     <BundleResource Include="Resources\Icon-Small-40%403x.png" />
     <BundleResource Include="Resources\Icon-Small%403x.png" />
