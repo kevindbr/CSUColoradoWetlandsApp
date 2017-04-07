@@ -1,0 +1,19 @@
+﻿<Application
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  x:Class="PortableApp.App">
+
+  <Application.Resources>
+    <ResourceDictionary>
+      <!--Set Styles for StaticResource semiTransparentButton, which is used all over the app-->
+
+      <Style x:Key="semiTransparentButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#55000000" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="Margin" Value="20, 0, 20, 0" />
+      </Style>
+    </ResourceDictionary>
+  </Application.Resources>
+
+</Application>
