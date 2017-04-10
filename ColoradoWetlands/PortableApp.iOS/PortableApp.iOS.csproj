@@ -88,6 +88,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BaseUrl_iOS.cs" />
     <Compile Include="FileAccessHelper.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
@@ -198,6 +199,33 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Default-667h%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\CDOT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\CNHP.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\CoNPS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\CPW.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\CRA.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\CSU1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\EPA1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\NatureServe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\USFWS.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />

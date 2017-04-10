@@ -9,6 +9,8 @@ using Xamarin.Forms;
 
 namespace PortableApp
 {
+    public interface IBaseUrl { string Get(); }
+
     public class HTMLPage : ViewHelpers
     {
         public HTMLPage(string file, string titleText)
@@ -27,8 +29,6 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(navigationBar, 0, 0);
 
-
-
             // Get file from PCL--in order for HTML files to be automatically pulled from the PCL, they need to be in a Views/HTML folder
             var assembly = typeof(HTMLPage).GetTypeInfo().Assembly;
             Stream stream = assembly.GetManifestResourceStream("PortableApp.Views.HTML." + file);
@@ -38,6 +38,7 @@ namespace PortableApp
             // Generate WebView content
             var browser = new TransparentWebView();
             var htmlSource = new HtmlWebViewSource();
+            htmlSource.BaseUrl = DependencyService.Get<IBaseUrl>().Get();
             htmlSource.Html = @text;
             browser.Source = htmlSource;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
