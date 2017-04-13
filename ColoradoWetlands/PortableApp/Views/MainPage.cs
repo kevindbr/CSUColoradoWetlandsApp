@@ -5,7 +5,7 @@ namespace PortableApp
 {
     public partial class MainPage : ViewHelpers
     {
-        public MainPage(string dbPath)
+        public MainPage(string dbPath = null)
         {
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -24,7 +26,7 @@ namespace PortableApp
         }
 
         // Construct Navigation Bar
-        public Grid ConstructNavigationBar(string titleText, bool backButtonVisible = true, bool menuButtonVisible = true, bool logoVisible = false)
+        public Grid ConstructNavigationBar(string titleText, bool backButtonVisible = true, bool homeButtonVisible = true, bool logoVisible = false)
         {
             Grid gridLayout = new Grid { VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand };
             gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
@@ -66,27 +68,27 @@ namespace PortableApp
             gridLayout.Children.Add(titleContent, 1, 0);
 
             // Construct home button and add gesture recognizer
-            if (menuButtonVisible)
+            if (homeButtonVisible)
             {
-                Image menuImage = new Image
+                Image homeImage = new Image
                 {
-                    Source = ImageSource.FromResource("PortableApp.Resources.Icons.menu_icon.png"),
+                    Source = ImageSource.FromResource("PortableApp.Resources.Icons.home_icon.png"),
                     HeightRequest = 20,
                     WidthRequest = 20,
                     Margin = new Thickness(0, 15, 0, 15)
                 };
-                var menuImageGestureRecognizer = new TapGestureRecognizer();
-                menuImageGestureRecognizer.Tapped += async (sender, e) =>
+                var homeImageGestureRecognizer = new TapGestureRecognizer();
+                homeImageGestureRecognizer.Tapped += async (sender, e) =>
                 {
-                    menuImage.Opacity = .5;
+                    homeImage.Opacity = .5;
                     await Task.Delay(200);
-                    menuImage.Opacity = 1;
+                    homeImage.Opacity = 1;
                     await Navigation.PopToRootAsync();
-                    //await Navigation.PushAsync(new IntroPage());
+                    await Navigation.PushAsync(new MainPage());
                 };
-                menuImage.GestureRecognizers.Add(menuImageGestureRecognizer);
+                homeImage.GestureRecognizers.Add(homeImageGestureRecognizer);
                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                gridLayout.Children.Add(menuImage, 2, 0);
+                gridLayout.Children.Add(homeImage, 2, 0);
             }
             else
             {
@@ -94,6 +96,33 @@ namespace PortableApp
             }
             
             return gridLayout;
+        }
+
+        public WebView HTMLProcessor(string location)
+        {
+            // Generate WebView container
+            var browser = new TransparentWebView();
+            //var pdfBrowser = new CustomWebView { Uri = location, HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
+            string htmlText;
+
+            // Get file locally unless the location is a web address
+            if (location.Contains("http"))
+            {
+                htmlText = location;
+                browser.Source = htmlText;
+            }
+            else if (!location.Contains(".pdf"))
+            {
+                // Get file from PCL--in order for HTML files to be automatically pulled from the PCL, they need to be in a Views/HTML folder
+                var assembly = typeof(HTMLPage).GetTypeInfo().Assembly;
+                Stream stream = assembly.GetManifestResourceStream("PortableApp.Views.HTML." + location);
+                htmlText = "";
+                using (var reader = new System.IO.StreamReader(stream)) { htmlText = reader.ReadToEnd(); }
+                var htmlSource = new HtmlWebViewSource();
+                htmlSource.Html = htmlText;
+                browser.Source = htmlSource;
+            }
+            return browser;
         }
 
         protected async void ChangeButtonColor(object sender, EventArgs e)
@@ -123,7 +152,7 @@ namespace PortableApp
         public async void ToWetlandMaps(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            //await Navigation.PushAsync(new WetlandMapsPage());
+            await Navigation.PushAsync(new WetlandPlantsPage());
         }
 
         public async void ToWetlandTypes(object sender, EventArgs e)

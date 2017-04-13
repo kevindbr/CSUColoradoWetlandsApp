@@ -22,7 +22,7 @@ namespace PortableApp
             conn = new SQLiteConnection(dbPath);
             connAsync = new SQLiteAsyncConnection(dbPath);
 
-            // Create the Plant table
+            // Create the Type table
             conn.CreateTable<WetlandType>();
             connAsync.CreateTableAsync<WetlandType>().Wait();
         }
@@ -50,7 +50,7 @@ namespace PortableApp
 
         public List<WetlandType> GetAllWetlandTypes()
         {
-            // return a list of plants saved to the Plant table in the database
+            // return a list of plants saved to the Type table in the database
             return (from p in conn.Table<WetlandType>() select p).ToList();
         }
 

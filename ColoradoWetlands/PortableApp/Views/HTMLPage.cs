@@ -29,18 +29,8 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(navigationBar, 0, 0);
 
-            // Get file from PCL--in order for HTML files to be automatically pulled from the PCL, they need to be in a Views/HTML folder
-            var assembly = typeof(HTMLPage).GetTypeInfo().Assembly;
-            Stream stream = assembly.GetManifestResourceStream("PortableApp.Views.HTML." + file);
-            string text = "";
-            using (var reader = new System.IO.StreamReader(stream)) { text = reader.ReadToEnd(); }
-
             // Generate WebView content
-            var browser = new TransparentWebView();
-            var htmlSource = new HtmlWebViewSource();
-            htmlSource.BaseUrl = DependencyService.Get<IBaseUrl>().Get();
-            htmlSource.Html = @text;
-            browser.Source = htmlSource;
+            var browser = HTMLProcessor(file);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(browser, 0, 1);
 

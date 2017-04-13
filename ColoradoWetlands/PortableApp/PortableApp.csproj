@@ -42,7 +42,7 @@
     <Compile Include="Assets\WetlandTypeRepository.cs" />
     <Compile Include="Assets\WetlandPlantRepository.cs" />
     <Compile Include="Models\WetlandPlantImage.cs" />
-    <Compile Include="ViewHelpers.cs" />
+    <Compile Include="Views\ViewHelpers.cs" />
     <Compile Include="Views\MainPage.cs" />
     <Compile Include="Views\TransparentWebView.cs" />
     <Compile Include="Views\WetlandPlantImagesPage.xaml.cs">
@@ -54,20 +54,16 @@
     <Compile Include="Views\WetlandPlantDetailPage.xaml.cs">
       <DependentUpon>WetlandPlantDetailPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WetlandTypesDetailPage.xaml.cs">
-      <DependentUpon>WetlandTypesDetailPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="EmbeddedImageResourceExtension.cs" />
     <Compile Include="Views\HTMLPage.cs" />
     <Compile Include="Models\WetlandType.cs" />
     <Compile Include="Models\WetlandPlant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\WetlandTypesPage.xaml.cs">
-      <DependentUpon>WetlandTypesPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\WetlandPlantsPage.xaml.cs">
       <DependentUpon>WetlandPlantsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WetlandTypesDetailPage.cs" />
+    <Compile Include="Views\WetlandTypesPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SQLite-net, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -116,18 +112,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\WetlandPlantsPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\WetlandTypesPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\WetlandTypesDetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -195,6 +179,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\menu_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\home_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-Marsh.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-WetMeadow.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
