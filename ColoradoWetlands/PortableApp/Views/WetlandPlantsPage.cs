@@ -20,7 +20,7 @@ namespace PortableApp
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Add header to inner container
-            Grid navigationBar = ConstructNavigationBar("WETLAND TYPES", true, true, false);
+            Grid navigationBar = ConstructNavigationBar("WETLAND PLANTS", true, true, false);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
 
             innerContainer.Children.Add(navigationBar, 0, 0);
@@ -29,7 +29,7 @@ namespace PortableApp
             var wetlandTypeTemplate = new DataTemplate(typeof(WetlandPlantsItemTemplate));
             wetlandPlantsList.ItemTemplate = wetlandTypeTemplate;
             wetlandPlantsList.ItemsSource = WetlandPlantsList();
-            wetlandPlantsList.ItemSelected += OnItemSelected;
+            //wetlandPlantsList.ItemSelected += OnItemSelected;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(wetlandPlantsList, 0, 1);
 

@@ -45,14 +45,12 @@
     <Compile Include="Views\ViewHelpers.cs" />
     <Compile Include="Views\MainPage.cs" />
     <Compile Include="Views\TransparentWebView.cs" />
+    <Compile Include="Views\WetlandPlantDetailPage.cs" />
     <Compile Include="Views\WetlandPlantImagesPage.xaml.cs">
       <DependentUpon>WetlandPlantImagesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WetlandPlantInfoPage.xaml.cs">
       <DependentUpon>WetlandPlantInfoPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\WetlandPlantDetailPage.xaml.cs">
-      <DependentUpon>WetlandPlantDetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="EmbeddedImageResourceExtension.cs" />
     <Compile Include="Views\HTMLPage.cs" />
@@ -61,7 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\WetlandTypesDetailPage.cs" />
     <Compile Include="Views\WetlandTypesPage.cs" />
-    <Compile Include="WetlandPlantsPage.cs" />
+    <Compile Include="Views\WetlandPlantsPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SQLite-net, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -107,12 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\EPA.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\WetlandPlantDetailPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\WetlandPlantInfoPage.xaml">
