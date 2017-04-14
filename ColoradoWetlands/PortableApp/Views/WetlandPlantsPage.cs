@@ -113,7 +113,7 @@ namespace PortableApp
             // Construct grid, the cell container
             Grid cell = new Grid
             {
-                BackgroundColor = Color.FromHex("66000000"),
+                BackgroundColor = Color.FromHex("88000000"),
                 Padding = new Thickness(20, 5, 20, 5),
                 Margin = new Thickness(0, 0, 0, 10)
             };
