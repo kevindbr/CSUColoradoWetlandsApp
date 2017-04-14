@@ -7,7 +7,7 @@ namespace PortableApp.Views
     {
         public WetlandPlantDetailPage(int plantId)
         { 
-            var helpers = new ViewHelpers();
+            //var helpers = new ViewHelpers();
             var navigationPage = new NavigationPage(new WetlandPlantImagesPage(plantId));
             navigationPage.Title = "IMAGES";
 
