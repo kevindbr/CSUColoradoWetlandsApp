@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using Xamarin.Forms;
 
 namespace PortableApp.Models
 {
@@ -10,5 +11,18 @@ namespace PortableApp.Models
 
         [MaxLength(250)]
         public string CommonName { get; set; }
+
+        public string Description { get; set; }
+
+        public string Description2 { get; set; }
+
+        public string Description3 { get; set; }
+
+        public string FileName { get; set; }
+
+        public ImageSource Thumbnail
+        {
+            get { return ImageSource.FromResource(string.Format("PortableApp.Resources.Images.Plants.{0}", FileName)); }
+        }
     }
 }

@@ -13,5 +13,6 @@ namespace PortableApp.Models
 
         [MaxLength(250)]
         public string Description { get; set; }
+
     }
 }
