@@ -74,6 +74,22 @@ namespace PortableApp
                 Description3 = "Ferns and Ferns Allies",
                 FileName = "ADCA_1.jpg"
             });
+            wetlandPlants.Add(new WetlandPlant
+            {
+                CommonName = "AGALINIS TENUIFOLIA",
+                Description = "Slenderleaf False Foxglove",
+                Description2 = "Scrophulariaceae (Orobanchaceae)",
+                Description3 = "Dicot Herbs",
+                FileName = "AGTE3_1.jpg"
+            });
+            wetlandPlants.Add(new WetlandPlant
+            {
+                CommonName = "AGROPYRON DESERTORUM",
+                Description = "Desert Wheatgrass",
+                Description2 = "Poaceae",
+                Description3 = "Grasses",
+                FileName = "AGDE2_icon.jpg"
+            });
             return wetlandPlants;
         }
 

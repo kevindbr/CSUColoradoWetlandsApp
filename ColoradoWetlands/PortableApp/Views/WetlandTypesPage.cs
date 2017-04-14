@@ -53,6 +53,11 @@ namespace PortableApp
                 Title = "WET MEADOW",
                 Description = "WetlandType-WetMeadow.html"
             });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "MESIC MEADOW",
+                Description = "WetlandType-MesicMeadow.html"
+            });
             return wetlandTypes;
         }
 
