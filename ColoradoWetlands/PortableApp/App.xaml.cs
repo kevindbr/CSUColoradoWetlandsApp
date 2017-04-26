@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using SQLite;
+using Xamarin.Forms;
 
 namespace PortableApp
 {
@@ -12,9 +13,16 @@ namespace PortableApp
         {
             InitializeComponent();
 
+            // Initialize SQLite connection and DBConnection class to hold connection
+            SQLiteConnection newConn = new SQLiteConnection(dbPath);
+            DBConnection dbConn = new DBConnection(newConn);
+
+            // Initialize repositories
             WetlandPlantRepo = new WetlandPlantRepository(dbPath);
             WetlandPlantImageRepo = new WetlandPlantImageRepository(dbPath);
             WetlandTypeRepo = new WetlandTypeRepository(dbPath);
+
+            // Set MainPage
             this.MainPage = new NavigationPage(new MainPage(dbPath));
         }
 

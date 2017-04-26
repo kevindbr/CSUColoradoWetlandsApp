@@ -7,16 +7,14 @@ namespace PortableApp.Models
     public class WetlandPlant
     {
         [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
+        public int plantid { get; set; }
 
-        [MaxLength(250)]
-        public string CommonName { get; set; }
-
-        public string Description { get; set; }
-
-        public string Description2 { get; set; }
-
-        public string Description3 { get; set; }
+        public int id { get; set; }
+        public string scinameauthor { get; set; }
+        public string scinamenoauthor { get; set; }
+        public string family { get; set; }
+        public string commonname { get; set; }
+        public string plantscode { get; set; }
 
         public string FileName { get; set; }
 

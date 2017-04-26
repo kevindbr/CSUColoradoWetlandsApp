@@ -8,6 +8,9 @@ namespace PortableApp
 {
     public class ViewHelpers : ContentPage
     {
+
+        public ExternalDBConnection externalConnection = new ExternalDBConnection();
+
         //
         // VIEWS
         //

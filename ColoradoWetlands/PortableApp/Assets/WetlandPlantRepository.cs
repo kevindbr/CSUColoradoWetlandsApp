@@ -37,7 +37,7 @@ namespace PortableApp
 					throw new Exception("Valid Common Name required");
 
                 // insert a new plant into the Plant table
-                result = await connAsync.InsertAsync(new WetlandPlant { CommonName = commonName });
+                result = await connAsync.InsertAsync(new WetlandPlant { commonname = commonName });
 
 				StatusMessage = string.Format("{0} record(s) added [CommonName: {1})", result, commonName);
 			}
