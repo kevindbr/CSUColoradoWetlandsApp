@@ -8,12 +8,13 @@ namespace PortableApp
     public partial class WetlandPlantsPage : ViewHelpers
     {
         ListView wetlandPlantsList;
+        ObservableCollection<WetlandPlant> plants;
 
         protected override async void OnAppearing()
         {
             // Get all Pumas from external API call, store them in a collection
-            ObservableCollection<WetlandPlant> plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAll());
-
+            plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAll());
+            wetlandPlantsList.ItemsSource = plants;
             base.OnAppearing();
         }
 
@@ -36,8 +37,7 @@ namespace PortableApp
             wetlandPlantsList = new ListView { BackgroundColor = Color.Transparent, RowHeight = 100 };
             var wetlandTypeTemplate = new DataTemplate(typeof(WetlandPlantsItemTemplate));
             wetlandPlantsList.ItemTemplate = wetlandTypeTemplate;
-            wetlandPlantsList.ItemsSource = WetlandPlantsList();
-            //wetlandPlantsList.ItemSelected += OnItemSelected;
+            wetlandPlantsList.ItemSelected += OnItemSelected;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(wetlandPlantsList, 0, 1);
 
@@ -93,7 +93,7 @@ namespace PortableApp
             if (wetlandPlantsList.SelectedItem != null)
             {
                 var selectedItem = e.SelectedItem as WetlandPlant;
-                var detailPage = new PortableApp.Views.WetlandPlantDetailPage(selectedItem.id);
+                var detailPage = new PortableApp.Views.WetlandPlantDetailPage(selectedItem);
                 detailPage.BindingContext = selectedItem;
                 wetlandPlantsList.SelectedItem = null;
                 await Navigation.PushAsync(detailPage);
@@ -130,7 +130,7 @@ namespace PortableApp
                 FontSize = 12,
                 FontAttributes = FontAttributes.Bold
             };
-            commonName.SetBinding(Label.TextProperty, new Binding("scinameauthor"));
+            commonName.SetBinding(Label.TextProperty, new Binding("scinamenoauthor"));
             textSection.Children.Add(commonName);
 
             var divider = new BoxView { HeightRequest = 1, WidthRequest = 500, BackgroundColor = Color.White };

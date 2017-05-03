@@ -12,10 +12,10 @@ namespace PortableApp.Views
 {
     public partial class WetlandPlantImagesPage : CarouselPage
     {
-        public WetlandPlantImagesPage(int plantId)
+        public WetlandPlantImagesPage(WetlandPlant plant)
         {
             InitializeComponent();
-            ObservableCollection<WetlandPlantImage> plantImages = new ObservableCollection<WetlandPlantImage>(App.WetlandPlantImageRepo.PlantImages(plantId));
+            ObservableCollection<WetlandPlantImage> plantImages = new ObservableCollection<WetlandPlantImage>(App.WetlandPlantImageRepo.PlantImages(plant.plantid));
             ItemsSource = plantImages;
         }
     }

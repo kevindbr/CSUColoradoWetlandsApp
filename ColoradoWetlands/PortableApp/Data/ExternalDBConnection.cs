@@ -11,7 +11,8 @@ namespace PortableApp
 {
     public class ExternalDBConnection
     {
-        const string Url = "http://sdt1.cas.colostate.edu/mobileapi/api/woody";
+        //const string Url = "http://sdt1.cas.colostate.edu/mobileapi/api/wetland";
+        const string Url = "http://129.82.38.57:61045/api/wetland";
         private string authorizationKey;
 
         private async Task<HttpClient> GetClient()
@@ -34,7 +35,7 @@ namespace PortableApp
             //HttpClient client = await GetClient();
             HttpClient client = new HttpClient();
             string result = await client.GetStringAsync(Url);
-            return JsonConvert.DeserializeObject<IEnumerable<WetlandPlant>>(result);
+            return JsonConvert.DeserializeObject<IList<WetlandPlant>>(result);
         }
 
         public async Task<IEnumerable<WetlandPlant>> Search()
