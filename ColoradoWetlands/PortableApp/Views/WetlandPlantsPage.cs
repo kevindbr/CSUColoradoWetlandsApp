@@ -128,7 +128,7 @@ namespace PortableApp
             {
                 TextColor = Color.White,
                 FontSize = 12,
-                FontAttributes = FontAttributes.Bold
+                FontAttributes = FontAttributes.Bold | FontAttributes.Italic
             };
             commonName.SetBinding(Label.TextProperty, new Binding("scinamenoauthor"));
             textSection.Children.Add(commonName);
