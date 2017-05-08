@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PortableApp.Models;
+using System;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -29,13 +31,13 @@ namespace PortableApp
         }
 
         // Construct Navigation Bar
-        public Grid ConstructNavigationBar(string titleText, bool backButtonVisible = true, bool homeButtonVisible = true, bool logoVisible = false)
+        public Grid ConstructNavigationBar(NavigationOptions options)
         {
             Grid gridLayout = new Grid { VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand };
             gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
 
             // Construct back button and add gesture recognizer
-            if (backButtonVisible)
+            if (options.backButtonVisible)
             {
                 Image backImage = new Image
                 {
@@ -63,15 +65,15 @@ namespace PortableApp
 
             // Construct title content section
             StackLayout titleContent = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
-            Image logo = new Image { Source = ImageSource.FromResource("PortableApp.Resources.Icons.Co_Logo_40.png"), IsVisible = logoVisible };
-            Label title = new Label { Text = titleText, FontFamily = Device.OnPlatform("Montserrat-Medium", "Montserrat-Medium.ttf#Montserrat-Medium", null), TextColor = Color.White, FontSize = 18, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center };
+            Image logo = new Image { Source = ImageSource.FromResource("PortableApp.Resources.Icons.Co_Logo_40.png"), IsVisible = options.logoVisible };
+            Label title = new Label { Text = options.titleText, FontFamily = Device.OnPlatform("Montserrat-Medium", "Montserrat-Medium.ttf#Montserrat-Medium", null), TextColor = Color.White, FontSize = 18, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center };
             titleContent.Children.Add(logo);
             titleContent.Children.Add(title);
             gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(5, GridUnitType.Star) });
             gridLayout.Children.Add(titleContent, 1, 0);
 
             // Construct home button and add gesture recognizer
-            if (homeButtonVisible)
+            if (options.homeButtonVisible)
             {
                 Image homeImage = new Image
                 {
@@ -92,6 +94,10 @@ namespace PortableApp
                 homeImage.GestureRecognizers.Add(homeImageGestureRecognizer);
                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 gridLayout.Children.Add(homeImage, 2, 0);
+            }
+            else if (options.nextAndPreviousVisible)
+            {
+
             }
             else
             {
@@ -186,5 +192,16 @@ namespace PortableApp
             await Navigation.PushAsync(new HTMLPage("Acknowledgements.html", "ACKNOWLEDGEMENTS"));
         }
 
+    }
+
+    public class NavigationOptions
+    {
+        public string titleText { get; set; }
+        public bool backButtonVisible { get; set; }
+        public bool homeButtonVisible { get; set; }
+        public bool logoVisible { get; set; }
+        public bool nextAndPreviousVisible { get; set; }
+        public WetlandPlant nextPlant { get; set; }
+        public WetlandPlant previousPlant { get; set; }
     }
 }
