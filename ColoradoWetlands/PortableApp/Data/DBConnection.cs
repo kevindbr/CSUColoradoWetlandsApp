@@ -1,4 +1,6 @@
-﻿using SQLite;
+﻿using PortableApp.Models;
+using SQLite;
+using System;
 using System.Collections.ObjectModel;
 
 namespace PortableApp
@@ -6,11 +8,24 @@ namespace PortableApp
     public class DBConnection
     {
         protected static SQLiteConnection conn { get; set; }
+        protected static SQLiteAsyncConnection connAsync { get; set; }
 
         // Initialize connection if it hasn't already been initialized
-        public DBConnection(SQLiteConnection newConn = null)
+        public DBConnection(dynamic newConn = null)
         {
-            if (conn == null) { conn = newConn; }
+            if (conn == null && newConn.GetType() == typeof(SQLiteConnection)) { conn = newConn; }
+            if (connAsync == null && newConn.GetType() == typeof(SQLiteAsyncConnection)) { connAsync = newConn; }
         }
+
+        // Seed database with Plant info
+        //public void SeedDB()
+        //{
+        //    ObservableCollection<WetlandPlant> plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+        //    if (plants.Count == 0)
+        //    {
+        //        conn.Insert(new WetlandPlant() { commonname = "Test" });
+        //    }
+        //}
+
     }
 }

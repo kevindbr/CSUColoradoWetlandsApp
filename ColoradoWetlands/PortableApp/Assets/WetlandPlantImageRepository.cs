@@ -9,22 +9,13 @@ using Xamarin.Forms;
 namespace PortableApp
 {
 
-    public class WetlandPlantImageRepository
+    public class WetlandPlantImageRepository : DBConnection
     {
-        // establish SQLite connection
-        private SQLiteConnection conn;
-        private SQLiteAsyncConnection connAsync;
-        public string StatusMessage { get; set; }
 
-        public WetlandPlantImageRepository(string dbPath)
-        {
-            // Initialize a new SQLiteConnection
-            conn = new SQLiteConnection(dbPath);
-            connAsync = new SQLiteAsyncConnection(dbPath);
-
+        public WetlandPlantImageRepository()
+        { 
             // Create the Wetland Plant table
             conn.CreateTable<WetlandPlantImage>();
-            connAsync.CreateTableAsync<WetlandPlantImage>().Wait();
         }
 
         // return a list of Wetland Plant Images saved to the WetlandPlantImage table in the database

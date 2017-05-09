@@ -1,63 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using PortableApp.Models;
-using SQLite;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Xamarin.Forms;
+using System;
 
 namespace PortableApp
 {
 
-    public class WetlandPlantRepository
+    public class WetlandPlantRepository : DBConnection
 	{
-        // establish SQLite connection
-        private SQLiteConnection conn;
-        private SQLiteAsyncConnection connAsync;
+
         public string StatusMessage { get; set; }
 
-		public WetlandPlantRepository(string dbPath)
+        public WetlandPlantRepository()
 		{
-            // Initialize a new SQLiteConnection
-            conn = new SQLiteConnection(dbPath);
-            connAsync = new SQLiteAsyncConnection(dbPath);
-
-            // Create the Wetland Plant table
+            // Create the Wetland Plant table (only if it's not yet created)
+            conn.DropTable<WetlandPlant>();
             conn.CreateTable<WetlandPlant>();
-            connAsync.CreateTableAsync<WetlandPlant>().Wait();
 		}
-
-		public async Task AddNewWetlandPlantAsync(string commonName)
-		{
-			int result = 0;
-			try
-			{
-				// basic validation to ensure a name was entered
-				if (string.IsNullOrEmpty(commonName))
-					throw new Exception("Valid Common Name required");
-
-                // insert a new plant into the Plant table
-                result = await connAsync.InsertAsync(new WetlandPlant { commonname = commonName });
-
-				StatusMessage = string.Format("{0} record(s) added [CommonName: {1})", result, commonName);
-			}
-			catch (Exception ex)
-			{
-				StatusMessage = string.Format("Failed to add {0}. Error: {1}", commonName, ex.Message);
-			}
-
-		}
-
+        
         public List<WetlandPlant> GetAllWetlandPlants()
         {
             // return a list of Wetlandplants saved to the WetlandPlant table in the database
             return (from p in conn.Table<WetlandPlant>() select p).ToList();
         }
 
-        public async Task<List<WetlandPlant>> GetAllWetlandPlantsAsync()
+        public async Task AddPlantAsync(WetlandPlant plant)
         {
-            // return a list of plants saved to the Wetland Plant table in the database
-            return await connAsync.Table<WetlandPlant>().ToListAsync();
+            try
+            {
+                if (string.IsNullOrEmpty(plant.commonname))
+                    throw new Exception("Valid plant required");
+
+                var result = await connAsync.InsertAsync(plant);
+                StatusMessage = string.Format("{0} record(s) added [Name: {1})", result, plant);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = string.Format("Failed to add {0}. Error: {1}", plant, ex.Message);
+            }
+            
         }
+
     }
 }

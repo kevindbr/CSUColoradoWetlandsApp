@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System;
 using Xamarin.Forms;
 
 namespace PortableApp
@@ -8,6 +9,7 @@ namespace PortableApp
         public static WetlandPlantRepository WetlandPlantRepo { get; private set; }
         public static WetlandPlantImageRepository WetlandPlantImageRepo { get; private set; }
         public static WetlandTypeRepository WetlandTypeRepo { get; private set; }
+        public static WetlandSettingRepository WetlandSettingsRepo { get; private set; }
 
         public App(string dbPath)
         {
@@ -17,10 +19,14 @@ namespace PortableApp
             SQLiteConnection newConn = new SQLiteConnection(dbPath);
             DBConnection dbConn = new DBConnection(newConn);
 
+            SQLiteAsyncConnection newConnAsync = new SQLiteAsyncConnection(dbPath);
+            DBConnection dbConnAsync = new DBConnection(newConnAsync);
+
             // Initialize repositories
-            WetlandPlantRepo = new WetlandPlantRepository(dbPath);
-            WetlandPlantImageRepo = new WetlandPlantImageRepository(dbPath);
-            WetlandTypeRepo = new WetlandTypeRepository(dbPath);
+            WetlandPlantRepo = new WetlandPlantRepository();
+            WetlandPlantImageRepo = new WetlandPlantImageRepository();
+            WetlandTypeRepo = new WetlandTypeRepository();
+            WetlandSettingsRepo = new WetlandSettingRepository();
 
             // Set MainPage
             this.MainPage = new NavigationPage(new MainPage(dbPath));

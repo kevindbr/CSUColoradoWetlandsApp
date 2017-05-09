@@ -12,6 +12,7 @@ namespace PortableApp
     public class ExternalDBConnection
     {
         const string Url = "http://sdt1.cas.colostate.edu/mobileapi/api/wetland";
+        const string localUrl = "http://129.82.38.57:61045/api/wetland";
         private string authorizationKey;
 
         private async Task<HttpClient> GetClient()
@@ -51,6 +52,13 @@ namespace PortableApp
             HttpClient client = new HttpClient();
             string result = await client.GetStringAsync("http://129.82.38.57:61045/api/Puma/" + resourceId + "/images");
             return JsonConvert.DeserializeObject<ObservableCollection<WetlandPlantImage>>(result);
+        }
+
+        public async Task<WetlandSetting> GetDateUpdatedDataOnServer()
+        {
+            HttpClient client = new HttpClient();
+            string result = await client.GetStringAsync(localUrl + "_settings/DatePlantDataUpdatedOnServer");
+            return JsonConvert.DeserializeObject<WetlandSetting>(result);
         }
 
         //public List<Puma> GetAllPumas()

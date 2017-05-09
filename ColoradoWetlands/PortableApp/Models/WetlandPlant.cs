@@ -7,7 +7,7 @@ namespace PortableApp.Models
     [Table("wetland_plants")]
     public class WetlandPlant
     {
-        [PrimaryKey, AutoIncrement]
+        [PrimaryKey]
         public int plantid { get; set; }
 
         public int id { get; set; }

@@ -1,6 +1,8 @@
 ﻿using PortableApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace PortableApp
@@ -13,7 +15,24 @@ namespace PortableApp
         protected override async void OnAppearing()
         {
             // Get all Pumas from external API call, store them in a collection
-            plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAll());
+            //plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAll());
+            plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+
+            // get and compare local data updated date and that of the server, sending to download page if date on server is newer
+            WetlandSetting datePlantDataUpdatedLocally = await App.WetlandSettingsRepo.GetSettingAsync("DatePlantsDownloaded");
+            if (datePlantDataUpdatedLocally != null)
+            {
+                WetlandSetting datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
+                if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || plants.Count == 0)
+                {
+                    await Navigation.PushAsync(new DownloadWetlandPlantsPage());
+                }
+            }
+            else
+            {
+                await Navigation.PushAsync(new DownloadWetlandPlantsPage());
+            }
+
             wetlandPlantsList.ItemsSource = plants;
             base.OnAppearing();
         }

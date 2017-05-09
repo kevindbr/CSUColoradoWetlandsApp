@@ -39,12 +39,14 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Assets\WetlandPlantImageRepository.cs" />
+    <Compile Include="Assets\WetlandSettingRepository.cs" />
     <Compile Include="Assets\WetlandTypeRepository.cs" />
     <Compile Include="Assets\WetlandPlantRepository.cs" />
     <Compile Include="Data\DBConnection.cs" />
     <Compile Include="Data\ExternalDBConnection.cs" />
+    <Compile Include="Models\WetlandSetting.cs" />
     <Compile Include="Models\WetlandPlantImage.cs" />
-    <Compile Include="Views\ViewHelpers.cs" />
+    <Compile Include="Helpers\ViewHelpers.cs" />
     <Compile Include="Views\MainPage.cs" />
     <Compile Include="Views\TransparentWebView.cs" />
     <Compile Include="Views\WetlandPlantDetailPage.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="Models\WetlandType.cs" />
     <Compile Include="Models\WetlandPlant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\DownloadWetlandPlantsPage.cs" />
     <Compile Include="Views\WetlandTypesDetailPage.cs" />
     <Compile Include="Views\WetlandPlantInfoPage.cs" />
     <Compile Include="Views\WetlandTypesPage.cs" />
