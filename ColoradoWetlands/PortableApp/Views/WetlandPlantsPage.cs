@@ -22,11 +22,11 @@ namespace PortableApp
             WetlandSetting datePlantDataUpdatedLocally = await App.WetlandSettingsRepo.GetSettingAsync("DatePlantsDownloaded");
             if (datePlantDataUpdatedLocally != null)
             {
-                WetlandSetting datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
-                if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || plants.Count == 0)
-                {
-                    await Navigation.PushAsync(new DownloadWetlandPlantsPage());
-                }
+                //WetlandSetting datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
+                //if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || plants.Count == 0)
+                //{
+                //    await Navigation.PushAsync(new DownloadWetlandPlantsPage());
+                //}
             }
             else
             {

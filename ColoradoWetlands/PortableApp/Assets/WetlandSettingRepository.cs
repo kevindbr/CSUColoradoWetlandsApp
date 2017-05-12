@@ -18,18 +18,26 @@ namespace PortableApp
             // Create the Wetland Setting table (only if it's not yet created)
             conn.CreateTable<WetlandSetting>();
 		}
-        
+
+        // return a list of Wetlandplants saved to the WetlandSetting table in the database
         public List<WetlandSetting> GetAllWetlandSettings()
         {
-            // return a list of Wetlandplants saved to the WetlandSetting table in the database
             return (from s in conn.Table<WetlandSetting>() select s).ToList();
         }
 
+        // get a list of image settings stored in the local database
+        public List<WetlandSetting> GetAllImageSettings()
+        {
+            return conn.Table<WetlandSetting>().Where(s => s.name.Equals("ImagesZipFile")).ToList();
+        }
+
+        // get an individual setting based on its name
         public async Task<WetlandSetting> GetSettingAsync(string settingName)
         {
             return await connAsync.Table<WetlandSetting>().Where(s => s.name.Equals(settingName)).FirstOrDefaultAsync();
         }
 
+        // add or update a setting
         public async Task AddOrUpdateSettingAsync(WetlandSetting setting)
         {
             try

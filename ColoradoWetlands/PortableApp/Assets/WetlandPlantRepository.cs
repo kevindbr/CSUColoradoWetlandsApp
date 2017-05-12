@@ -16,7 +16,7 @@ namespace PortableApp
         public WetlandPlantRepository()
 		{
             // Create the Wetland Plant table (only if it's not yet created)
-            conn.DropTable<WetlandPlant>();
+            //conn.DropTable<WetlandPlant>();
             conn.CreateTable<WetlandPlant>();
 		}
         
