@@ -75,35 +75,35 @@ namespace PortableApp
                 scinameauthor = "ACER NEGUNDO",
                 commonname = "Boxelder",
                 family = "Aceraceae",
-                FileName = "ACNE2_3.jpg"
+                topimgtopimg = "ACNE2_3.jpg"
             });
             wetlandPlants.Add(new WetlandPlant
             {
                 scinameauthor = "ACONITUM COLUMBIANUM",
                 commonname = "Columbian Monkshood",
                 family = "Ranunculaceae (Helleboraceae)",
-                FileName = "ACCO4_1.jpg"
+                topimgtopimg = "ACCO4_1.jpg"
             });
             wetlandPlants.Add(new WetlandPlant
             {
                 scinameauthor = "ACORUS CALAMUS",
                 commonname = "Calamus",
                 family = "Acoraceae",
-                FileName = "ACCA4_2.jpg"
+                topimgtopimg = "ACCA4_2.jpg"
             });
             wetlandPlants.Add(new WetlandPlant
             {
                 scinameauthor = "ADIANTUM CAPILLUS-VENERIS",
                 commonname = "Common Maidenhair",
                 family = "Pteridaceae (Adiantaceae)",
-                FileName = "ADCA_1.jpg"
+                topimgtopimg = "ADCA_1.jpg"
             });
             wetlandPlants.Add(new WetlandPlant
             {
                 scinameauthor = "AGALINIS TENUIFOLIA",
                 commonname = "Slenderleaf False Foxglove",
                 family = "Scrophulariaceae (Orobanchaceae)",
-                FileName = "AGTE3_1.jpg"
+                topimgtopimg = "AGTE3_1.jpg"
             });
             return wetlandPlants;
         }
@@ -138,7 +138,7 @@ namespace PortableApp
 
             // Add image
             var image = new Image { Aspect = Aspect.AspectFill, Margin = new Thickness(0, 0, 0, 20) };
-            image.SetBinding(Image.SourceProperty, new Binding("Thumbnail"));
+            image.SetBinding(Image.SourceProperty, new Binding("ThumbnailPath"));
             cell.Children.Add(image, 0, 0);
 
             // Add text section

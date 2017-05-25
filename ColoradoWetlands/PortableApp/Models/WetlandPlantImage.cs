@@ -1,4 +1,7 @@
-﻿using SQLite;
+﻿using PCLStorage;
+using SQLite;
+using System.IO;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PortableApp.Models
@@ -17,9 +20,13 @@ namespace PortableApp.Models
         [MaxLength(250)]
         public string Credit { get; set; }
 
-        public ImageSource ImageSource
+        public string ImagePath
         {
-            get { return ImageSource.FromResource(string.Format("PortableApp.Resources.Images.Plants.Plant{0}.{1}", PlantId, FileName)); }
+            get
+            {
+                IFolder rootFolder = FileSystem.Current.LocalStorage;
+                return rootFolder + "/Images/" + FileName;
+            }
         }
 
         public string ImageCredit

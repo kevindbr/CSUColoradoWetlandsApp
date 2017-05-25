@@ -1,5 +1,8 @@
-﻿using SQLite;
+﻿using PCLStorage;
+using SQLite;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PortableApp.Models
@@ -51,12 +54,14 @@ namespace PortableApp.Models
         public string topimgtopimg { get; set; }
         public string duration { get; set; }
         
-
-        public string FileName { get; set; }
-
-        public ImageSource Thumbnail
+        public string ThumbnailPath
         {
-            get { return ImageSource.FromResource(string.Format("PortableApp.Resources.Images.Plants.{0}", topimgtopimg)); }
+            get
+            {
+                IFolder rootFolder = FileSystem.Current.LocalStorage;
+                return rootFolder.Path + "/Images/" + topimgtopimg;
+            }
         }
+
     }
 }

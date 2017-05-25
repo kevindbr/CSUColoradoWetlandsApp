@@ -5,13 +5,12 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using PCLStorage;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using ICSharpCode.SharpZipLib.Zip;
 using System.IO;
+using ICSharpCode.SharpZipLib.Zip;
+using ICSharpCode.SharpZipLib.Core;
 
 namespace PortableApp
 {
@@ -36,7 +35,7 @@ namespace PortableApp
             await UpdatePlants();
 
             // Save images to the database
-            //await UpdatePlantImages();
+            await UpdatePlantImages();
 
             // Pop modal off stack (and return to WetlandPlantsPage)
             await App.Current.MainPage.Navigation.PopAsync();
@@ -88,7 +87,7 @@ namespace PortableApp
             
         //}
 
-        // Iterate through plants and update progressbar
+        // Get plants from MobileApi server and save locally
         public async Task UpdatePlants()
         {
             try
@@ -113,79 +112,65 @@ namespace PortableApp
             }
         }
 
-        // Iterate through plants and update progressbar
+        // Get plant images from MobileApi server and save locally
         public async Task UpdatePlantImages()
         {
+            // Declare variables
             string imagesZipFileLocation = PortableApp.ExternalDBConnection.localUrl + "/image_zip_files/";
+            IEnumerable<WetlandSetting> imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
             long receivedBytes = 0;
             long? totalBytes = 0;
 
+            // Set progressBar to 0 and downloadLabel text to "Downloading Images..."
             await progressBar.ProgressTo(0, 0, Easing.Linear);
+            downloadLabel.Text = "Downloading Images...";
 
             try
             {
-                downloadLabel.Text = "Downloading Images...";
+                // IFolder interface from PCLStorage; create or open imagesZipped folder (in Library/imagesZipped)    
+                IFolder rootFolder = FileSystem.Current.LocalStorage;
+                IFolder folder = await rootFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+                string folderPath = rootFolder + "Images";
 
-                IEnumerable<WetlandSetting> imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
+                // Get image file setting records from MobileApi to determine which files to download
+                // TODO: Limit this to only the files needed, not just every file
                 totalBytes = imageFileSettingsOnServer.Sum(x => x.valueint);
 
+                // For each setting, get the corresponding zip file and save it locally
                 foreach (WetlandSetting imageFile in imageFileSettingsOnServer)
                 {
-                    using (var stream = await client.GetStreamAsync(imagesZipFileLocation + imageFile.valuetext.Replace(".zip", "")))
+                    Stream webStream = await client.GetStreamAsync(imagesZipFileLocation + imageFile.valuetext.Replace(".zip", ""));
+                    ZipInputStream zipInputStream = new ZipInputStream(webStream);
+                    ZipEntry zipEntry = zipInputStream.GetNextEntry();
+                    while (zipEntry != null)
                     {
-                        byte[] buffer = new byte[4096];
+                        String entryFileName = zipEntry.Name;
+                        // to remove the folder from the entry:- entryFileName = Path.GetFileName(entryFileName);
+                        // Optionally match entrynames against a selection list here to skip as desired.
 
-                        for (;;)
+                        byte[] buffer = new byte[4096];      
+
+                        IFile file = await folder.CreateFileAsync(entryFileName, CreationCollisionOption.OpenIfExists);
+                        using (Stream localStream = await file.OpenAsync(FileAccess.ReadAndWrite))
                         {
-                            long bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-                            if (bytesRead == 0)
-                            {
-                                await Task.Yield();
-                                break;
-                            }
-
-                            receivedBytes += bytesRead;
-                            await progressBar.ProgressTo((double)receivedBytes / (double)totalBytes, 0, Easing.Linear);
+                            StreamUtils.Copy(zipInputStream, localStream, buffer);
                         }
-
-                        // IFolder interface comes from PCLStorage    
-                        IFolder rootFolder = FileSystem.Current.LocalStorage;
-                        IFolder folder = await rootFolder.CreateFolderAsync("zipFolder", CreationCollisionOption.OpenIfExists);
-                        IFile file = await folder.CreateFileAsync("images.zip", CreationCollisionOption.OpenIfExists);
-
-                        using (Stream newStream = await file.OpenAsync(FileAccess.ReadAndWrite))
-                        {
-                            await newStream.WriteAsync(buffer, 0, buffer.Length);
-                            using (var zf = new ZipFile(stream))
-                            {
-                                foreach (ZipEntry zipEntry in zf)
-                                {
-                                    // Get Entry Stream.
-                                    Stream zipEntryStream = zf.GetInputStream(zipEntry);
-
-                                    // Create the file in filesystem and copy entry stream to it.
-                                    IFile zipEntryFile = await rootFolder.CreateFileAsync(zipEntry.Name, CreationCollisionOption.FailIfExists);
-                                    using (Stream outPutFileStream = await zipEntryFile.OpenAsync(FileAccess.ReadAndWrite))
-                                    {
-                                        await zipEntryStream.CopyToAsync(outPutFileStream);
-                                    }
-                                }
-                            }
-                        }
-
+                        receivedBytes += zipEntry.Size;
+                        double percentage = (double)receivedBytes / (double)totalBytes;
+                        await progressBar.ProgressTo(percentage, 0, Easing.Linear);
+                        zipEntry = zipInputStream.GetNextEntry();
                     }
-                    
                 }
-                
             }
             catch (OperationCanceledException e)
             {
-                Debug.WriteLine("Canceled Updating of Images {0}", e.Message);
+                Debug.WriteLine("Canceled Downloading of Images {0}", e.Message);
             }
             catch (Exception e)
             {
                 Debug.WriteLine("ex {0}", e.Message);
             }
+            
         }
     }
 }

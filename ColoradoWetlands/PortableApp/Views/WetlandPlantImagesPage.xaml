@@ -13,7 +13,7 @@
         </ContentPage.Padding>
         <StackLayout>
           <Label Text="{Binding ImageCredit}" FontSize="Medium" HorizontalOptions="Center" />
-          <Image Source="{Binding ImageSource}" />
+          <Image Source="{Binding FileName}" />
         </StackLayout>
       </ContentPage>
     </DataTemplate>

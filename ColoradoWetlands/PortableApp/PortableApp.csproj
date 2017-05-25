@@ -144,10 +144,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\Plants\ACCA4_1.jpg" />
-    <EmbeddedResource Include="Resources\Images\Plants\ACCA4_2.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\Icon-Small-40%402x.png" />
   </ItemGroup>
   <ItemGroup>
@@ -196,32 +192,7 @@
     <EmbeddedResource Include="Views\HTML\WetlandType-WetMeadow.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\Plants\ADCA_1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\Plants\ACNE2_1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\Plants\ACNE2_3.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\Plants\ACCO4_1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Views\HTML\WetlandType-MesicMeadow.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\Plants\AGDE2_icon.jpg" />
-    <EmbeddedResource Include="Resources\Images\Plants\AGTE3_1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\Plants\ACNE2_2.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\Plants\ACNE2_icon.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\Plants\ACCO4_icon.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
