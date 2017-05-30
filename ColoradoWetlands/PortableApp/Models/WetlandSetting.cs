@@ -1,7 +1,5 @@
-﻿using SQLite;
+﻿using SQLite.Net.Attributes;
 using System;
-using System.Collections.Generic;
-using Xamarin.Forms;
 
 namespace PortableApp.Models
 {

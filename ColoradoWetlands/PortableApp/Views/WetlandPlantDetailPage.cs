@@ -13,9 +13,9 @@ namespace PortableApp.Views
 
             Children.Add(new WetlandPlantInfoPage(plant) { Title = "INFO", Icon = "info.png" });
             Children.Add(new WetlandPlantImagesPage(plant) { Title = "IMAGES", Icon = "images.png" });
-            Children.Add(new WetlandPlantImagesPage(plant) { Title = "SIMILAR", Icon = "similar.png" });
-            Children.Add(new WetlandPlantImagesPage(plant) { Title = "ECOLOGY", Icon = "ecology.png" });
-            Children.Add(new WetlandPlantImagesPage(plant) { Title = "RANGE", Icon = "range.png" });
+            Children.Add(new WetlandPlantInfoPage(plant) { Title = "SIMILAR", Icon = "similar.png" });
+            Children.Add(new WetlandPlantInfoPage(plant) { Title = "ECOLOGY", Icon = "ecology.png" });
+            Children.Add(new WetlandPlantInfoPage(plant) { Title = "RANGE", Icon = "range.png" });
             BarBackgroundColor = Color.Black;
             BarTextColor = Color.White;
         }

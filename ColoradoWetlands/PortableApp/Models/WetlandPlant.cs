@@ -1,9 +1,7 @@
 ﻿using PCLStorage;
-using SQLite;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace PortableApp.Models
 {
@@ -53,6 +51,9 @@ namespace PortableApp.Models
         public string synonyms { get; set; }
         public string topimgtopimg { get; set; }
         public string duration { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<WetlandPlantImage> Images { get; set; }
         
         public string ThumbnailPath
         {

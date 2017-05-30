@@ -1,7 +1,5 @@
-﻿using PortableApp.Models;
-using SQLite;
-using System;
-using System.Collections.ObjectModel;
+﻿using SQLite.Net;
+using SQLite.Net.Async;
 
 namespace PortableApp
 {

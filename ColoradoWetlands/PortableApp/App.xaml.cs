@@ -1,4 +1,6 @@
-﻿using SQLite;
+﻿using SQLite.Net;
+using SQLite.Net.Async;
+using SQLite.Net.Interop;
 using System;
 using Xamarin.Forms;
 
@@ -11,15 +13,15 @@ namespace PortableApp
         public static WetlandTypeRepository WetlandTypeRepo { get; private set; }
         public static WetlandSettingRepository WetlandSettingsRepo { get; private set; }
 
-        public App(string dbPath)
+        public App(ISQLitePlatform sqliteplatform, string dbPath)
         {
             InitializeComponent();
 
             // Initialize SQLite connection and DBConnection class to hold connection
-            SQLiteConnection newConn = new SQLiteConnection(dbPath);
+            SQLiteConnection newConn = new SQLiteConnection(sqliteplatform, dbPath);
             DBConnection dbConn = new DBConnection(newConn);
 
-            SQLiteAsyncConnection newConnAsync = new SQLiteAsyncConnection(dbPath);
+            SQLiteAsyncConnection newConnAsync = new SQLiteAsyncConnection(() => new SQLiteConnectionWithLock(sqliteplatform, new SQLiteConnectionString(dbPath, false)));
             DBConnection dbConnAsync = new DBConnection(newConnAsync);
 
             // Initialize repositories

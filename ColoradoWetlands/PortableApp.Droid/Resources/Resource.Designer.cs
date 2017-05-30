@@ -28,6 +28,8 @@ namespace PortableApp.Droid
 		{
 			global::PCLStorage.Resource.String.ApplicationName = global::PortableApp.Droid.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::PortableApp.Droid.Resource.String.Hello;
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.ApplicationName = global::PortableApp.Droid.Resource.String.ApplicationName;
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.Hello = global::PortableApp.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::PortableApp.Droid.Resource.Attribute.actionBarSize;
 		}
 		

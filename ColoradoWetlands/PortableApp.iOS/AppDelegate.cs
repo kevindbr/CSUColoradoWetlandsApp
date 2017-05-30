@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Foundation;
+﻿using Foundation;
 using UIKit;
+using SQLite.Net.Platform.XamarinIOS;
 
 namespace PortableApp.iOS
 {
@@ -26,8 +23,8 @@ namespace PortableApp.iOS
             global::Xamarin.Forms.Forms.Init();
 
             string dbPath = FileAccessHelper.GetLocalFilePath("db.db3");
-
-            LoadApplication(new PortableApp.App(dbPath));
+            var platform = new SQLitePlatformIOS();
+            LoadApplication(new PortableApp.App(platform, dbPath));
 
             return base.FinishedLaunching(app, options);
         }

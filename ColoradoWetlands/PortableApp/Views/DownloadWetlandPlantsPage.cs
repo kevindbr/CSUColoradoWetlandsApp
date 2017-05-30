@@ -96,7 +96,7 @@ namespace PortableApp
                 int plantsSaved = 0;
                 foreach (var plant in plants)
                 {
-                    await App.WetlandPlantRepo.AddPlantAsync(plant);
+                    App.WetlandPlantRepo.AddPlant(plant);
                     plantsSaved += 1;
                     await progressBar.ProgressTo(plantsSaved / plants.Count, 500, Easing.Linear);
                 }

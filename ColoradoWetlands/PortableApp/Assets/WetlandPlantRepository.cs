@@ -4,6 +4,7 @@ using PortableApp.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System;
+using SQLiteNetExtensions.Extensions;
 
 namespace PortableApp
 {
@@ -23,18 +24,17 @@ namespace PortableApp
         public List<WetlandPlant> GetAllWetlandPlants()
         {
             // return a list of Wetlandplants saved to the WetlandPlant table in the database
-            return (from p in conn.Table<WetlandPlant>() select p).ToList();
+            return conn.GetAllWithChildren<WetlandPlant>();
         }
 
-        public async Task AddPlantAsync(WetlandPlant plant)
+        public void AddPlant(WetlandPlant plant)
         {
             try
             {
                 if (string.IsNullOrEmpty(plant.commonname))
                     throw new Exception("Valid plant required");
-
-                var result = await connAsync.InsertAsync(plant);
-                StatusMessage = string.Format("{0} record(s) added [Name: {1})", result, plant);
+                conn.InsertWithChildren(plant);
+                //StatusMessage = string.Format("{0} record(s) added [Name: {1})", result, plant);
             }
             catch (Exception ex)
             {

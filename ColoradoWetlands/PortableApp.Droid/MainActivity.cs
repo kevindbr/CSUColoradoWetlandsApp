@@ -1,10 +1,5 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
 
 namespace PortableApp.Droid
@@ -22,8 +17,8 @@ namespace PortableApp.Droid
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
             string dbPath = FileAccessHelper.GetLocalFilePath("db.db3");
-
-            LoadApplication(new PortableApp.App(dbPath));
+            var platform = new SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid();
+            LoadApplication(new PortableApp.App(platform, dbPath));
         }
     }
 }

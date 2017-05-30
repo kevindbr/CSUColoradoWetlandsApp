@@ -15,8 +15,7 @@ namespace PortableApp.Views
         public WetlandPlantImagesPage(WetlandPlant plant)
         {
             InitializeComponent();
-            ObservableCollection<WetlandPlantImage> plantImages = new ObservableCollection<WetlandPlantImage>(App.WetlandPlantImageRepo.PlantImages(plant.plantid));
-            ItemsSource = plantImages;
+            ItemsSource = plant.Images;
         }
     }
 }

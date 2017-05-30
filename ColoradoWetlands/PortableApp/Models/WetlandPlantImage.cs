@@ -1,8 +1,6 @@
 ﻿using PCLStorage;
-using SQLite;
-using System.IO;
-using System.Threading.Tasks;
-using Xamarin.Forms;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 
 namespace PortableApp.Models
 {
@@ -12,7 +10,11 @@ namespace PortableApp.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
+        [ForeignKey(typeof(WetlandPlant))]
         public int PlantId { get; set; }
+
+        [ManyToOne]
+        public WetlandPlant Plant { get; set; }
 
         [MaxLength(250)]
         public string FileName { get; set; }
@@ -25,7 +27,7 @@ namespace PortableApp.Models
             get
             {
                 IFolder rootFolder = FileSystem.Current.LocalStorage;
-                return rootFolder + "/Images/" + FileName;
+                return rootFolder.Path + "/Images/" + FileName;
             }
         }
 
