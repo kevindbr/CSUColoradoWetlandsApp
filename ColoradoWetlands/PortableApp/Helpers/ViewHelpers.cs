@@ -1,4 +1,5 @@
 ﻿using PortableApp.Models;
+using PortableApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -99,7 +100,53 @@ namespace PortableApp
             }
             else if (options.nextAndPreviousVisible)
             {
+                int plantIndex = options.plants.IndexOf(options.plant);
+                if (plantIndex > 0)
+                {
+                    WetlandPlant previousPlant = options.plants[plantIndex - 1];
+                    Image nextImage = new Image
+                    {
+                        Source = ImageSource.FromResource("PortableApp.Resources.Icons.previous_icon.png"),
+                        HeightRequest = 20,
+                        WidthRequest = 20,
+                        Margin = new Thickness(0, 15, 0, 15)
+                    };
+                    var nextImageGestureRecognizer = new TapGestureRecognizer();
+                    nextImageGestureRecognizer.Tapped += async (sender, e) =>
+                    {
+                        nextImage.Opacity = .5;
+                        await Task.Delay(200);
+                        nextImage.Opacity = 1;
+                        await Navigation.PushAsync(new WetlandPlantDetailPage(previousPlant, options.plants));
+                    };
+                    nextImage.GestureRecognizers.Add(nextImageGestureRecognizer);
+                    gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    gridLayout.Children.Add(nextImage, 2, 0);
+                }
 
+                if (plantIndex < options.plants.Count - 1)
+                {
+                    WetlandPlant nextPlant = options.plants[plantIndex + 1];
+                    Image nextImage = new Image
+                    {
+                        Source = ImageSource.FromResource("PortableApp.Resources.Icons.next_icon.png"),
+                        HeightRequest = 20,
+                        WidthRequest = 20,
+                        Margin = new Thickness(0, 15, 0, 15)
+                    };
+                    var nextImageGestureRecognizer = new TapGestureRecognizer();
+                    nextImageGestureRecognizer.Tapped += async (sender, e) =>
+                    {
+                        nextImage.Opacity = .5;
+                        await Task.Delay(200);
+                        nextImage.Opacity = 1;
+                        await Navigation.PushAsync(new WetlandPlantDetailPage(nextPlant, options.plants));
+                    };
+                    nextImage.GestureRecognizers.Add(nextImageGestureRecognizer);
+                    gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    gridLayout.Children.Add(nextImage, 2, 0);
+                }
+                
             }
             else
             {
@@ -203,8 +250,8 @@ namespace PortableApp
         public bool homeButtonVisible { get; set; }
         public bool logoVisible { get; set; }
         public bool nextAndPreviousVisible { get; set; }
-        public WetlandPlant nextPlant { get; set; }
-        public WetlandPlant previousPlant { get; set; }
+        public WetlandPlant plant { get; set; }
+        public ObservableCollection<WetlandPlant> plants { get; set; }
     }
 
     static class Extensions

@@ -199,7 +199,7 @@ namespace PortableApp
             if (wetlandPlantsList.SelectedItem != null)
             {
                 var selectedItem = e.SelectedItem as WetlandPlant;
-                var detailPage = new PortableApp.Views.WetlandPlantDetailPage(selectedItem);
+                var detailPage = new PortableApp.Views.WetlandPlantDetailPage(selectedItem, plants);
                 detailPage.BindingContext = selectedItem;
                 wetlandPlantsList.SelectedItem = null;
                 await Navigation.PushAsync(detailPage);

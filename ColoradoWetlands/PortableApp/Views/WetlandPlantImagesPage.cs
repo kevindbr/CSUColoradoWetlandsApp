@@ -1,5 +1,6 @@
 ﻿using CarouselView.FormsPlugin.Abstractions;
 using PortableApp.Models;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace PortableApp
@@ -7,7 +8,7 @@ namespace PortableApp
     public partial class WetlandPlantImagesPage : ViewHelpers
     {
 
-        public WetlandPlantImagesPage(WetlandPlant plant)
+        public WetlandPlantImagesPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants)
         {
 
             // Turn off navigation bar and initialize pageContainer
@@ -19,7 +20,7 @@ namespace PortableApp
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Add header to inner container
-            NavigationOptions navOptions = new NavigationOptions { titleText = plant.scinamenoauthor, backButtonVisible = true, homeButtonVisible = true };
+            NavigationOptions navOptions = new NavigationOptions { titleText = plant.scinamenoauthor, backButtonVisible = true, nextAndPreviousVisible = true, plant = plant, plants = plants };
             Grid navigationBar = ConstructNavigationBar(navOptions);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(navigationBar, 0, 0);
