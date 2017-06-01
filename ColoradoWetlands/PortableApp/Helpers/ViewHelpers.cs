@@ -1,8 +1,9 @@
 ﻿using PortableApp.Models;
 using System;
-using System.Collections;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -204,5 +205,24 @@ namespace PortableApp
         public bool nextAndPreviousVisible { get; set; }
         public WetlandPlant nextPlant { get; set; }
         public WetlandPlant previousPlant { get; set; }
+    }
+
+    static class Extensions
+    {
+        public static void Sort<TSource, TKey>(this Collection<TSource> source, Func<TSource, TKey> keySelector, string sortDirection)
+        {
+            List<TSource> sortedList;
+            if (sortDirection == "\u25B2")
+            {
+                sortedList = source.OrderByDescending(keySelector).ToList();
+            }
+            else
+            {
+                sortedList = source.OrderBy(keySelector).ToList();
+            }
+            source.Clear();
+            foreach (var sortedItem in sortedList)
+                source.Add(sortedItem);
+        }
     }
 }
