@@ -1,6 +1,7 @@
 ﻿using Foundation;
 using UIKit;
 using SQLite.Net.Platform.XamarinIOS;
+using CarouselView.FormsPlugin.iOS;
 
 namespace PortableApp.iOS
 {
@@ -21,6 +22,7 @@ namespace PortableApp.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            CarouselViewRenderer.Init();
 
             string dbPath = FileAccessHelper.GetLocalFilePath("db.db3");
             var platform = new SQLitePlatformIOS();

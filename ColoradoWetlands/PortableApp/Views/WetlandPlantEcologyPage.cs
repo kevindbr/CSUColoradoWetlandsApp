@@ -1,13 +1,12 @@
 ﻿using PortableApp.Models;
-using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace PortableApp
 {
-    public partial class WetlandPlantSimilarPage : ViewHelpers
+    public partial class WetlandPlantEcologyPage : ViewHelpers
     {
 
-        public WetlandPlantSimilarPage(WetlandPlant plant)
+        public WetlandPlantEcologyPage(WetlandPlant plant)
         {
 
             // Turn off navigation bar and initialize pageContainer
@@ -30,8 +29,10 @@ namespace PortableApp
                 Margin = new Thickness(15, 0, 15, 0)
             };
             StackLayout contentContainer = new StackLayout();
-                        
-            contentContainer.Children.Add(InfoPageSet("General Comments:", plant.scinamenoauthor));
+            
+            contentContainer.Children.Add(InfoPageSet("Habitat & Ecology:", plant.habitat));
+            contentContainer.Children.Add(InfoPageSet("Comments:", plant.comments));
+            contentContainer.Children.Add(InfoPageSet("Wetland Types:", plant.commonname));
 
             contentScrollView.Content = contentContainer;
             innerContainer.RowDefinitions.Add(new RowDefinition { });

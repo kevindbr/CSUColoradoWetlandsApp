@@ -1,13 +1,12 @@
 ﻿using PortableApp.Models;
-using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace PortableApp
 {
-    public partial class WetlandPlantSimilarPage : ViewHelpers
+    public partial class WetlandPlantRangePage : ViewHelpers
     {
 
-        public WetlandPlantSimilarPage(WetlandPlant plant)
+        public WetlandPlantRangePage(WetlandPlant plant)
         {
 
             // Turn off navigation bar and initialize pageContainer
@@ -30,8 +29,8 @@ namespace PortableApp
                 Margin = new Thickness(15, 0, 15, 0)
             };
             StackLayout contentContainer = new StackLayout();
-                        
-            contentContainer.Children.Add(InfoPageSet("General Comments:", plant.scinamenoauthor));
+            
+            contentContainer.Children.Add(InfoPageSet("Map:", plant.commonname));
 
             contentScrollView.Content = contentContainer;
             innerContainer.RowDefinitions.Add(new RowDefinition { });
