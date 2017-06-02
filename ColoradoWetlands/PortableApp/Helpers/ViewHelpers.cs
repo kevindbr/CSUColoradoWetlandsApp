@@ -118,6 +118,7 @@ namespace PortableApp
                         await Task.Delay(200);
                         nextImage.Opacity = 1;
                         await Navigation.PushAsync(new WetlandPlantDetailPage(previousPlant, options.plants));
+                        Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
                     };
                     nextImage.GestureRecognizers.Add(nextImageGestureRecognizer);
                     gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -141,6 +142,7 @@ namespace PortableApp
                         await Task.Delay(200);
                         nextImage.Opacity = 1;
                         await Navigation.PushAsync(new WetlandPlantDetailPage(nextPlant, options.plants));
+                        Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
                     };
                     nextImage.GestureRecognizers.Add(nextImageGestureRecognizer);
                     gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
