@@ -1,4 +1,5 @@
 ﻿using PortableApp.Models;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace PortableApp
@@ -6,7 +7,7 @@ namespace PortableApp
     public partial class WetlandPlantEcologyPage : ViewHelpers
     {
 
-        public WetlandPlantEcologyPage(WetlandPlant plant)
+        public WetlandPlantEcologyPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants)
         {
 
             // Turn off navigation bar and initialize pageContainer

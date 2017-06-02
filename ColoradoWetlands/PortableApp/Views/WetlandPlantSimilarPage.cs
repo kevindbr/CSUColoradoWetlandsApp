@@ -1,5 +1,5 @@
 ﻿using PortableApp.Models;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace PortableApp
@@ -7,7 +7,7 @@ namespace PortableApp
     public partial class WetlandPlantSimilarPage : ViewHelpers
     {
 
-        public WetlandPlantSimilarPage(WetlandPlant plant)
+        public WetlandPlantSimilarPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants)
         {
 
             // Turn off navigation bar and initialize pageContainer
