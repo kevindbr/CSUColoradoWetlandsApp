@@ -1,4 +1,5 @@
-﻿using PortableApp.Models;
+﻿using Plugin.Connectivity;
+using PortableApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +9,7 @@ namespace PortableApp
 {
     public partial class WetlandPlantsPage : ViewHelpers
     {
+        bool isConnectedToWifi;
         ListView wetlandPlantsList;
         ObservableCollection<WetlandPlant> plants;
         Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" } };
@@ -21,17 +23,35 @@ namespace PortableApp
 
             // get and compare local data updated date and that of the server, sending to download page if date on server is newer
             WetlandSetting datePlantDataUpdatedLocally = await App.WetlandSettingsRepo.GetSettingAsync("DatePlantsDownloaded");
-            if (datePlantDataUpdatedLocally != null)
+
+            // if there's a connection, look for updates; if connected to WiFi, attempt to update local app from the MobileAPI 
+            if (CrossConnectivity.Current.IsConnected)
             {
-                //WetlandSetting datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
-                //if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || plants.Count == 0)
-                //{
-                //    await Navigation.PushAsync(new DownloadWetlandPlantsPage());
-                //}
-            }
-            else
-            {
-                await Navigation.PushAsync(new DownloadWetlandPlantsPage());
+                WetlandSetting datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
+
+                foreach (var band in CrossConnectivity.Current.ConnectionTypes)
+                {
+                    if (band.ToString() == "WiFi")
+                        isConnectedToWifi = true;
+                }
+
+                if (datePlantDataUpdatedLocally != null)
+                {
+                    if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || plants.Count == 0)
+                    {
+                        if (isConnectedToWifi)
+                            await Navigation.PushAsync(new DownloadWetlandPlantsPage(datePlantDataUpdatedOnServer.valuetimestamp));
+                        else
+                            await DisplayAlert("Connect to WiFi", "Please connect to WiFi to download additional plant data and/or images", "OK");
+                    }
+                }
+                else
+                {
+                    if (isConnectedToWifi)
+                        await Navigation.PushAsync(new DownloadWetlandPlantsPage(datePlantDataUpdatedOnServer.valuetimestamp));
+                    else
+                        await DisplayAlert("Connect to WiFi", "Please connect to WiFi to download plant data and images", "OK");
+                }
             }
 
             wetlandPlantsList.ItemsSource = plants;
@@ -236,7 +256,7 @@ namespace PortableApp
                 FontSize = 12,
                 FontAttributes = FontAttributes.Bold | FontAttributes.Italic
             };
-            commonName.SetBinding(Label.TextProperty, new Binding("scinamenoauthor"));
+            commonName.SetBinding(Label.TextProperty, new Binding("scinamenoauthorstripped"));
             textSection.Children.Add(commonName);
 
             var divider = new BoxView { HeightRequest = 1, WidthRequest = 500, BackgroundColor = Color.White };
