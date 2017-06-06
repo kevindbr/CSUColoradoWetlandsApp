@@ -16,7 +16,7 @@ namespace PortableApp.Models
         [ManyToOne]
         public WetlandPlant Plant { get; set; }
 
-        [MaxLength(250)]
+        [MaxLength(250), Unique]
         public string FileName { get; set; }
 
         [MaxLength(250)]

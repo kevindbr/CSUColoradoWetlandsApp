@@ -39,7 +39,7 @@ namespace PortableApp
         
         public async Task<WetlandSetting> GetDateUpdatedDataOnServer()
         {
-            string result = await client.GetStringAsync(Url + "_settings/DatePlantDataUpdatedOnServer");
+            string result = await client.GetStringAsync(localUrl + "_settings/DatePlantDataUpdatedOnServer");
             return JsonConvert.DeserializeObject<WetlandSetting>(result);
         }
 

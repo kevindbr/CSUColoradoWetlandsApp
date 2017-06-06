@@ -14,6 +14,7 @@ namespace PortableApp.Models
         [PrimaryKey]
         public int plantid { get; set; }
 
+        [Unique]
         public int id { get; set; }
         public string scinameauthor { get; set; }
         public string scinamenoauthor { get; set; }
@@ -63,8 +64,25 @@ namespace PortableApp.Models
             get
             {
                 IFolder rootFolder = FileSystem.Current.LocalStorage;
-                return rootFolder.Path + "/Images/" + topimgtopimg;
+                return rootFolder.Path + "/Images/" + plantscode + "_icon.jpg";
             }
+        }
+
+        public string scinameauthorstripped
+        {
+            get
+            {
+                return scinameauthor.Replace("<em>", "").Replace("</em>", "");
+            }
+
+        }
+
+        public string scinamenoauthorstripped {
+            get
+            {
+                return scinamenoauthor.Replace("<em>", "").Replace("</em>", "");
+            }
+
         }
 
     }
