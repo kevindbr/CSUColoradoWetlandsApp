@@ -16,6 +16,7 @@ namespace PortableApp
         public WetlandSettingRepository()
 		{
             // Create the Wetland Setting table (only if it's not yet created)
+            //conn.DropTable<WetlandSetting>();
             conn.CreateTable<WetlandSetting>();
 		}
 

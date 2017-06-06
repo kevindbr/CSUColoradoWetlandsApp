@@ -13,8 +13,9 @@ namespace PortableApp
     {
 
         public WetlandPlantImageRepository()
-        { 
+        {
             // Create the Wetland Plant table
+            //conn.DropTable<WetlandPlantImage>();
             conn.CreateTable<WetlandPlantImage>();
         }
 

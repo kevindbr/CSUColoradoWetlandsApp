@@ -16,6 +16,7 @@ namespace PortableApp
 {
     public partial class DownloadWetlandPlantsPage : ViewHelpers
     {
+        DateTime? datePlantDataUpdatedOnServer;
         ObservableCollection<WetlandPlant> plants;
         ProgressBar progressBar = new ProgressBar();
         Label downloadLabel = new Label { Text = "", TextColor = Color.White, FontSize = 18, HorizontalTextAlignment = TextAlignment.Center };
@@ -42,8 +43,11 @@ namespace PortableApp
 
         }
 
-        public DownloadWetlandPlantsPage()
+        public DownloadWetlandPlantsPage(DateTime? datePlantDataUpdated)
         {
+
+            datePlantDataUpdatedOnServer = datePlantDataUpdated;
+
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);
             AbsoluteLayout pageContainer = ConstructPageContainer();
@@ -100,7 +104,7 @@ namespace PortableApp
                     plantsSaved += 1;
                     await progressBar.ProgressTo(plantsSaved / plants.Count, 500, Easing.Linear);
                 }
-                await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "DatePlantsDownloaded", valuetimestamp = DateTime.Now });
+                await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "DatePlantsDownloaded", valuetimestamp = datePlantDataUpdatedOnServer });
             }
             catch (OperationCanceledException e)
             {
@@ -127,10 +131,10 @@ namespace PortableApp
 
             try
             {
-                // IFolder interface from PCLStorage; create or open imagesZipped folder (in Library/imagesZipped)    
+                // IFolder interface from PCLStorage; create or open imagesZipped folder (in Library/Images)    
                 IFolder rootFolder = FileSystem.Current.LocalStorage;
                 IFolder folder = await rootFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-                string folderPath = rootFolder + "Images";
+                string folderPath = rootFolder.Path;
 
                 // Get image file setting records from MobileApi to determine which files to download
                 // TODO: Limit this to only the files needed, not just every file
