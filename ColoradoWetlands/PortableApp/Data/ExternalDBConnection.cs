@@ -8,51 +8,47 @@ using System.Threading.Tasks;
 using PortableApp.Models;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net.Http.Headers;
+using System.Diagnostics;
 
 namespace PortableApp
 {
     public class ExternalDBConnection
     {
-        const string Url = "http://sdt1.cas.colostate.edu/mobileapi/api/wetland";
-        public const string localUrl = "http://129.82.38.57:61045/api/wetland";
-        private string authorizationKey;
+        // Declare variables
+        public string Url = (Debugger.IsAttached == true) ? "http://129.82.38.57:61045/api/wetland" : "http://sdt1.cas.colostate.edu/mobileapi/api/wetland";
         HttpClient client = new HttpClient();
 
-        private async Task<HttpClient> GetClient()
+        // Set headers for client
+        public ExternalDBConnection()
         {
-            if (string.IsNullOrEmpty(authorizationKey))
-            {
-                authorizationKey = await client.GetStringAsync(Url + "login");
-                authorizationKey = JsonConvert.DeserializeObject<string>(authorizationKey);
-            }
-
-            client.DefaultRequestHeaders.Add("Authorization", authorizationKey);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", "p4OqMiplghVdWPbVv5rx84jdlskdJk*jdlsKDIE84");
             client.DefaultRequestHeaders.Add("Accept", "application/json");
-            return client;
         }
-
+        
         public async Task<IEnumerable<WetlandPlant>> GetAllPlants()
         {
-            string result = await client.GetStringAsync(Url);
-            return JsonConvert.DeserializeObject<IList<WetlandPlant>>(result);
+            string response = await client.GetStringAsync(Url);
+            return JsonConvert.DeserializeObject<IList<WetlandPlant>>(response);
         }
         
         public async Task<WetlandSetting> GetDateUpdatedDataOnServer()
         {
-            string result = await client.GetStringAsync(localUrl + "_settings/DatePlantDataUpdatedOnServer");
+            string result = await client.GetStringAsync(Url + "_settings/DatePlantDataUpdatedOnServer");
             return JsonConvert.DeserializeObject<WetlandSetting>(result);
         }
 
         public async Task<IEnumerable<WetlandSetting>> GetImageZipFileSettings()
         {
-            string result = await client.GetStringAsync(localUrl + "_settings/images");
+            string result = await client.GetStringAsync(Url + "_settings/images");
             return JsonConvert.DeserializeObject<IList<WetlandSetting>>(result);
         }
 
-        //public List<Puma> GetAllPumas()
-        //{
-        //    // return a list of Puma Types saved to the table in the database
-        //    return (from p in conn.Table<Puma>() select p).ToList();
-        //}
+        public async Task<Stream> GetImageZipFiles(string imageFileToDownload)
+        {
+            Stream result = await client.GetStreamAsync(Url + "/image_zip_files/" + imageFileToDownload);
+            return result;
+        }
+        
     }
 }

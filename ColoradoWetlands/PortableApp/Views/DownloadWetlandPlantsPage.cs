@@ -131,7 +131,6 @@ namespace PortableApp
         public async Task UpdatePlantImages(CancellationToken token)
         {
             // Get image file settings on server and determine which ones have not yet been saved locally, indicating which image files to download
-            string imagesZipFileLocation = PortableApp.ExternalDBConnection.localUrl + "/image_zip_files/";
             IEnumerable<WetlandSetting> imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
             List<WetlandSetting> imageFilesToDownload = new List<WetlandSetting>();
             foreach (WetlandSetting imageFile in imageFileSettingsOnServer)
@@ -165,7 +164,7 @@ namespace PortableApp
                     // For each setting, get the corresponding zip file and save it locally
                     foreach (WetlandSetting imageFileToDownload in imageFilesToDownload)
                     {
-                        Stream webStream = await client.GetStreamAsync(imagesZipFileLocation + imageFileToDownload.valuetext.Replace(".zip", ""));
+                        Stream webStream = await externalConnection.GetImageZipFiles(imageFileToDownload.valuetext.Replace(".zip", ""));
                         ZipInputStream zipInputStream = new ZipInputStream(webStream);
                         ZipEntry zipEntry = zipInputStream.GetNextEntry();
                         while (zipEntry != null)
