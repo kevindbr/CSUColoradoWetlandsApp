@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System;
 using SQLiteNetExtensions.Extensions;
+using SQLiteNetExtensionsAsync.Extensions;
 
 namespace PortableApp
 {
@@ -27,14 +28,13 @@ namespace PortableApp
             return conn.GetAllWithChildren<WetlandPlant>();
         }
 
-        public void AddPlant(WetlandPlant plant)
+        public async Task AddPlantAsync(WetlandPlant plant)
         {
             try
             {
                 if (string.IsNullOrEmpty(plant.commonname))
                     throw new Exception("Valid plant required");
-                conn.InsertWithChildren(plant);
-                //StatusMessage = string.Format("{0} record(s) added [Name: {1})", result, plant);
+                await connAsync.InsertWithChildrenAsync(plant);
             }
             catch (Exception ex)
             {

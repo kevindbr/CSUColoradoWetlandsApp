@@ -11,6 +11,7 @@ using Xamarin.Forms;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Core;
+using System.Threading;
 
 namespace PortableApp
 {
@@ -21,10 +22,16 @@ namespace PortableApp
         ProgressBar progressBar = new ProgressBar();
         Label downloadLabel = new Label { Text = "", TextColor = Color.White, FontSize = 18, HorizontalTextAlignment = TextAlignment.Center };
         Button cancelButton;
+        CancellationTokenSource tokenSource;
+        CancellationToken token;
         HttpClient client = new HttpClient();
 
         protected async override void OnAppearing()
         {
+            // Initialize CancellationToken
+            tokenSource = new CancellationTokenSource();
+            token = tokenSource.Token;
+
             // Initialize progressbar and page
             progressBar.Progress = 0;
             base.OnAppearing();
@@ -33,12 +40,15 @@ namespace PortableApp
             plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAllPlants());
 
             // Save plants to the database
-            await UpdatePlants();
+            if (!token.IsCancellationRequested)
+                await UpdatePlants(token);
 
             // Save images to the database
-            await UpdatePlantImages();
+            if (!token.IsCancellationRequested)
+                await UpdatePlantImages(token);
 
             // Pop modal off stack (and return to WetlandPlantsPage)
+            if (token.IsCancellationRequested) { await App.Current.MainPage.Navigation.PopToRootAsync(); };
             await App.Current.MainPage.Navigation.PopAsync();
 
         }
@@ -75,7 +85,7 @@ namespace PortableApp
                 Text = "CANCEL",
                 BorderRadius = Device.OnPlatform(0, 1, 0)
             };
-            //cancelButton.Clicked += OnCancelButtonClicked;
+            cancelButton.Clicked += OnCancelButtonClicked;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(cancelButton, 0, 3);
 
@@ -92,7 +102,7 @@ namespace PortableApp
         //}
 
         // Get plants from MobileApi server and save locally
-        public async Task UpdatePlants()
+        public async Task UpdatePlants(CancellationToken token)
         {
             try
             {
@@ -100,9 +110,10 @@ namespace PortableApp
                 int plantsSaved = 0;
                 foreach (var plant in plants)
                 {
-                    App.WetlandPlantRepo.AddPlant(plant);
+                    if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
+                    await App.WetlandPlantRepo.AddPlantAsync(plant);
                     plantsSaved += 1;
-                    await progressBar.ProgressTo(plantsSaved / plants.Count, 500, Easing.Linear);
+                    await progressBar.ProgressTo((double)plantsSaved / plants.Count, 1, Easing.Linear);
                 }
                 await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "DatePlantsDownloaded", valuetimestamp = datePlantDataUpdatedOnServer });
             }
@@ -117,64 +128,83 @@ namespace PortableApp
         }
 
         // Get plant images from MobileApi server and save locally
-        public async Task UpdatePlantImages()
+        public async Task UpdatePlantImages(CancellationToken token)
         {
-            // Declare variables
+            // Get image file settings on server and determine which ones have not yet been saved locally, indicating which image files to download
             string imagesZipFileLocation = PortableApp.ExternalDBConnection.localUrl + "/image_zip_files/";
             IEnumerable<WetlandSetting> imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
-            long receivedBytes = 0;
-            long? totalBytes = 0;
-
-            // Set progressBar to 0 and downloadLabel text to "Downloading Images..."
-            await progressBar.ProgressTo(0, 0, Easing.Linear);
-            downloadLabel.Text = "Downloading Images...";
-
-            try
+            List<WetlandSetting> imageFilesToDownload = new List<WetlandSetting>();
+            foreach (WetlandSetting imageFile in imageFileSettingsOnServer)
             {
-                // IFolder interface from PCLStorage; create or open imagesZipped folder (in Library/Images)    
-                IFolder rootFolder = FileSystem.Current.LocalStorage;
-                IFolder folder = await rootFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
-                string folderPath = rootFolder.Path;
+                WetlandSetting imageFileLocalSetting = App.WetlandSettingsRepo.GetImageZipFileSetting(imageFile.valuetext);
+                if (imageFileLocalSetting == null)
+                    imageFilesToDownload.Add(imageFile);
+            }
 
-                // Get image file setting records from MobileApi to determine which files to download
-                // TODO: Limit this to only the files needed, not just every file
-                totalBytes = imageFileSettingsOnServer.Sum(x => x.valueint);
+            // Download needed image files
+            if (imageFilesToDownload.Count > 0)
+            {
+                long receivedBytes = 0;
+                long? totalBytes = 0;
 
-                // For each setting, get the corresponding zip file and save it locally
-                foreach (WetlandSetting imageFile in imageFileSettingsOnServer)
+                // Set progressBar to 0 and downloadLabel text to "Downloading Images..."
+                await progressBar.ProgressTo(0, 1, Easing.Linear);
+                downloadLabel.Text = "Downloading Images...";
+
+                try
                 {
-                    Stream webStream = await client.GetStreamAsync(imagesZipFileLocation + imageFile.valuetext.Replace(".zip", ""));
-                    ZipInputStream zipInputStream = new ZipInputStream(webStream);
-                    ZipEntry zipEntry = zipInputStream.GetNextEntry();
-                    while (zipEntry != null)
+                    // IFolder interface from PCLStorage; create or open imagesZipped folder (in Library/Images)    
+                    IFolder rootFolder = FileSystem.Current.LocalStorage;
+                    IFolder folder = await rootFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+                    string folderPath = rootFolder.Path;
+
+                    // Get image file setting records from MobileApi to determine which files to download
+                    // TODO: Limit this to only the files needed, not just every file
+                    totalBytes = imageFilesToDownload.Sum(x => x.valueint);
+
+                    // For each setting, get the corresponding zip file and save it locally
+                    foreach (WetlandSetting imageFileToDownload in imageFilesToDownload)
                     {
-                        String entryFileName = zipEntry.Name;
-                        // to remove the folder from the entry:- entryFileName = Path.GetFileName(entryFileName);
-                        // Optionally match entrynames against a selection list here to skip as desired.
-
-                        byte[] buffer = new byte[4096];      
-
-                        IFile file = await folder.CreateFileAsync(entryFileName, CreationCollisionOption.OpenIfExists);
-                        using (Stream localStream = await file.OpenAsync(FileAccess.ReadAndWrite))
+                        Stream webStream = await client.GetStreamAsync(imagesZipFileLocation + imageFileToDownload.valuetext.Replace(".zip", ""));
+                        ZipInputStream zipInputStream = new ZipInputStream(webStream);
+                        ZipEntry zipEntry = zipInputStream.GetNextEntry();
+                        while (zipEntry != null)
                         {
-                            StreamUtils.Copy(zipInputStream, localStream, buffer);
+                            if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
+                            String entryFileName = zipEntry.Name;
+                            // to remove the folder from the entry:- entryFileName = Path.GetFileName(entryFileName);
+                            // Optionally match entrynames against a selection list here to skip as desired.
+
+                            byte[] buffer = new byte[4096];
+
+                            IFile file = await folder.CreateFileAsync(entryFileName, CreationCollisionOption.OpenIfExists);
+                            using (Stream localStream = await file.OpenAsync(FileAccess.ReadAndWrite))
+                            {
+                                StreamUtils.Copy(zipInputStream, localStream, buffer);
+                            }
+                            receivedBytes += zipEntry.Size;
+                            double percentage = (double)receivedBytes / (double)totalBytes;
+                            await progressBar.ProgressTo(percentage, 1, Easing.Linear);
+                            zipEntry = zipInputStream.GetNextEntry();
                         }
-                        receivedBytes += zipEntry.Size;
-                        double percentage = (double)receivedBytes / (double)totalBytes;
-                        await progressBar.ProgressTo(percentage, 0, Easing.Linear);
-                        zipEntry = zipInputStream.GetNextEntry();
+                        await App.WetlandSettingsRepo.AddSettingAsync(new WetlandSetting { name = "ImagesZipFile", valuetimestamp = imageFileToDownload.valuetimestamp, valuetext = imageFileToDownload.valuetext });
                     }
                 }
+                catch (OperationCanceledException e)
+                {
+                    Debug.WriteLine("Canceled Downloading of Images {0}", e.Message);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("ex {0}", e.Message);
+                }
             }
-            catch (OperationCanceledException e)
-            {
-                Debug.WriteLine("Canceled Downloading of Images {0}", e.Message);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("ex {0}", e.Message);
-            }
-            
+                        
+        }
+
+        public void OnCancelButtonClicked(object sender, EventArgs e)
+        {
+            tokenSource.Cancel();
         }
     }
 }

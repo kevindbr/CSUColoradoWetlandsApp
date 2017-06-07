@@ -38,6 +38,29 @@ namespace PortableApp
             return await connAsync.Table<WetlandSetting>().Where(s => s.name.Equals(settingName)).FirstOrDefaultAsync();
         }
 
+        public WetlandSetting GetImageZipFileSetting(string fileName)
+        {
+            return conn.Table<WetlandSetting>().Where(s => s.valuetext.Equals(fileName)).FirstOrDefault();
+        }
+
+        // add a setting
+        public async Task AddSettingAsync(WetlandSetting setting)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(setting.name))
+                    throw new Exception("Valid setting name required");
+
+                var result = await connAsync.InsertAsync(setting);
+                StatusMessage = string.Format("{0} record(s) added [Name: {1})", result, setting);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = string.Format("Failed to add/update {0}. Error: {1}", setting, ex.Message);
+            }
+
+        }
+
         // add or update a setting
         public async Task AddOrUpdateSettingAsync(WetlandSetting setting)
         {

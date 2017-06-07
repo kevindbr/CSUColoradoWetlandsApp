@@ -98,43 +98,47 @@ namespace PortableApp
                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 gridLayout.Children.Add(homeImage, 2, 0);
             }
+            // if Next and Previous buttons visible
             else if (options.nextAndPreviousVisible)
             {
+                Image previousImage = new Image
+                {
+                    Source = ImageSource.FromResource("PortableApp.Resources.Icons.previous_icon.png"),
+                    HeightRequest = 20,
+                    WidthRequest = 20,
+                    Margin = new Thickness(0, 15, 0, 15)
+                };
+
+                Image nextImage = new Image
+                {
+                    Source = ImageSource.FromResource("PortableApp.Resources.Icons.next_icon.png"),
+                    HeightRequest = 20,
+                    WidthRequest = 20,
+                    Margin = new Thickness(0, 15, 0, 15)
+                };
+
                 int plantIndex = options.plants.IndexOf(options.plant);
+
                 if (plantIndex > 0)
                 {
                     WetlandPlant previousPlant = options.plants[plantIndex - 1];
-                    Image nextImage = new Image
+                    
+                    var previousImageGestureRecognizer = new TapGestureRecognizer();
+                    previousImageGestureRecognizer.Tapped += async (sender, e) =>
                     {
-                        Source = ImageSource.FromResource("PortableApp.Resources.Icons.previous_icon.png"),
-                        HeightRequest = 20,
-                        WidthRequest = 20,
-                        Margin = new Thickness(0, 15, 0, 15)
-                    };
-                    var nextImageGestureRecognizer = new TapGestureRecognizer();
-                    nextImageGestureRecognizer.Tapped += async (sender, e) =>
-                    {
-                        nextImage.Opacity = .5;
+                        previousImage.Opacity = .5;
                         await Task.Delay(200);
-                        nextImage.Opacity = 1;
+                        previousImage.Opacity = 1;
                         await Navigation.PushAsync(new WetlandPlantDetailPage(previousPlant, options.plants));
                         Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
                     };
-                    nextImage.GestureRecognizers.Add(nextImageGestureRecognizer);
-                    gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                    gridLayout.Children.Add(nextImage, 2, 0);
+                    previousImage.GestureRecognizers.Add(previousImageGestureRecognizer);
                 }
 
                 if (plantIndex < options.plants.Count - 1)
                 {
                     WetlandPlant nextPlant = options.plants[plantIndex + 1];
-                    Image nextImage = new Image
-                    {
-                        Source = ImageSource.FromResource("PortableApp.Resources.Icons.next_icon.png"),
-                        HeightRequest = 20,
-                        WidthRequest = 20,
-                        Margin = new Thickness(0, 15, 0, 15)
-                    };
+
                     var nextImageGestureRecognizer = new TapGestureRecognizer();
                     nextImageGestureRecognizer.Tapped += async (sender, e) =>
                     {
@@ -145,10 +149,26 @@ namespace PortableApp
                         Navigation.RemovePage(Navigation.NavigationStack[Navigation.NavigationStack.Count - 2]);
                     };
                     nextImage.GestureRecognizers.Add(nextImageGestureRecognizer);
+                }
+
+                // add to layout
+                if (plantIndex > 0 && plantIndex < options.plants.Count - 1)
+                {
+                    gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    gridLayout.Children.Add(previousImage, 2, 0);
+                    gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    gridLayout.Children.Add(nextImage, 3, 0);
+                }
+                else if (plantIndex > 0)
+                {
+                    gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    gridLayout.Children.Add(previousImage, 2, 0);
+                }
+                else if (plantIndex < options.plants.Count - 1)
+                {
                     gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                     gridLayout.Children.Add(nextImage, 2, 0);
                 }
-                
             }
             else
             {
