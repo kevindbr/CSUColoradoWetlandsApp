@@ -36,7 +36,7 @@ namespace PortableApp
         // Construct Navigation Bar
         public Grid ConstructNavigationBar(NavigationOptions options)
         {
-            Grid gridLayout = new Grid { VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand };
+            Grid gridLayout = new Grid { VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand, ColumnSpacing = 0 };
             gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
 
             // Construct back button and add gesture recognizer
@@ -69,10 +69,10 @@ namespace PortableApp
             // Construct title content section
             StackLayout titleContent = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
             Image logo = new Image { Source = ImageSource.FromResource("PortableApp.Resources.Icons.Co_Logo_40.png"), IsVisible = options.logoVisible };
-            Label title = new Label { Text = options.titleText, FontFamily = Device.OnPlatform("Montserrat-Medium", "Montserrat-Medium.ttf#Montserrat-Medium", null), TextColor = Color.White, FontSize = 18, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center };
+            Label title = new Label { Text = options.titleText, FontFamily = Device.OnPlatform("Montserrat-Medium", "Montserrat-Medium.ttf#Montserrat-Medium", null), TextColor = Color.White, FontSize = 16, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center };
             titleContent.Children.Add(logo);
             titleContent.Children.Add(title);
-            gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(5, GridUnitType.Star) });
+            gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(6, GridUnitType.Star) });
             gridLayout.Children.Add(titleContent, 1, 0);
 
             // Construct home button and add gesture recognizer

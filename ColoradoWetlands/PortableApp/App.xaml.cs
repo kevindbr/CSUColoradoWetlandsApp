@@ -31,7 +31,7 @@ namespace PortableApp
             WetlandSettingsRepo = new WetlandSettingRepository();
 
             // Set MainPage
-            this.MainPage = new NavigationPage(new MainPage(dbPath));
+            this.MainPage = new NavigationPage(new MainPage());
         }
 
         protected override void OnStart()

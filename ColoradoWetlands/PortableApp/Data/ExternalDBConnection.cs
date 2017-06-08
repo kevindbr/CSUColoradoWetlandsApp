@@ -18,6 +18,8 @@ namespace PortableApp
         // Declare variables
         public string Url = (Debugger.IsAttached == true) ? "http://129.82.38.57:61045/api/wetland" : "http://sdt1.cas.colostate.edu/mobileapi/api/wetland";
         HttpClient client = new HttpClient();
+        private string result;
+        private Stream resultStream;
 
         // Set headers for client
         public ExternalDBConnection()
@@ -28,26 +30,33 @@ namespace PortableApp
         
         public async Task<IEnumerable<WetlandPlant>> GetAllPlants()
         {
-            string response = await client.GetStringAsync(Url);
-            return JsonConvert.DeserializeObject<IList<WetlandPlant>>(response);
+            result = await client.GetStringAsync(Url);
+            return JsonConvert.DeserializeObject<IList<WetlandPlant>>(result);
         }
         
         public async Task<WetlandSetting> GetDateUpdatedDataOnServer()
         {
-            string result = await client.GetStringAsync(Url + "_settings/DatePlantDataUpdatedOnServer");
+            try
+            {
+                result = await client.GetStringAsync(Url + "_settings/DatePlantDataUpdatedOnServer");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
             return JsonConvert.DeserializeObject<WetlandSetting>(result);
         }
 
         public async Task<IEnumerable<WetlandSetting>> GetImageZipFileSettings()
         {
-            string result = await client.GetStringAsync(Url + "_settings/images");
+            result = await client.GetStringAsync(Url + "_settings/images");
             return JsonConvert.DeserializeObject<IList<WetlandSetting>>(result);
         }
 
         public async Task<Stream> GetImageZipFiles(string imageFileToDownload)
         {
-            Stream result = await client.GetStreamAsync(Url + "/image_zip_files/" + imageFileToDownload);
-            return result;
+            resultStream = await client.GetStreamAsync(Url + "/image_zip_files/" + imageFileToDownload);
+            return resultStream;
         }
         
     }

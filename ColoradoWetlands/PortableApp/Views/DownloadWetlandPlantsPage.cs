@@ -47,9 +47,8 @@ namespace PortableApp
             if (!token.IsCancellationRequested)
                 await UpdatePlantImages(token);
 
-            // Pop modal off stack (and return to WetlandPlantsPage)
-            if (token.IsCancellationRequested) { await App.Current.MainPage.Navigation.PopToRootAsync(); };
-            await App.Current.MainPage.Navigation.PopAsync();
+            // Pop modal off stack (and return to MainPage)
+            await App.Current.MainPage.Navigation.PopToRootAsync();
 
         }
 

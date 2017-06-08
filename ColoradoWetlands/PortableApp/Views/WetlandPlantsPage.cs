@@ -9,7 +9,7 @@ namespace PortableApp
 {
     public partial class WetlandPlantsPage : ViewHelpers
     {
-        bool isConnectedToWifi;
+
         ListView wetlandPlantsList;
         ObservableCollection<WetlandPlant> plants;
         Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" } };
@@ -17,43 +17,9 @@ namespace PortableApp
         Button sortButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "Scientific Name", BorderRadius = Device.OnPlatform(0, 1, 0) };
         Button sortDirection = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "\u25BC", BorderRadius = Device.OnPlatform(0, 1, 0) };
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
-
-            // get and compare local data updated date and that of the server, sending to download page if date on server is newer
-            WetlandSetting datePlantDataUpdatedLocally = await App.WetlandSettingsRepo.GetSettingAsync("DatePlantsDownloaded");
-
-            // if there's a connection, look for updates; if connected to WiFi, attempt to update local app from the MobileAPI 
-            if (CrossConnectivity.Current.IsConnected)
-            {
-                WetlandSetting datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
-
-                foreach (var band in CrossConnectivity.Current.ConnectionTypes)
-                {
-                    if (band.ToString() == "WiFi")
-                        isConnectedToWifi = true;
-                }
-
-                if (datePlantDataUpdatedLocally != null)
-                {
-                    if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || plants.Count == 0)
-                    {
-                        if (isConnectedToWifi)
-                            await Navigation.PushAsync(new DownloadWetlandPlantsPage(datePlantDataUpdatedOnServer.valuetimestamp));
-                        else
-                            await DisplayAlert("Connect to WiFi", "Please connect to WiFi to download additional plant data and/or images", "OK");
-                    }
-                }
-                else
-                {
-                    if (isConnectedToWifi)
-                        await Navigation.PushAsync(new DownloadWetlandPlantsPage(datePlantDataUpdatedOnServer.valuetimestamp));
-                    else
-                        await DisplayAlert("Connect to WiFi", "Please connect to WiFi to download plant data and images", "OK");
-                }
-            }
-
             wetlandPlantsList.ItemsSource = plants;
             base.OnAppearing();
         }
