@@ -16,23 +16,32 @@ namespace PortableApp
         private Grid innerContainer;
         private Button downloadDataButton;
         private int numberOfPlants;
+        private bool updatePlants = false;
         private WetlandSetting datePlantDataUpdatedLocally;
         private WetlandSetting datePlantDataUpdatedOnServer;
+        private List<WetlandSetting> imageFilesToDownload;
+        private IEnumerable<WetlandSetting> imageFileSettingsOnServer;
 
         protected override async void OnAppearing()
         {
             isConnectedToWiFi = Connectivity.checkWiFiConnection();
             numberOfPlants = new List<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants()).Count;
+            imageFilesToDownload = new List<WetlandSetting>();
 
             // if connected to WiFi and updates are needed, show download button
             if (isConnectedToWiFi)
             {
                 datePlantDataUpdatedLocally = await App.WetlandSettingsRepo.GetSettingAsync("DatePlantsDownloaded");
                 datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
+                imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
+                ImageFilesToDownload();
+
+                // If valid date comparison and date on server is more recent than local date, show download button
                 if (datePlantDataUpdatedLocally != null && datePlantDataUpdatedOnServer != null)
                 {
                     if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || numberOfPlants == 0)
                     {
+                        updatePlants = true;
                         innerContainer.Children.Add(downloadDataButton, 0, 2);
                     }
                     else
@@ -40,14 +49,23 @@ namespace PortableApp
                         innerContainer.Children.Remove(downloadDataButton);
                     }
                 }
+                // If can't get setting on server, add connection error message
                 else if (datePlantDataUpdatedOnServer == null)
                 {
                     innerContainer.Children.Add(new Label { Text = "Could not connect to server, please try again at a later time.", TextColor = Color.White, FontSize = 13, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(20, 0, 20, 0) }, 0, 2);
                 }
+                // If in doubt, add button to ensure data is updated
                 else
                 {
+                    if (datePlantDataUpdatedLocally == null) { updatePlants = true; }
                     innerContainer.Children.Add(downloadDataButton, 0, 2);
-                }                
+                }
+
+                // If image data needs to be downloaded, show button
+                if (imageFilesToDownload.Count > 0)
+                {
+                    innerContainer.Children.Add(downloadDataButton, 0, 2);
+                }
             }
             else
             {
@@ -168,7 +186,17 @@ namespace PortableApp
 
         public async void DownloadData(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new DownloadWetlandPlantsPage(datePlantDataUpdatedOnServer.valuetimestamp));
+            await Navigation.PushAsync(new DownloadWetlandPlantsPage(updatePlants, datePlantDataUpdatedOnServer.valuetimestamp, imageFilesToDownload));
+        }
+
+        public void ImageFilesToDownload()
+        {
+            foreach (WetlandSetting imageFile in imageFileSettingsOnServer)
+            {
+                WetlandSetting imageFileLocalSetting = App.WetlandSettingsRepo.GetImageZipFileSetting(imageFile.valuetext);
+                if (imageFileLocalSetting == null)
+                    imageFilesToDownload.Add(imageFile);
+            }
         }
     }
 }

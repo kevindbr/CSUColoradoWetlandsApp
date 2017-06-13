@@ -30,24 +30,54 @@ namespace PortableApp
                 Padding = new Thickness(20, 5, 20, 5),
                 Margin = new Thickness(15, 0, 15, 0)
             };
-            StackLayout contentContainer = new StackLayout();
 
-            contentContainer.Children.Add(InfoPageSectionHeader("NOMENCLATURE"));
-            contentContainer.Children.Add(InfoPageSet("Scientific Name:", plant.scinamenoauthorstripped));
-            contentContainer.Children.Add(InfoPageSet("Family:", plant.family));
-            contentContainer.Children.Add(InfoPageSet("Common Name:", plant.commonname));
+            TransparentWebView browser = ConstructHTMLContent(plant);
 
-            contentContainer.Children.Add(InfoPageSectionHeader("CONSERVATION STATUS"));
-            contentContainer.Children.Add(InfoPageSet("Federal Status:", plant.federalstatus));
-            contentContainer.Children.Add(InfoPageSet("Global Rank:", plant.grank));
-
-            contentScrollView.Content = contentContainer;
+            contentScrollView.Content = browser;
             innerContainer.RowDefinitions.Add(new RowDefinition { });
             innerContainer.Children.Add(contentScrollView, 0, 1);
 
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
+        }
+
+        public TransparentWebView ConstructHTMLContent(WetlandPlant plant)
+        {
+            var browser = new TransparentWebView();
+            var htmlSource = new HtmlWebViewSource();
+            string html = "";
+
+            html += "<!DOCTYPE html><html lang='en' xmlns='http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8' /><title>Plant Info Page</title></head><body>";
+            html += "<style>body { color: white; font-size: 0.8em; } .section_header { font-weight: bold; border-bottom: 1px solid white; margin: 10px 0; }</style>";
+
+            html += "<div class='section_header'>NOMENCLATURE</div>";
+            html += "<strong>Scientific Name: </strong>" + plant.scinameauthor + "<br/>";
+            html += "<strong>Family: </strong>" + plant.family + "<br/>";
+            html += "<strong>Common Name: </strong>" + plant.commonname + "<br/>";
+            html += "<strong>Synonyms: </strong>" + plant.synonyms + "<br/>";
+
+            html += "<div class='section_header'>CONSERVATION STATUS</div>";
+            html += "<strong>Federal Status: </strong>" + plant.federalstatus + "<br/>";
+            html += "<strong>Global Rank: </strong>" + plant.grank + "<br/>";
+
+            html += "</body></html>";
+
+            htmlSource.Html = html;
+            browser.Source = htmlSource;
+            return browser;
+
+
+            //contentContainer.Children.Add(InfoPageSectionHeader("NOMENCLATURE"));
+            //contentContainer.Children.Add(InfoPageSet("Scientific Name:", plant.scinamenoauthorstripped));
+            //contentContainer.Children.Add(InfoPageSet("Family:", plant.family));
+            //contentContainer.Children.Add(InfoPageSet("Common Name:", plant.commonname));
+
+            //contentContainer.Children.Add(InfoPageSectionHeader("CONSERVATION STATUS"));
+            //contentContainer.Children.Add(InfoPageSet("Federal Status:", plant.federalstatus));
+            //contentContainer.Children.Add(InfoPageSet("Global Rank:", plant.grank));
+
+            //return browser;
         }
 
     }

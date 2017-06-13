@@ -17,7 +17,9 @@ namespace PortableApp
 {
     public partial class DownloadWetlandPlantsPage : ViewHelpers
     {
+        bool updatePlants;
         DateTime? datePlantDataUpdatedOnServer;
+        List<WetlandSetting> imageFilesToDownload;
         ObservableCollection<WetlandPlant> plants;
         ProgressBar progressBar = new ProgressBar();
         Label downloadLabel = new Label { Text = "", TextColor = Color.White, FontSize = 18, HorizontalTextAlignment = TextAlignment.Center };
@@ -40,11 +42,11 @@ namespace PortableApp
             plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAllPlants());
 
             // Save plants to the database
-            if (!token.IsCancellationRequested)
+            if (updatePlants && !token.IsCancellationRequested)
                 await UpdatePlants(token);
 
             // Save images to the database
-            if (!token.IsCancellationRequested)
+            if (imageFilesToDownload.Count > 0 && !token.IsCancellationRequested)
                 await UpdatePlantImages(token);
 
             // Pop modal off stack (and return to MainPage)
@@ -52,10 +54,11 @@ namespace PortableApp
 
         }
 
-        public DownloadWetlandPlantsPage(DateTime? datePlantDataUpdated)
+        public DownloadWetlandPlantsPage(bool updatePlantsNow, DateTime? datePlantDataUpdated, List<WetlandSetting> imageFilesNeedingDownloaded)
         {
-
+            updatePlants = updatePlantsNow;
             datePlantDataUpdatedOnServer = datePlantDataUpdated;
+            imageFilesToDownload = imageFilesNeedingDownloaded;
 
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);
@@ -129,15 +132,7 @@ namespace PortableApp
         // Get plant images from MobileApi server and save locally
         public async Task UpdatePlantImages(CancellationToken token)
         {
-            // Get image file settings on server and determine which ones have not yet been saved locally, indicating which image files to download
-            IEnumerable<WetlandSetting> imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
-            List<WetlandSetting> imageFilesToDownload = new List<WetlandSetting>();
-            foreach (WetlandSetting imageFile in imageFileSettingsOnServer)
-            {
-                WetlandSetting imageFileLocalSetting = App.WetlandSettingsRepo.GetImageZipFileSetting(imageFile.valuetext);
-                if (imageFileLocalSetting == null)
-                    imageFilesToDownload.Add(imageFile);
-            }
+
 
             // Download needed image files
             if (imageFilesToDownload.Count > 0)

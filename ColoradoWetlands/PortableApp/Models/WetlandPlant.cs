@@ -70,19 +70,12 @@ namespace PortableApp.Models
 
         public string scinameauthorstripped
         {
-            get
-            {
-                return scinameauthor.Replace("<em>", "").Replace("</em>", "");
-            }
-
+            get { return scinameauthor.Replace("<em>", "").Replace("</em>", ""); }
         }
 
-        public string scinamenoauthorstripped {
-            get
-            {
-                return scinamenoauthor.Replace("<em>", "").Replace("</em>", "");
-            }
-
+        public string scinamenoauthorstripped
+        {
+            get { return scinamenoauthor.Replace("<em>", "").Replace("</em>", ""); }
         }
 
     }
