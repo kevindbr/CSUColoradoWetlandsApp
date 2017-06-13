@@ -49,17 +49,47 @@ namespace PortableApp
             string html = "";
 
             html += "<!DOCTYPE html><html lang='en' xmlns='http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8' /><title>Plant Info Page</title></head><body>";
-            html += "<style>body { color: white; font-size: 0.8em; } .section_header { font-weight: bold; border-bottom: 1px solid white; margin: 10px 0; }</style>";
+            html += "<style>body { color: white; font-size: 0.8em; } .section_header { font-weight: bold; border-bottom: 1px solid white; margin: 10px 0; } .embedded_table { width: 100%; margin-left: 10px; }</style>";
 
             html += "<div class='section_header'>NOMENCLATURE</div>";
             html += "<strong>Scientific Name: </strong>" + plant.scinameauthor + "<br/>";
             html += "<strong>Family: </strong>" + plant.family + "<br/>";
             html += "<strong>Common Name: </strong>" + plant.commonname + "<br/>";
             html += "<strong>Synonyms: </strong>" + plant.synonyms + "<br/>";
+            html += "<strong>USDA Plants Symbol: </strong>" + plant.plantscode + "<br/>";
+            html += "<strong>ITIS TSN: </strong>" + plant.itiscode + "<br/>";
 
             html += "<div class='section_header'>CONSERVATION STATUS</div>";
             html += "<strong>Federal Status: </strong>" + plant.federalstatus + "<br/>";
             html += "<strong>Global Rank: </strong>" + plant.grank + "<br/>";
+            html += "<strong>State Ranks</strong><br/>";
+            html += "<table class='embedded_table'><tbody>";
+            html += "<tr><td><strong>CO: </strong>" + plant.cosrank + "</td><td><strong>MT: </strong>" + plant.mtsrank + "</td></tr>";
+            html += "<tr><td><strong>WY: </strong>" + plant.wysrank + "</td><td><strong>ND: </strong>" + plant.ndsrank + "</td></tr>";
+            html += "<tr><td><strong>UT: </strong>" + plant.utsrank + "</td></tr>";
+            html += "</tbody></table><br/>";
+
+            html += "<div class='section_header'>BIOLOGY</div>";
+            html += "<strong>C-Value: </strong>" + plant.cvalue + "<br/>";
+            html += "<strong>Duration: </strong>" + plant.duration + "<br/>";
+            html += "<strong>Native Status: </strong>" + plant.nativity + "<br/>";
+            html += "<strong>Wetland Indicator Status</strong><br/>";
+            html += "<table class='embedded_table'><tbody>";
+            html += "<tr><td><strong>AW: </strong>" + plant.awwetcode + "</td></tr>";
+            html += "<tr><td><strong>WM: </strong>" + plant.wmvcwetcode + "</td></tr>";
+            html += "<tr><td><strong>GP: </strong>" + plant.gpwetcode + "</td></tr>";
+            html += "</tbody></table><br/>";
+
+            html += "<div class='section_header'>KEY CHARACTERISTICS</div>";
+
+            html += "<ul>";
+            if (plant.keychar1 != null && plant.keychar1 != "") { html += "<li>" + plant.keychar1 + "</li>"; };
+            if (plant.keychar2 != null && plant.keychar2 != "") { html += "<li>" + plant.keychar2 + "</li>"; };
+            if (plant.keychar3 != null && plant.keychar3 != "") { html += "<li>" + plant.keychar3 + "</li>"; };
+            if (plant.keychar4 != null && plant.keychar4 != "") { html += "<li>" + plant.keychar4 + "</li>"; };
+            if (plant.keychar5 != null && plant.keychar5 != "") { html += "<li>" + plant.keychar5 + "</li>"; };
+            if (plant.keychar6 != null && plant.keychar6 != "") { html += "<li>" + plant.keychar6 + "</li>"; };
+            html += "</ul>";
 
             html += "</body></html>";
 
