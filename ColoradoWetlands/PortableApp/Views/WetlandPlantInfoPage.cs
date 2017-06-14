@@ -67,7 +67,7 @@ namespace PortableApp
             html += "<tr><td><strong>CO: </strong>" + plant.cosrank + "</td><td><strong>MT: </strong>" + plant.mtsrank + "</td></tr>";
             html += "<tr><td><strong>WY: </strong>" + plant.wysrank + "</td><td><strong>ND: </strong>" + plant.ndsrank + "</td></tr>";
             html += "<tr><td><strong>UT: </strong>" + plant.utsrank + "</td></tr>";
-            html += "</tbody></table><br/>";
+            html += "</tbody></table>";
 
             html += "<div class='section_header'>BIOLOGY</div>";
             html += "<strong>C-Value: </strong>" + plant.cvalue + "<br/>";
@@ -78,7 +78,7 @@ namespace PortableApp
             html += "<tr><td><strong>AW: </strong>" + plant.awwetcode + "</td></tr>";
             html += "<tr><td><strong>WM: </strong>" + plant.wmvcwetcode + "</td></tr>";
             html += "<tr><td><strong>GP: </strong>" + plant.gpwetcode + "</td></tr>";
-            html += "</tbody></table><br/>";
+            html += "</tbody></table>";
 
             html += "<div class='section_header'>KEY CHARACTERISTICS</div>";
 
@@ -91,23 +91,13 @@ namespace PortableApp
             if (plant.keychar6 != null && plant.keychar6 != "") { html += "<li>" + plant.keychar6 + "</li>"; };
             html += "</ul>";
 
+            html += "<div class='section_header'>SIMILAR PLANTS</div>" + plant.similarsp;
+
             html += "</body></html>";
 
             htmlSource.Html = html;
             browser.Source = htmlSource;
             return browser;
-
-
-            //contentContainer.Children.Add(InfoPageSectionHeader("NOMENCLATURE"));
-            //contentContainer.Children.Add(InfoPageSet("Scientific Name:", plant.scinamenoauthorstripped));
-            //contentContainer.Children.Add(InfoPageSet("Family:", plant.family));
-            //contentContainer.Children.Add(InfoPageSet("Common Name:", plant.commonname));
-
-            //contentContainer.Children.Add(InfoPageSectionHeader("CONSERVATION STATUS"));
-            //contentContainer.Children.Add(InfoPageSet("Federal Status:", plant.federalstatus));
-            //contentContainer.Children.Add(InfoPageSet("Global Rank:", plant.grank));
-
-            //return browser;
         }
 
     }

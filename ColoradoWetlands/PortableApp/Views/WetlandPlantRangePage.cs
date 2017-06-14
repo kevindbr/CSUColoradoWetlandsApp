@@ -30,8 +30,17 @@ namespace PortableApp
                 Margin = new Thickness(15, 0, 15, 0)
             };
             StackLayout contentContainer = new StackLayout();
-            
-            contentContainer.Children.Add(InfoPageSet("Map:", plant.commonname));
+
+            Image rangeImage = new Image { Aspect = Aspect.AspectFit, Margin = new Thickness(10, 0, 10, 0) };
+            rangeImage.SetBinding(Image.SourceProperty, new Binding("RangePath"));
+            contentContainer.Children.Add(rangeImage);
+
+            Label elevationLabel = new Label {
+                Text = "Elevation: " + plant.elevminfeet + "-" + plant.elevmaxfeet + " ft. (" + plant.elevminm + "-" + plant.elevmaxm + " m)",
+                FontSize = 12,
+                TextColor = Color.White
+            };
+            contentContainer.Children.Add(elevationLabel);
 
             contentScrollView.Content = contentContainer;
             innerContainer.RowDefinitions.Add(new RowDefinition { });

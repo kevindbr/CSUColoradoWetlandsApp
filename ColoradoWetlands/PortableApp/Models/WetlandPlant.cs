@@ -58,15 +58,15 @@ namespace PortableApp.Models
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<WetlandPlantImage> Images { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<WetlandPlantReference> References { get; set; }
+
+        public IFolder rootFolder { get { return FileSystem.Current.LocalStorage; } }
         
-        public string ThumbnailPath
-        {
-            get
-            {
-                IFolder rootFolder = FileSystem.Current.LocalStorage;
-                return rootFolder.Path + "/Images/" + plantscode + "_icon.jpg";
-            }
-        }
+        public string ThumbnailPath { get { return rootFolder.Path + "/Images/" + plantscode + "_icon.jpg"; } }
+
+        public string RangePath { get { return rootFolder.Path + "/Images/" + mapimg; } }
 
         public string scinameauthorstripped
         {

@@ -177,23 +177,7 @@ namespace PortableApp
             
             return gridLayout;
         }
-
-        public StackLayout InfoPageSectionHeader(string title)
-        {
-            StackLayout layout = new StackLayout();
-            layout.Children.Add(new Label { Text = title, Style = Application.Current.Resources["sectionHeader"] as Style });
-            layout.Children.Add(new BoxView { HeightRequest = 1, WidthRequest = 500, BackgroundColor = Color.White });
-            return layout;
-        }
-
-        public StackLayout InfoPageSet(string title, string text)
-        {
-            StackLayout layout = new StackLayout { Margin = new Thickness(0, 0, 0, -3), Orientation = StackOrientation.Horizontal };
-            layout.Children.Add(new Label { Text = title, Style = Application.Current.Resources["paragraphTextBold"] as Style });
-            layout.Children.Add(new Label { Text = text, Style = Application.Current.Resources["paragraphText"] as Style });
-            return layout;
-        }
-
+        
         public WebView HTMLProcessor(string location)
         {
             // Generate WebView container
