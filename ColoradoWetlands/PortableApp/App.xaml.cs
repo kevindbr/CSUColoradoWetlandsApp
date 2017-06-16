@@ -13,6 +13,7 @@ namespace PortableApp
         public static WetlandPlantReferenceRepository WetlandPlantReferenceRepo { get; private set; }
         public static WetlandTypeRepository WetlandTypeRepo { get; private set; }
         public static WetlandSettingRepository WetlandSettingsRepo { get; private set; }
+        public static WetlandSearchRepository WetlandSearchRepo { get; private set; }
 
         public App(ISQLitePlatform sqliteplatform, string dbPath)
         {
@@ -31,6 +32,7 @@ namespace PortableApp
             WetlandPlantReferenceRepo = new WetlandPlantReferenceRepository();
             WetlandTypeRepo = new WetlandTypeRepository();
             WetlandSettingsRepo = new WetlandSettingRepository();
+            WetlandSearchRepo = new WetlandSearchRepository();
 
             // Set MainPage
             this.MainPage = new NavigationPage(new MainPage());

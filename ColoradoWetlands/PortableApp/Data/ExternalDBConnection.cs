@@ -16,8 +16,8 @@ namespace PortableApp
     public class ExternalDBConnection
     {
         // Declare variables
-        //public string Url = "http://sdt1.cas.colostate.edu/mobileapi/api/wetland";
-        public string Url = (Debugger.IsAttached == true) ? "http://129.82.38.57:61045/api/wetland" : "http://sdt1.cas.colostate.edu/mobileapi/api/wetland";
+        public string Url = "http://sdt1.cas.colostate.edu/mobileapi/api/wetland";
+        //public string Url = (Debugger.IsAttached == true) ? "http://129.82.38.57:61045/api/wetland" : "http://sdt1.cas.colostate.edu/mobileapi/api/wetland";
         HttpClient client = new HttpClient();
         private string result;
         private Stream resultStream;
@@ -41,7 +41,7 @@ namespace PortableApp
             {
                 result = await client.GetStringAsync(Url + "_settings/DatePlantDataUpdatedOnServer");
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }

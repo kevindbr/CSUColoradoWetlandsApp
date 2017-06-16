@@ -40,6 +40,7 @@
     </Compile>
     <Compile Include="Assets\WetlandPlantImageRepository.cs" />
     <Compile Include="Assets\WetlandPlantReferenceRepository.cs" />
+    <Compile Include="Assets\WetlandSearchRepository.cs" />
     <Compile Include="Assets\WetlandSettingRepository.cs" />
     <Compile Include="Assets\WetlandTypeRepository.cs" />
     <Compile Include="Assets\WetlandPlantRepository.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="Data\DBConnection.cs" />
     <Compile Include="Data\ExternalDBConnection.cs" />
     <Compile Include="Models\WetlandPlantReference.cs" />
+    <Compile Include="Models\WetlandSearch.cs" />
     <Compile Include="Models\WetlandSetting.cs" />
     <Compile Include="Models\WetlandPlantImage.cs" />
     <Compile Include="Helpers\ViewHelpers.cs" />
@@ -63,7 +65,7 @@
     <Compile Include="Views\DownloadWetlandPlantsPage.cs" />
     <Compile Include="Views\WetlandPlantEcologyPage.cs" />
     <Compile Include="Views\WetlandPlantReferencesPage.cs" />
-    <Compile Include="Views\WetlandPlantsFilterPage.cs" />
+    <Compile Include="Views\WetlandPlantsSearchPage.cs" />
     <Compile Include="Views\WetlandTypesDetailPage.cs" />
     <Compile Include="Views\WetlandPlantInfoPage.cs" />
     <Compile Include="Views\WetlandTypesPage.cs" />

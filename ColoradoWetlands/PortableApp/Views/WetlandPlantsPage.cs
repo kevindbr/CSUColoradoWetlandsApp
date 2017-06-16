@@ -9,9 +9,9 @@ namespace PortableApp
 {
     public partial class WetlandPlantsPage : ViewHelpers
     {
-
         ListView wetlandPlantsList;
         ObservableCollection<WetlandPlant> plants;
+        bool cameFromSearch;
         Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" } };
         Picker sortPicker = new Picker();
         Button sortButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "Scientific Name", BorderRadius = Device.OnPlatform(0, 1, 0) };
@@ -19,9 +19,12 @@ namespace PortableApp
 
         protected override void OnAppearing()
         {
-            plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
-            wetlandPlantsList.ItemsSource = plants;
-            base.OnAppearing();
+            if (!cameFromSearch)
+            {
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+                if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
+                base.OnAppearing();
+            }
         }
 
         public WetlandPlantsPage()
@@ -46,41 +49,45 @@ namespace PortableApp
             buttonGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             buttonGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-                // Add search button
-                Button search = new Button {
-                    Style = Application.Current.Resources["semiTransparentPlantButton"] as Style,
-                    Text = "Search",
-                    BorderRadius = Device.OnPlatform(0, 1, 0),
-                    Margin = new Thickness(10, 0, 10, 0)
-                };
-                buttonGroup.Children.Add(search, 0, 0);
+            // Add search button
+            Button search = new Button
+            {
+                Style = Application.Current.Resources["semiTransparentPlantButton"] as Style,
+                Text = "Search",
+                BorderRadius = Device.OnPlatform(0, 1, 0),
+                Margin = new Thickness(10, 0, 10, 0)
+            };
+            buttonGroup.Children.Add(search, 0, 0);
+            var SearchPage = new WetlandPlantsSearchPage();
+            search.Clicked += async (s, e) => { await Navigation.PushModalAsync(SearchPage); };
+            SearchPage.InitResetSearch += HandleResetSearch;
+            SearchPage.InitRunSearch += HandleRunSearch;
+            SearchPage.InitCloseSearch += HandleCloseSearch;
 
-                search.Clicked += OpenFilterList;
+            // Add sort container
+            Grid sortContainer = new Grid { ColumnSpacing = 0 };
+            sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
+            sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.2, GridUnitType.Star) });
+            sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.1, GridUnitType.Star) });
+            sortContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
 
-                // Add sort container
-                Grid sortContainer = new Grid { ColumnSpacing = 0 };
-                sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
-                sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.2, GridUnitType.Star) });
-                sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.1, GridUnitType.Star) });
-                sortContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
+            sortButton.Clicked += SortPickerTapped;
+            sortContainer.Children.Add(sortButton, 0, 0);
 
-                sortButton.Clicked += SortPickerTapped;
-                sortContainer.Children.Add(sortButton, 0, 0);
+            foreach (string option in sortOptions.Keys) { sortPicker.Items.Add(option); }
+            sortPicker.IsVisible = false;
+            sortPicker.SelectedIndex = 0;
+            if (Device.OS == TargetPlatform.iOS)
+                sortPicker.Unfocused += SortOnUnfocused;
+            else
+                sortPicker.SelectedIndexChanged += SortItems;
 
-                foreach (string option in sortOptions.Keys) { sortPicker.Items.Add(option); }
-                sortPicker.IsVisible = false;
-                sortPicker.SelectedIndex = 0;
-                if (Device.OS == TargetPlatform.iOS)
-                    sortPicker.Unfocused += SortOnUnfocused;
-                else
-                    sortPicker.SelectedIndexChanged += SortItems;
+            sortContainer.Children.Add(sortPicker, 0, 0);
 
-                sortContainer.Children.Add(sortPicker, 0, 0);
+            sortDirection.Clicked += ChangeSortDirection;
+            sortContainer.Children.Add(sortDirection, 1, 0);
 
-                sortDirection.Clicked += ChangeSortDirection;
-                sortContainer.Children.Add(sortDirection, 1, 0);
-
-                buttonGroup.Children.Add(sortContainer, 1, 0);
+            buttonGroup.Children.Add(sortContainer, 1, 0);
 
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
             innerContainer.Children.Add(buttonGroup, 0, 1);
@@ -96,9 +103,24 @@ namespace PortableApp
             Content = pageContainer;
         }
 
-        async private void OpenFilterList(object sender, EventArgs e)
+        private async void HandleResetSearch(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new WetlandPlantsFilterPage());
+            cameFromSearch = false;
+            await App.Current.MainPage.Navigation.PopModalAsync();
+        }
+
+        private void HandleRunSearch(object sender, EventArgs e)
+        {
+            plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetPlantsBySearchCriteria());
+            wetlandPlantsList.ItemsSource = plants;
+            cameFromSearch = true;
+            //await App.Current.MainPage.Navigation.PopModalAsync();
+        }
+
+        private async void HandleCloseSearch(object sender, EventArgs e)
+        {
+            cameFromSearch = true;
+            await App.Current.MainPage.Navigation.PopModalAsync();
         }
 
         private void SortPickerTapped(object sender, EventArgs e)

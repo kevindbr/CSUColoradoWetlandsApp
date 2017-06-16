@@ -21,11 +21,34 @@ namespace PortableApp
             //conn.DropTable<WetlandPlant>();
             conn.CreateTable<WetlandPlant>();
 		}
-        
+
+        // return a list of Wetlandplants saved to the WetlandPlant table in the database
         public List<WetlandPlant> GetAllWetlandPlants()
         {
-            // return a list of Wetlandplants saved to the WetlandPlant table in the database
             return conn.GetAllWithChildren<WetlandPlant>();
+        }
+
+        // get current search criteria (saved in db) and return appropriate list of Wetland Plants
+        public IEnumerable<WetlandPlant> GetPlantsBySearchCriteria()
+        {
+            IEnumerable<WetlandPlant> plants = GetAllWetlandPlants();
+            List<WetlandSearch> searchCriteria = new List<WetlandSearch>(App.WetlandSearchRepo.GetQueryableSearchCriteria());
+            if (searchCriteria.Count > 0)
+            {
+                foreach (WetlandSearch criterion in searchCriteria)
+                {
+                    try
+                    {
+                        if (criterion.Name == "Bentgrass") { plants = plants.Where(x => x.commonname.Contains(criterion.SearchString1)); };
+                        if (criterion.Name == "Poaceae") { plants = plants.Where(x => x.family.Contains(criterion.SearchString1)); };
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+            }
+            return plants;
         }
 
         public async Task AddPlantAsync(WetlandPlant plant)
