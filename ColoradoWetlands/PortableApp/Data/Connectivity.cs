@@ -12,8 +12,6 @@ namespace PortableApp.Data
                 {
                     if (band.ToString() == "WiFi")
                         return true;
-                    else
-                        return false;
                 }
                 return false;
             }
