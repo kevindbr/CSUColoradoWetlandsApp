@@ -32,9 +32,13 @@ namespace PortableApp
             if (isConnectedToWiFi)
             {
                 datePlantDataUpdatedLocally = await App.WetlandSettingsRepo.GetSettingAsync("DatePlantsDownloaded");
-                datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
-                imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
-                ImageFilesToDownload();
+                try
+                {
+                    datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
+                    imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
+                    ImageFilesToDownload();
+                }
+                catch { }                               
 
                 // If valid date comparison and date on server is more recent than local date, show download button
                 if (datePlantDataUpdatedLocally != null && datePlantDataUpdatedOnServer != null)
