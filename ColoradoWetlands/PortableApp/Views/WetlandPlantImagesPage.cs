@@ -27,6 +27,7 @@ namespace PortableApp
             
             CarouselViewControl carouselControl = new CarouselViewControl();
             carouselControl.ItemsSource = plant.Images;
+            carouselControl.ShowIndicators = true;
 
             DataTemplate imageTemplate = new DataTemplate(() =>
             {
