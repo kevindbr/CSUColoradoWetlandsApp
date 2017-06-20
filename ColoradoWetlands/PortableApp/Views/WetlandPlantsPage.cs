@@ -231,33 +231,24 @@ namespace PortableApp
             // Add text section
             StackLayout textSection = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 2 };
 
-            var commonName = new Label
-            {
-                TextColor = Color.White,
-                FontSize = 12,
-                FontAttributes = FontAttributes.Bold | FontAttributes.Italic
-            };
-            commonName.SetBinding(Label.TextProperty, new Binding("scinamenoauthorstripped"));
-            textSection.Children.Add(commonName);
+            var scientificName = new Label { TextColor = Color.White, FontSize = 12, FontAttributes = FontAttributes.Bold | FontAttributes.Italic };
+            scientificName.SetBinding(Label.TextProperty, new Binding("scinamenoauthorstripped"));
+            textSection.Children.Add(scientificName);
 
             var divider = new BoxView { HeightRequest = 1, WidthRequest = 500, BackgroundColor = Color.White };
             textSection.Children.Add(divider);
 
-            var description = new Label
-            {
-                TextColor = Color.White,
-                FontSize = 12
-            };
-            description.SetBinding(Label.TextProperty, new Binding("commonname"));
-            textSection.Children.Add(description);
+            var commonName = new Label { TextColor = Color.White, FontSize = 12 };
+            commonName.SetBinding(Label.TextProperty, new Binding("commonname"));
+            textSection.Children.Add(commonName);
 
-            var description2 = new Label
-            {
-                TextColor = Color.White,
-                FontSize = 12
-            };
-            description2.SetBinding(Label.TextProperty, new Binding("family"));
-            textSection.Children.Add(description2);
+            var family = new Label { TextColor = Color.White, FontSize = 12 };
+            family.SetBinding(Label.TextProperty, new Binding("family"));
+            textSection.Children.Add(family);
+
+            var group = new Label { TextColor = Color.White, FontSize = 12 };
+            group.SetBinding(Label.TextProperty, new Binding("sections"));
+            textSection.Children.Add(group);
 
             cell.Children.Add(textSection, 1, 0);
             View = cell;

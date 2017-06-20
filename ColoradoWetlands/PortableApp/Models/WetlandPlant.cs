@@ -16,6 +16,7 @@ namespace PortableApp.Models
 
         [Unique]
         public int id { get; set; }
+        public string sections { get; set; }
         public string scinameauthor { get; set; }
         public string scinamenoauthor { get; set; }
         public string family { get; set; }
