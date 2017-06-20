@@ -47,6 +47,7 @@
     <Compile Include="Data\Connectivity.cs" />
     <Compile Include="Data\DBConnection.cs" />
     <Compile Include="Data\ExternalDBConnection.cs" />
+    <Compile Include="Helpers\SearchCharacteristic.cs" />
     <Compile Include="Models\WetlandPlantReference.cs" />
     <Compile Include="Models\WetlandSearch.cs" />
     <Compile Include="Models\WetlandSetting.cs" />

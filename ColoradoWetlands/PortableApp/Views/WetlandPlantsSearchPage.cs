@@ -10,14 +10,15 @@ namespace PortableApp
     public partial class WetlandPlantsSearchPage : ViewHelpers
     {
         public EventHandler InitRunSearch;
-        public EventHandler InitResetSearch;
         public EventHandler InitCloseSearch;
 
-        public ObservableCollection<WetlandSearch> searchCriteria;
-        
+        public ObservableCollection<WetlandSearch> searchCriteriaDB;
+        public ObservableCollection<SearchCharacteristic> searchCriteria;
+
         public WetlandPlantsSearchPage()
         {
-            searchCriteria = new ObservableCollection<WetlandSearch>(App.WetlandSearchRepo.GetAllWetlandSearchCriteria());
+            searchCriteriaDB = new ObservableCollection<WetlandSearch>(App.WetlandSearchRepo.GetAllWetlandSearchCriteria());
+            searchCriteria = SearchCharacteristicsCollection();
 
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);
@@ -40,7 +41,7 @@ namespace PortableApp
 
             StackLayout typesOfPlantsLayout = new StackLayout { Orientation = StackOrientation.Horizontal, Spacing = 5 };
 
-            ImageButton posceaeFamily = new ImageButton { Text = "Poaceae", TextColor = Color.White, BorderColor = Color.White };
+            ImageButton posceaeFamily = searchCriteria[0];
             posceaeFamily.Clicked += ProcessSearchFilter;
             typesOfPlantsLayout.Children.Add(posceaeFamily);
 
@@ -52,7 +53,7 @@ namespace PortableApp
 
             StackLayout commonnameLayout = new StackLayout { Orientation = StackOrientation.Horizontal, Spacing = 5 };
 
-            ImageButton bentgrassCommonname = new ImageButton { Text = "Bentgrass", TextColor = Color.White, BorderColor = Color.White };
+            ImageButton bentgrassCommonname = searchCriteria[1];
             bentgrassCommonname.Clicked += ProcessSearchFilter;
             commonnameLayout.Children.Add(bentgrassCommonname);
 
@@ -95,24 +96,25 @@ namespace PortableApp
 
         private void ResetSearchFilters(object sender, EventArgs e)
         {
-            InitResetSearch?.Invoke(this, EventArgs.Empty);
+
+            var ten = 10;
         }
 
         private async void ProcessSearchFilter(object sender, EventArgs e)
         {
-            var button = (ImageButton)sender;
-            WetlandSearch buttonBinding = searchCriteria.Where(X => X.Name == button.Text).First();
-            if (buttonBinding.Query == true)
+            var button = (SearchCharacteristic)sender;
+            var correspondingDBRecord = (WetlandSearch)sender;
+            if (button.Query == true)
             {
-                buttonBinding.Query = false;
+                correspondingDBRecord.Query = false;
                 button.BorderWidth = 0;
             }
-            else if (buttonBinding.Query == false)
+            else if (button.Query == false)
             {
-                buttonBinding.Query = true;
+                correspondingDBRecord.Query = true;
                 button.BorderWidth = 1;
             }
-            await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(buttonBinding);
+            await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(correspondingDBRecord);
         }
 
         private void RunSearch(object sender, EventArgs e)
@@ -123,6 +125,20 @@ namespace PortableApp
         private void CloseSearch(object sender, EventArgs e)
         {
             InitCloseSearch?.Invoke(this, EventArgs.Empty);
+        }
+
+        private ObservableCollection<SearchCharacteristic> SearchCharacteristicsCollection()
+        {
+            searchCriteria = new ObservableCollection<SearchCharacteristic>();
+            foreach (WetlandSearch searchItem in searchCriteriaDB)
+            {
+                SearchCharacteristic item = new SearchCharacteristic();
+                item.SetBinding(SearchCharacteristic.TextProperty, new Binding("Name"));
+                item.SetBinding(SearchCharacteristic.QueryProperty, new Binding("Query"));
+                item.SetBinding(SearchCharacteristic.ColumnsProperty, new Binding("Columns"));
+                item.SetBinding(SearchCharacteristic.SearchStringsProperty, new Binding("SearchStrings"));
+            }            
+            return searchCriteria;
         }
 
     }

@@ -60,7 +60,6 @@ namespace PortableApp
             buttonGroup.Children.Add(search, 0, 0);
             var SearchPage = new WetlandPlantsSearchPage();
             search.Clicked += async (s, e) => { await Navigation.PushModalAsync(SearchPage); };
-            SearchPage.InitResetSearch += HandleResetSearch;
             SearchPage.InitRunSearch += HandleRunSearch;
             SearchPage.InitCloseSearch += HandleCloseSearch;
 
@@ -103,18 +102,12 @@ namespace PortableApp
             Content = pageContainer;
         }
 
-        private async void HandleResetSearch(object sender, EventArgs e)
-        {
-            cameFromSearch = false;
-            await App.Current.MainPage.Navigation.PopModalAsync();
-        }
-
-        private void HandleRunSearch(object sender, EventArgs e)
+        private async void HandleRunSearch(object sender, EventArgs e)
         {
             plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetPlantsBySearchCriteria());
             wetlandPlantsList.ItemsSource = plants;
             cameFromSearch = true;
-            //await App.Current.MainPage.Navigation.PopModalAsync();
+            await App.Current.MainPage.Navigation.PopModalAsync();
         }
 
         private async void HandleCloseSearch(object sender, EventArgs e)
