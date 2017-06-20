@@ -3,6 +3,7 @@ using PortableApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Xamarin.Forms;
 
 namespace PortableApp
@@ -12,7 +13,8 @@ namespace PortableApp
         ListView wetlandPlantsList;
         ObservableCollection<WetlandPlant> plants;
         bool cameFromSearch;
-        Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" } };
+        string sortColumn;
+        Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" }, { "Group", "sections" } };
         Picker sortPicker = new Picker();
         Button sortButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "Scientific Name", BorderRadius = Device.OnPlatform(0, 1, 0) };
         Button sortDirection = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "\u25BC", BorderRadius = Device.OnPlatform(0, 1, 0) };
@@ -136,6 +138,8 @@ namespace PortableApp
                 plants.Sort(i => i.commonname, sortDirection.Text);
             else if (sortButton.Text == "Family")
                 plants.Sort(i => i.family, sortDirection.Text);
+            else if (sortButton.Text == "Group")
+                plants.Sort(i => i.sections, sortDirection.Text);
 
             wetlandPlantsList.ItemsSource = plants;
         }
@@ -152,49 +156,7 @@ namespace PortableApp
             }
             SortItems(sender, e);
         }
-
-        public List<WetlandPlant> WetlandPlantsList()
-        {
-
-            var wetlandPlants = new List<WetlandPlant>();
-            wetlandPlants.Add(new WetlandPlant
-            {
-                scinameauthor = "ACER NEGUNDO",
-                commonname = "Boxelder",
-                family = "Aceraceae",
-                topimgtopimg = "ACNE2_3.jpg"
-            });
-            wetlandPlants.Add(new WetlandPlant
-            {
-                scinameauthor = "ACONITUM COLUMBIANUM",
-                commonname = "Columbian Monkshood",
-                family = "Ranunculaceae (Helleboraceae)",
-                topimgtopimg = "ACCO4_1.jpg"
-            });
-            wetlandPlants.Add(new WetlandPlant
-            {
-                scinameauthor = "ACORUS CALAMUS",
-                commonname = "Calamus",
-                family = "Acoraceae",
-                topimgtopimg = "ACCA4_2.jpg"
-            });
-            wetlandPlants.Add(new WetlandPlant
-            {
-                scinameauthor = "ADIANTUM CAPILLUS-VENERIS",
-                commonname = "Common Maidenhair",
-                family = "Pteridaceae (Adiantaceae)",
-                topimgtopimg = "ADCA_1.jpg"
-            });
-            wetlandPlants.Add(new WetlandPlant
-            {
-                scinameauthor = "AGALINIS TENUIFOLIA",
-                commonname = "Slenderleaf False Foxglove",
-                family = "Scrophulariaceae (Orobanchaceae)",
-                topimgtopimg = "AGTE3_1.jpg"
-            });
-            return wetlandPlants;
-        }
-
+        
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (wetlandPlantsList.SelectedItem != null)
@@ -231,22 +193,22 @@ namespace PortableApp
             // Add text section
             StackLayout textSection = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 2 };
 
-            var scientificName = new Label { TextColor = Color.White, FontSize = 12, FontAttributes = FontAttributes.Bold | FontAttributes.Italic };
+            Label scientificName = new Label { TextColor = Color.White, FontSize = 12, FontAttributes = FontAttributes.Bold | FontAttributes.Italic };
             scientificName.SetBinding(Label.TextProperty, new Binding("scinamenoauthorstripped"));
             textSection.Children.Add(scientificName);
 
             var divider = new BoxView { HeightRequest = 1, WidthRequest = 500, BackgroundColor = Color.White };
             textSection.Children.Add(divider);
 
-            var commonName = new Label { TextColor = Color.White, FontSize = 12 };
+            Label commonName = new Label { TextColor = Color.White, FontSize = 12 };
             commonName.SetBinding(Label.TextProperty, new Binding("commonname"));
             textSection.Children.Add(commonName);
 
-            var family = new Label { TextColor = Color.White, FontSize = 12 };
+            Label family = new Label { TextColor = Color.White, FontSize = 12 };
             family.SetBinding(Label.TextProperty, new Binding("family"));
             textSection.Children.Add(family);
 
-            var group = new Label { TextColor = Color.White, FontSize = 12 };
+            Label group = new Label { TextColor = Color.White, FontSize = 12 };
             group.SetBinding(Label.TextProperty, new Binding("sections"));
             textSection.Children.Add(group);
 
