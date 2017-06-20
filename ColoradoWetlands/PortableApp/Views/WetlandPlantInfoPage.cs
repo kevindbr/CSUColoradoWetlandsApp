@@ -28,7 +28,7 @@ namespace PortableApp
             ScrollView contentScrollView = new ScrollView {
                 BackgroundColor = Color.FromHex("88000000"),
                 Padding = new Thickness(20, 5, 20, 5),
-                Margin = new Thickness(15, 0, 15, 0)
+                Margin = new Thickness(0, 0, 0, 0)
             };
 
             TransparentWebView browser = ConstructHTMLContent(plant);
@@ -49,7 +49,7 @@ namespace PortableApp
             string html = "";
 
             html += "<!DOCTYPE html><html lang='en' xmlns='http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8' /><title>Plant Info Page</title></head><body>";
-            html += "<style>body { color: white; font-size: 0.8em; } .section_header { font-weight: bold; border-bottom: 1px solid white; margin: 10px 0; } .embedded_table { width: 100%; margin-left: 10px; }</style>";
+            html += "<style>body { color: white; font-size: 0.9em; } .section_header { font-weight: bold; border-bottom: 1px solid white; margin: 10px 0; } .embedded_table { width: 100%; margin-left: 10px; }</style>";
 
             html += "<div class='section_header'>NOMENCLATURE</div>";
             html += "<strong>Scientific Name: </strong>" + plant.scinameauthor + "<br/>";
@@ -92,6 +92,15 @@ namespace PortableApp
             html += "</ul>";
 
             html += "<div class='section_header'>SIMILAR PLANTS</div>" + plant.similarsp;
+
+            html += "<div class='section_header'>REFERENCES</div>";
+
+            html += "<ul>";
+            foreach (WetlandPlantReference reference in plant.References)
+            {
+                html += "<li>" + reference.fullcitation + "</li>";
+            }
+            html += "</ul>";
 
             html += "</body></html>";
 
