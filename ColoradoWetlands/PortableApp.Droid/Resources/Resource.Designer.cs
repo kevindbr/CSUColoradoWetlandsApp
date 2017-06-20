@@ -5607,7 +5607,7 @@ namespace PortableApp.Droid
 			public const int range = 2130837671;
 			
 			// aapt resource value: 0x7f0200a8
-			public const int refs = 2130837672;
+			public const int similar = 2130837672;
 			
 			static Drawable()
 			{
