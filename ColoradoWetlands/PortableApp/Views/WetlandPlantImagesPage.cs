@@ -41,7 +41,7 @@ namespace PortableApp
                 cell.Children.Add(imageCredit, 0, 0);
 
                 // Add image
-                var image = new Image { Aspect = Aspect.AspectFit, Margin = new Thickness(10, 0, 10, 0) };
+                var image = new Image { Aspect = Aspect.AspectFill, Margin = new Thickness(10, 0, 10, 0) };
                 image.SetBinding(Image.SourceProperty, new Binding("ImagePath"));
                 cell.Children.Add(image, 0, 1);
 

@@ -26,19 +26,20 @@ namespace PortableApp
             
             ScrollView contentScrollView = new ScrollView {
                 BackgroundColor = Color.FromHex("88000000"),
-                Padding = new Thickness(20, 5, 20, 5),
-                Margin = new Thickness(15, 0, 15, 0)
+                Padding = new Thickness(0, 20, 0, 20),
+                Margin = new Thickness(0, 0, 0, 0)
             };
             StackLayout contentContainer = new StackLayout();
 
-            Image rangeImage = new Image { Aspect = Aspect.AspectFit, Margin = new Thickness(10, 0, 10, 0) };
+            Image rangeImage = new Image { Aspect = Aspect.AspectFill, Margin = new Thickness(10, 0, 10, 0) };
             rangeImage.SetBinding(Image.SourceProperty, new Binding("RangePath"));
             contentContainer.Children.Add(rangeImage);
 
             Label elevationLabel = new Label {
                 Text = "Elevation: " + plant.elevminfeet + "-" + plant.elevmaxfeet + " ft. (" + plant.elevminm + "-" + plant.elevmaxm + " m)",
                 FontSize = 12,
-                TextColor = Color.White
+                TextColor = Color.White,
+                HorizontalTextAlignment = TextAlignment.Center
             };
             contentContainer.Children.Add(elevationLabel);
 
