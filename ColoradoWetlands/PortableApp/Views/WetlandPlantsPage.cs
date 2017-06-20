@@ -58,10 +58,10 @@ namespace PortableApp
                 Margin = new Thickness(10, 0, 10, 0)
             };
             buttonGroup.Children.Add(search, 0, 0);
-            var SearchPage = new WetlandPlantsSearchPage();
-            search.Clicked += async (s, e) => { await Navigation.PushModalAsync(SearchPage); };
-            SearchPage.InitRunSearch += HandleRunSearch;
-            SearchPage.InitCloseSearch += HandleCloseSearch;
+            //var SearchPage = new WetlandPlantsSearchPage();
+            //search.Clicked += async (s, e) => { await Navigation.PushModalAsync(SearchPage); };
+            //SearchPage.InitRunSearch += HandleRunSearch;
+            //SearchPage.InitCloseSearch += HandleCloseSearch;
 
             // Add sort container
             Grid sortContainer = new Grid { ColumnSpacing = 0 };
