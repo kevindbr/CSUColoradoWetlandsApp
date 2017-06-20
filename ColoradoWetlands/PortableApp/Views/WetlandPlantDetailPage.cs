@@ -1,5 +1,6 @@
 ﻿using PortableApp.Models;
 using PortableApp.Views;
+using System;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
@@ -7,6 +8,8 @@ namespace PortableApp.Views
 {
     public partial class WetlandPlantDetailPage : TabbedPage
     {
+        public WetlandSetting selectedTabSetting = App.WetlandSettingsRepo.GetSetting("SelectedTab");
+
         public WetlandPlantDetailPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants)
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -19,6 +22,19 @@ namespace PortableApp.Views
             Children.Add(new WetlandPlantSimilarPage(plant, plants) { Title = "SIMILAR", Icon = "similar.png" });
             BarBackgroundColor = Color.Black;
             BarTextColor = Color.White;
+
+            if (selectedTabSetting != null)
+                SelectedItem = Children[Convert.ToInt32(selectedTabSetting.valueint)];
+            else
+                SelectedItem = Children[0];
+
+            this.CurrentPageChanged += RememberPageChange;
+        }
+
+        private async void RememberPageChange(object sender, EventArgs e)
+        {
+            int index = this.Children.IndexOf(this.CurrentPage);
+            await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "SelectedTab", valueint = (long?)index } );
         }
     }
 }
