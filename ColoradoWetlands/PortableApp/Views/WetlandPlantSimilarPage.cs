@@ -4,10 +4,10 @@ using Xamarin.Forms;
 
 namespace PortableApp
 {
-    public partial class WetlandPlantEcologyPage : ViewHelpers
+    public partial class WetlandPlantSimilarPage : ViewHelpers
     {
 
-        public WetlandPlantEcologyPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants)
+        public WetlandPlantSimilarPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants)
         {
 
             // Turn off navigation bar and initialize pageContainer
@@ -48,18 +48,18 @@ namespace PortableApp
             var htmlSource = new HtmlWebViewSource();
             string html = "";
 
-            html += "<!DOCTYPE html><html lang='en' xmlns='http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8' /><title>Plant Info Page</title></head><body>";
-            html += "<style>body { color: white; font-size: 0.9em; } .section_header { font-weight: bold; border-bottom: 1px solid white; margin: 10px 0; } .embedded_table { width: 100%; margin-left: 10px; } .iconImg { height: 40px; }</style>";
+            //html += "<!DOCTYPE html><html lang='en' xmlns='http://www.w3.org/1999/xhtml'><head><meta charset = 'utf-8' /><title>Plant Info Page</title></head><body>";
+            //html += "<style>body { color: white; font-size: 0.9em; } .section_header { font-weight: bold; border-bottom: 1px solid white; margin: 10px 0; } .embedded_table { width: 100%; margin-left: 10px; } .iconImg { height: 40px; }</style>";
 
-            html += "<div class='section_header'>HABITAT & ECOLOGY</div>" + plant.habitat;
+            //html += "<div class='section_header'>HABITAT & ECOLOGY</div>" + plant.habitat;
 
-            html += "<div class='section_header'>COMMENTS</div>" + plant.comments;
+            //html += "<div class='section_header'>COMMENTS</div>" + plant.comments;
 
-            html += "<div class='section_header'>WETLAND TYPES</div>" + plant.ecologicalsystems;
+            //html += "<div class='section_header'>WETLAND TYPES</div>" + plant.ecologicalsystems;
 
-            html += "<div class='section_header'>ANIMAL USE</div>" + plant.animaluse.Replace("resources/images/animals/", "");
+            //html += "<div class='section_header'>ANIMAL USE</div>" + plant.animaluse.Replace("resources/images/animals/", "");
 
-            html += "</body></html>";
+            //html += "</body></html>";
 
             htmlSource.Html = html;
             browser.Source = htmlSource;
