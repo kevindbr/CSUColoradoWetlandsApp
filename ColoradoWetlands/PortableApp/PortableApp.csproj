@@ -38,6 +38,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\WetlandPlantSimilarSpeciesRepository.cs" />
     <Compile Include="Assets\WetlandPlantImageRepository.cs" />
     <Compile Include="Assets\WetlandPlantReferenceRepository.cs" />
     <Compile Include="Assets\WetlandSearchRepository.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="Data\DBConnection.cs" />
     <Compile Include="Data\ExternalDBConnection.cs" />
     <Compile Include="Helpers\SearchCharacteristic.cs" />
+    <Compile Include="Models\WetlandPlantSimilarSpecies.cs" />
     <Compile Include="Models\WetlandPlantReference.cs" />
     <Compile Include="Models\WetlandSearch.cs" />
     <Compile Include="Models\WetlandSetting.cs" />

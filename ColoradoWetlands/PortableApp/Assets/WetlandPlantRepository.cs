@@ -28,6 +28,13 @@ namespace PortableApp
             return conn.GetAllWithChildren<WetlandPlant>();
         }
 
+        // return a specific WetlandPlant given an id
+        public WetlandPlant GetWetlandPlantByAltId(int Id)
+        {
+            WetlandPlant plant = conn.Table<WetlandPlant>().Where(p => p.id.Equals(Id)).FirstOrDefault();
+            return conn.GetWithChildren<WetlandPlant>(plant.plantid);
+        }
+
         // get current search criteria (saved in db) and return appropriate list of Wetland Plants
         public IEnumerable<WetlandPlant> GetPlantsBySearchCriteria()
         {

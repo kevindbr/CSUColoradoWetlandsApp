@@ -99,7 +99,7 @@ namespace PortableApp
                 gridLayout.Children.Add(homeImage, 2, 0);
             }
             // if Next and Previous buttons visible
-            else if (options.nextAndPreviousVisible)
+            else if (options.nextAndPreviousVisible && options.plants != null)
             {
                 Image previousImage = new Image
                 {

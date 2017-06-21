@@ -10,7 +10,7 @@ namespace PortableApp.Views
     {
         public WetlandSetting selectedTabSetting = App.WetlandSettingsRepo.GetSetting("SelectedTab");
 
-        public WetlandPlantDetailPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants)
+        public WetlandPlantDetailPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants = null)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             var helpers = new ViewHelpers();
