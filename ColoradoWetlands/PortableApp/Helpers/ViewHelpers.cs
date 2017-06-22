@@ -180,7 +180,7 @@ namespace PortableApp
 
         public Grid ConstructFooterBar()
         {
-            Grid gridLayout = new Grid { BackgroundColor = Color.FromHex("cc000000"), VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand, ColumnSpacing = 0 };
+            Grid gridLayout = new Grid { BackgroundColor = Color.FromHex("44000000"), VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand, ColumnSpacing = 0 };
             gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
             gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
@@ -189,11 +189,21 @@ namespace PortableApp
                 Style = Application.Current.Resources["footerBarButton"] as Style,
                 BorderRadius = Device.OnPlatform(0, 1, 0)
             };
-            Device.OnPlatform(Android: () => terms.BackgroundColor = Color.Black);
             Device.OnPlatform(iOS: () => terms.Margin = new Thickness(5, 5, 5, 5));
             terms.Clicked += ToGlossary;
             gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(75) });
             gridLayout.Children.Add(terms, 1, 0);
+
+            Button maps = new Button
+            {
+                Text = "MAPS",
+                Style = Application.Current.Resources["footerBarButton"] as Style,
+                BorderRadius = Device.OnPlatform(0, 1, 0)
+            };
+            Device.OnPlatform(iOS: () => maps.Margin = new Thickness(5, 5, 5, 5));
+            maps.Clicked += ToWetlandMaps;
+            gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
+            gridLayout.Children.Add(maps, 2, 0);
 
             Button help = new Button
             {
@@ -201,11 +211,10 @@ namespace PortableApp
                 Style = Application.Current.Resources["footerBarButton"] as Style,
                 BorderRadius = Device.OnPlatform(0, 1, 0)
             };
-            Device.OnPlatform(Android: () => help.BackgroundColor = Color.Black);
             Device.OnPlatform(iOS: () => help.Margin = new Thickness(5, 5, 5, 5));
-            help.Clicked += ToGlossary;
+            help.Clicked += ToPlantsHelp;
             gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30) });
-            gridLayout.Children.Add(help, 2, 0);
+            gridLayout.Children.Add(help, 3, 0);
 
             gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
@@ -261,6 +270,12 @@ namespace PortableApp
         {
             ChangeButtonColor(sender, e);
             await Navigation.PushAsync(new WetlandPlantsPage());
+        }
+
+        public async void ToPlantsHelp(object sender, EventArgs e)
+        {
+            ChangeButtonColor(sender, e);
+            await Navigation.PushAsync(new HTMLPage("PlantsHelp.html", "PLANTS HELP"));
         }
 
         public async void ToWetlandMaps(object sender, EventArgs e)

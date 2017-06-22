@@ -391,6 +391,9 @@
   <ItemGroup>
     <BundleResource Include="Resources\Podicipediformes.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\WetlandRegions.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
