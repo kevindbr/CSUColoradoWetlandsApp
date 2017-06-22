@@ -28,6 +28,11 @@ namespace PortableApp
             return conn.GetAllWithChildren<WetlandPlant>();
         }
 
+        public List<string> GetPlantJumpList()
+        {
+            return GetAllWetlandPlants().Select(x => x.scinameauthorstripped[0].ToString()).Distinct().ToList();
+        }
+
         // return a specific WetlandPlant given an id
         public WetlandPlant GetWetlandPlantByAltId(int Id)
         {

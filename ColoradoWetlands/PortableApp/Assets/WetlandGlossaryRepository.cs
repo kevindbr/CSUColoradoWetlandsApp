@@ -12,10 +12,7 @@ namespace PortableApp
 
     public class WetlandGlossaryRepository : DBConnection
     { 
-
-        public ObservableCollection<WetlandGlossary> terms;
-        public List<string> alphabetList;
-
+        
         public WetlandGlossaryRepository()
         {
             // Create the Wetland Glossary table

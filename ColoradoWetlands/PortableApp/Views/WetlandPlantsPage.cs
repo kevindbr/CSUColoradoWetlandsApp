@@ -1,19 +1,22 @@
 ﻿using Plugin.Connectivity;
+using PortableApp.Helpers;
 using PortableApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace PortableApp
 {
     public partial class WetlandPlantsPage : ViewHelpers
     {
+        ObservableCollection<Grouping<string, WetlandPlant>> plantsGrouped;
+        List<string> jumpList;
         ListView wetlandPlantsList;
         ObservableCollection<WetlandPlant> plants;
         bool cameFromSearch;
-        string sortColumn;
         Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" }, { "Group", "sections" } };
         Picker sortPicker = new Picker();
         Button sortButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "Scientific Name", BorderRadius = Device.OnPlatform(0, 1, 0) };
@@ -93,11 +96,52 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
             innerContainer.Children.Add(buttonGroup, 0, 1);
 
+            // Create ListView container
+            RelativeLayout listViewContainer = new RelativeLayout
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.Transparent,
+            };
+
+            // Add Plants ListView
             wetlandPlantsList = new ListView { BackgroundColor = Color.Transparent, RowHeight = 100 };
             wetlandPlantsList.ItemTemplate = new DataTemplate(typeof(WetlandPlantsItemTemplate));
             wetlandPlantsList.ItemSelected += OnItemSelected;
+
+            listViewContainer.Children.Add(wetlandPlantsList,
+                Constraint.RelativeToParent((parent) => { return parent.X; }),
+                Constraint.RelativeToParent((parent) => { return parent.Y - 105; }),
+                Constraint.RelativeToParent((parent) => { return parent.Width * .9; }),
+                Constraint.RelativeToParent((parent) => { return parent.Height; })
+            );
+            
+            // Create jump list from termsGrouped
+            jumpList = new List<string>("ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray().Select(x => x.ToString()).ToList());
+
+            // Add jump list to right side
+            StackLayout jumpListContainer = new StackLayout { Spacing = -1, Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
+            foreach (string letter in jumpList)
+            {
+                Label letterLabel = new Label { Text = letter, Style = Application.Current.Resources["jumpListLetter"] as Style };
+                var tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.Tapped += (s, e) => {
+                    var firstRecordMatchingLetter = plants.Where(x => x.scinameauthorstripped[0].ToString() == letter).FirstOrDefault();
+                    wetlandPlantsList.ScrollTo(firstRecordMatchingLetter, ScrollToPosition.Start, true);
+                };
+                letterLabel.GestureRecognizers.Add(tapGestureRecognizer);
+                jumpListContainer.Children.Add(letterLabel);
+            }
+
+            listViewContainer.Children.Add(jumpListContainer,
+                Constraint.RelativeToParent((parent) => { return parent.Width * .9; }),
+                Constraint.RelativeToParent((parent) => { return parent.Y - 105; }),
+                Constraint.RelativeToParent((parent) => { return parent.Width * .1; }),
+                Constraint.RelativeToParent((parent) => { return parent.Height; })
+            );
+
+            // Add ListView and Jump List to grid
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            innerContainer.Children.Add(wetlandPlantsList, 0, 2);
+            innerContainer.Children.Add(listViewContainer, 0, 2);
 
             // Add FooterBar
             Grid footerBar = ConstructFooterBar();
