@@ -21,6 +21,7 @@ namespace PortableApp
         DateTime? datePlantDataUpdatedOnServer;
         List<WetlandSetting> imageFilesToDownload;
         ObservableCollection<WetlandPlant> plants;
+        ObservableCollection<WetlandGlossary> terms;
         ProgressBar progressBar = new ProgressBar();
         Label downloadLabel = new Label { Text = "", TextColor = Color.White, FontSize = 18, HorizontalTextAlignment = TextAlignment.Center };
         Button cancelButton;
@@ -40,6 +41,7 @@ namespace PortableApp
 
             // Get all plants from external API call, store them in a collection
             plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAllPlants());
+            terms = new ObservableCollection<WetlandGlossary>(await externalConnection.GetAllTerms());
 
             // Save plants to the database
             if (updatePlants && !token.IsCancellationRequested)
@@ -115,7 +117,14 @@ namespace PortableApp
                     if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
                     await App.WetlandPlantRepo.AddPlantAsync(plant);
                     plantsSaved += 1;
-                    await progressBar.ProgressTo((double)plantsSaved / plants.Count, 1, Easing.Linear);
+                    await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
+                }
+                foreach (var term in terms)
+                {
+                    if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
+                    await App.WetlandGlossaryRepo.AddTermAsync(term);
+                    plantsSaved += 1;
+                    await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
                 }
                 await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "DatePlantsDownloaded", valuetimestamp = datePlantDataUpdatedOnServer });
             }
@@ -132,7 +141,6 @@ namespace PortableApp
         // Get plant images from MobileApi server and save locally
         public async Task UpdatePlantImages(CancellationToken token)
         {
-
 
             // Download needed image files
             if (imageFilesToDownload.Count > 0)

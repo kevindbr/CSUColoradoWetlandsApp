@@ -34,7 +34,13 @@ namespace PortableApp
             result = await client.GetStringAsync(Url);
             return JsonConvert.DeserializeObject<IList<WetlandPlant>>(result);
         }
-        
+
+        public async Task<IEnumerable<WetlandGlossary>> GetAllTerms()
+        {
+            result = await client.GetStringAsync(Url + "_glossary");
+            return JsonConvert.DeserializeObject<IList<WetlandGlossary>>(result);
+        }
+
         public async Task<WetlandSetting> GetDateUpdatedDataOnServer()
         {
             try

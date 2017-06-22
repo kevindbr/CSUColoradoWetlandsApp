@@ -36,7 +36,7 @@ namespace PortableApp
             AbsoluteLayout pageContainer = ConstructPageContainer();
 
             // Initialize grid for inner container
-            Grid innerContainer = new Grid { Padding = new Thickness(0, Device.OnPlatform(10, 0, 0), 0, 0) };
+            Grid innerContainer = new Grid { Padding = new Thickness(0, Device.OnPlatform(10, 0, 0), 0, 0), ColumnSpacing = 0 };
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Add header to inner container
@@ -98,6 +98,11 @@ namespace PortableApp
             wetlandPlantsList.ItemSelected += OnItemSelected;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(wetlandPlantsList, 0, 2);
+
+            // Add FooterBar
+            Grid footerBar = ConstructFooterBar();
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
+            innerContainer.Children.Add(footerBar, 0, 3);
 
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);

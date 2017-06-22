@@ -61,6 +61,19 @@
         <Setter Property="HorizontalOptions" Value="FillAndExpand" />
         <Setter Property="VerticalOptions" Value="Center" />
       </Style>
+      <Style x:Key="jumpListLetter" TargetType="Label">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontAttributes" Value="Bold" />
+      </Style>
+      <Style x:Key="footerBarButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#00000000" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Margin" Value="0, 0, 0, 0" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="White" />
+      </Style>
     </ResourceDictionary>
   </Application.Resources>
 

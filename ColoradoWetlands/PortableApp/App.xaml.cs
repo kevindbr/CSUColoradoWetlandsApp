@@ -12,6 +12,7 @@ namespace PortableApp
         public static WetlandPlantImageRepository WetlandPlantImageRepo { get; private set; }
         public static WetlandPlantSimilarSpeciesRepository WetlandPlantSimilarSpeciesRepo { get; private set; }
         public static WetlandPlantReferenceRepository WetlandPlantReferenceRepo { get; private set; }
+        public static WetlandGlossaryRepository WetlandGlossaryRepo { get; private set; }
         public static WetlandTypeRepository WetlandTypeRepo { get; private set; }
         public static WetlandSettingRepository WetlandSettingsRepo { get; private set; }
         public static WetlandSearchRepository WetlandSearchRepo { get; private set; }
@@ -32,6 +33,7 @@ namespace PortableApp
             WetlandPlantImageRepo = new WetlandPlantImageRepository();
             WetlandPlantSimilarSpeciesRepo = new WetlandPlantSimilarSpeciesRepository();
             WetlandPlantReferenceRepo = new WetlandPlantReferenceRepository();
+            WetlandGlossaryRepo = new WetlandGlossaryRepository();
             WetlandTypeRepo = new WetlandTypeRepository();
             WetlandSettingsRepo = new WetlandSettingRepository();
             WetlandSearchRepo = new WetlandSearchRepository();
