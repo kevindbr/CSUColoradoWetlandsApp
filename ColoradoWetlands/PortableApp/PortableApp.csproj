@@ -50,6 +50,7 @@
     <Compile Include="Data\DBConnection.cs" />
     <Compile Include="Data\ExternalDBConnection.cs" />
     <Compile Include="Helpers\Grouping.cs" />
+    <Compile Include="Helpers\ZoomImage.cs" />
     <Compile Include="Helpers\SearchCharacteristic.cs" />
     <Compile Include="Models\WetlandGlossary.cs" />
     <Compile Include="Models\WetlandPlantSimilarSpecies.cs" />

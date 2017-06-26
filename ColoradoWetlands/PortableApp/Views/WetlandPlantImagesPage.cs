@@ -1,4 +1,5 @@
 ﻿using CarouselView.FormsPlugin.Abstractions;
+using PortableApp.Helpers;
 using PortableApp.Models;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
@@ -42,8 +43,9 @@ namespace PortableApp
                 cell.Children.Add(imageCredit, 0, 0);
 
                 // Add image
-                var image = new Image { Aspect = Aspect.AspectFill, Margin = new Thickness(10, 0, 10, 0) };
+                var image = new ZoomImage { Margin = new Thickness(10, 0, 10, 0) };
                 image.SetBinding(Image.SourceProperty, new Binding("ImagePath"));
+
                 cell.Children.Add(image, 0, 1);
 
                 return cell;
@@ -61,7 +63,7 @@ namespace PortableApp
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
         }
-
+        
     }
     
 }
