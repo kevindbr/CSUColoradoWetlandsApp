@@ -43,7 +43,7 @@ namespace PortableApp
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Add header to inner container
-            NavigationOptions navOptions = new NavigationOptions { titleText = "WETLAND PLANTS", backButtonVisible = true, homeButtonVisible = true };
+            HeaderNavigationOptions navOptions = new HeaderNavigationOptions { titleText = "WETLAND PLANTS", backButtonVisible = true, homeButtonVisible = true };
             Grid navigationBar = ConstructNavigationBar(navOptions);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(navigationBar, 0, 0);
@@ -144,7 +144,8 @@ namespace PortableApp
             innerContainer.Children.Add(listViewContainer, 0, 2);
 
             // Add FooterBar
-            Grid footerBar = ConstructFooterBar();
+            FooterNavigationOptions footerOptions = new FooterNavigationOptions { plantsFooter = true };
+            Grid footerBar = ConstructFooterBar(footerOptions);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
             innerContainer.Children.Add(footerBar, 0, 3);
 

@@ -21,7 +21,7 @@ namespace PortableApp
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Add header to inner container
-            NavigationOptions navOptions = new NavigationOptions { titleText = "WETLAND TYPES", backButtonVisible = true, homeButtonVisible = true };
+            HeaderNavigationOptions navOptions = new HeaderNavigationOptions { titleText = "WETLAND TYPES", backButtonVisible = true, homeButtonVisible = true };
             Grid navigationBar = ConstructNavigationBar(navOptions);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
         

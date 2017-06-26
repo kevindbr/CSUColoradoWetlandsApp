@@ -34,7 +34,7 @@ namespace PortableApp
         }
 
         // Construct Navigation Bar
-        public Grid ConstructNavigationBar(NavigationOptions options)
+        public Grid ConstructNavigationBar(HeaderNavigationOptions options)
         {
             Grid gridLayout = new Grid { VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand, ColumnSpacing = 0 };
             gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
@@ -178,43 +178,94 @@ namespace PortableApp
             return gridLayout;
         }
 
-        public Grid ConstructFooterBar()
+        public Grid ConstructFooterBar(FooterNavigationOptions options)
         {
             Grid gridLayout = new Grid { BackgroundColor = Color.FromHex("44000000"), VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand, ColumnSpacing = 0 };
             gridLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
             gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-            Button terms = new Button {
-                Text = "TERMS",
-                Style = Application.Current.Resources["footerBarButton"] as Style,
-                BorderRadius = Device.OnPlatform(0, 1, 0)
-            };
-            Device.OnPlatform(iOS: () => terms.Margin = new Thickness(5, 5, 5, 5));
-            terms.Clicked += ToGlossary;
-            gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(75) });
-            gridLayout.Children.Add(terms, 1, 0);
-
-            Button maps = new Button
+            if (options.plantsFooter)
             {
-                Text = "MAPS",
-                Style = Application.Current.Resources["footerBarButton"] as Style,
-                BorderRadius = Device.OnPlatform(0, 1, 0)
-            };
-            Device.OnPlatform(iOS: () => maps.Margin = new Thickness(5, 5, 5, 5));
-            maps.Clicked += ToWetlandMaps;
-            gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
-            gridLayout.Children.Add(maps, 2, 0);
+                Button terms = new Button
+                {
+                    Text = "TERMS",
+                    Style = Application.Current.Resources["footerBarButton"] as Style,
+                    BorderRadius = Device.OnPlatform(0, 1, 0)
+                };
+                Device.OnPlatform(iOS: () => terms.Margin = new Thickness(5, 5, 5, 5));
+                terms.Clicked += ToGlossary;
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(75) });
+                gridLayout.Children.Add(terms, 1, 0);
 
-            Button help = new Button
+                Button maps = new Button
+                {
+                    Text = "MAPS",
+                    Style = Application.Current.Resources["footerBarButton"] as Style,
+                    BorderRadius = Device.OnPlatform(0, 1, 0)
+                };
+                Device.OnPlatform(iOS: () => maps.Margin = new Thickness(5, 5, 5, 5));
+                maps.Clicked += ToWetlandMaps;
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
+                gridLayout.Children.Add(maps, 2, 0);
+
+                Button help = new Button
+                {
+                    Text = "?",
+                    Style = Application.Current.Resources["footerBarButton"] as Style,
+                    BorderRadius = Device.OnPlatform(0, 1, 0)
+                };
+                Device.OnPlatform(iOS: () => help.Margin = new Thickness(5, 5, 5, 5));
+                help.Clicked += ToPlantsHelp;
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30) });
+                gridLayout.Children.Add(help, 3, 0);
+            }
+
+            if (options.mapsFooter)
             {
-                Text = "?",
-                Style = Application.Current.Resources["footerBarButton"] as Style,
-                BorderRadius = Device.OnPlatform(0, 1, 0)
-            };
-            Device.OnPlatform(iOS: () => help.Margin = new Thickness(5, 5, 5, 5));
-            help.Clicked += ToPlantsHelp;
-            gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30) });
-            gridLayout.Children.Add(help, 3, 0);
+                Button key = new Button
+                {
+                    Text = "KEY",
+                    Style = Application.Current.Resources["footerBarButton"] as Style,
+                    BorderRadius = Device.OnPlatform(0, 1, 0)
+                };
+                Device.OnPlatform(iOS: () => key.Margin = new Thickness(5, 5, 5, 5));
+                key.Clicked += ToMapsKey;
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(50) });
+                gridLayout.Children.Add(key, 1, 0);
+
+                Button legend = new Button
+                {
+                    Text = "LEGEND",
+                    Style = Application.Current.Resources["footerBarButton"] as Style,
+                    BorderRadius = Device.OnPlatform(0, 1, 0)
+                };
+                Device.OnPlatform(iOS: () => legend.Margin = new Thickness(5, 5, 5, 5));
+                legend.Clicked += ToMapsLegend;
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(85) });
+                gridLayout.Children.Add(legend, 2, 0);
+
+                Button plants = new Button
+                {
+                    Text = "PLANTS",
+                    Style = Application.Current.Resources["footerBarButton"] as Style,
+                    BorderRadius = Device.OnPlatform(0, 1, 0)
+                };
+                Device.OnPlatform(iOS: () => plants.Margin = new Thickness(5, 5, 5, 5));
+                plants.Clicked += ToWetlandPlants;
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(85) });
+                gridLayout.Children.Add(plants, 3, 0);
+
+                Button help = new Button
+                {
+                    Text = "?",
+                    Style = Application.Current.Resources["footerBarButton"] as Style,
+                    BorderRadius = Device.OnPlatform(0, 1, 0)
+                };
+                Device.OnPlatform(iOS: () => help.Margin = new Thickness(5, 5, 5, 5));
+                help.Clicked += ToMapsHelp;
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30) });
+                gridLayout.Children.Add(help, 4, 0);
+            }            
 
             gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
@@ -278,10 +329,34 @@ namespace PortableApp
             await Navigation.PushAsync(new HTMLPage("PlantsHelp.html", "PLANTS HELP"));
         }
 
+        public async void ToGlossary(object sender, EventArgs e)
+        {
+            ChangeButtonColor(sender, e);
+            await Navigation.PushAsync(new WetlandGlossaryPage());
+        }
+
         public async void ToWetlandMaps(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new WetlandPlantsPage());
+            await Navigation.PushAsync(new WetlandMapsPage());
+        }
+
+        public async void ToMapsKey(object sender, EventArgs e)
+        {
+            ChangeButtonColor(sender, e);
+            //await Navigation.PushAsync(new WetlandPlantsPage());
+        }
+
+        public async void ToMapsLegend(object sender, EventArgs e)
+        {
+            ChangeButtonColor(sender, e);
+            //await Navigation.PushAsync(new WetlandPlantsPage());
+        }
+
+        public async void ToMapsHelp(object sender, EventArgs e)
+        {
+            ChangeButtonColor(sender, e);
+            await Navigation.PushAsync(new HTMLPage("MapsHelp.html", "MAPS HELP"));
         }
 
         public async void ToWetlandTypes(object sender, EventArgs e)
@@ -296,15 +371,9 @@ namespace PortableApp
             await Navigation.PushAsync(new HTMLPage("Acknowledgements.html", "ACKNOWLEDGEMENTS"));
         }
 
-        public async void ToGlossary(object sender, EventArgs e)
-        {
-            ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new WetlandGlossaryPage());
-        }
-
     }
 
-    public class NavigationOptions
+    public class HeaderNavigationOptions
     {
         public string titleText { get; set; }
         public bool backButtonVisible { get; set; }
@@ -313,6 +382,12 @@ namespace PortableApp
         public bool nextAndPreviousVisible { get; set; }
         public WetlandPlant plant { get; set; }
         public ObservableCollection<WetlandPlant> plants { get; set; }
+    }
+
+    public class FooterNavigationOptions
+    {
+        public bool plantsFooter { get; set; }
+        public bool mapsFooter { get; set; }
     }
 
     static class Extensions

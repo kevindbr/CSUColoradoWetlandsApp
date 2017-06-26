@@ -1,12 +1,13 @@
-﻿using Xamarin.Forms;
+﻿using PortableApp.Models;
+using System.Collections.Generic;
+using Xamarin.Forms;
 
 namespace PortableApp
 {
-    public interface IBaseUrl { string Get(); }
-
-    public class HTMLPage : ViewHelpers
+    public partial class WetlandMapsPage : ViewHelpers
     {
-        public HTMLPage(string file, string titleText)
+        
+        public WetlandMapsPage()
         {
 
             // Turn off navigation bar and initialize pageContainer
@@ -18,19 +19,26 @@ namespace PortableApp
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Add header to inner container
-            HeaderNavigationOptions navOptions = new HeaderNavigationOptions { titleText = titleText, backButtonVisible = true, homeButtonVisible = true };
+            HeaderNavigationOptions navOptions = new HeaderNavigationOptions { titleText = "WETLAND MAPS", backButtonVisible = true, homeButtonVisible = true };
             Grid navigationBar = ConstructNavigationBar(navOptions);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(navigationBar, 0, 0);
 
-            // Generate WebView content
-            var browser = HTMLProcessor(file);
+            // Add map to layout
+            Label map = new Label { Text = "MAP GOES HERE IN PLACE OF THIS LABEL" };
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            innerContainer.Children.Add(browser, 0, 1);
+            innerContainer.Children.Add(map, 0, 1);
+
+            // Add FooterBar
+            FooterNavigationOptions footerOptions = new FooterNavigationOptions { mapsFooter = true };
+            Grid footerBar = ConstructFooterBar(footerOptions);
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
+            innerContainer.Children.Add(footerBar, 0, 2);
 
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
-        }
+        }        
+
     }
 }

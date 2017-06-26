@@ -76,6 +76,7 @@
     <Compile Include="Views\WetlandPlantsSearchPage.cs" />
     <Compile Include="Views\WetlandTypesDetailPage.cs" />
     <Compile Include="Views\WetlandPlantInfoPage.cs" />
+    <Compile Include="Views\WetlandMapsPage.cs" />
     <Compile Include="Views\WetlandTypesPage.cs" />
     <Compile Include="Views\WetlandPlantsPage.cs" />
   </ItemGroup>
@@ -246,6 +247,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\HTML\PlantsHelp.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\MapsHelp.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
