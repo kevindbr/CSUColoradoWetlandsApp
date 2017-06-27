@@ -43,7 +43,7 @@ namespace PortableApp
         // get plants marked as favorites
         public List<WetlandPlant> GetFavoritePlants()
         {
-            return conn.Table<WetlandPlant>().Where(p => p.isFavorite == true).ToList();
+            return GetAllWetlandPlants().Where(p => p.isFavorite == true).ToList();
         }
 
         // get current search criteria (saved in db) and return appropriate list of Wetland Plants

@@ -22,6 +22,9 @@ namespace PortableApp
         Button sortButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "Scientific Name", BorderRadius = Device.OnPlatform(0, 1, 0) };
         Button sortDirection = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "\u25BC", BorderRadius = Device.OnPlatform(0, 1, 0) };
         Grid plantFilterGroup;
+        Button browseFilter;
+        Button searchFilter;
+        Button favoritesFilter;
 
         protected override void OnAppearing()
         {
@@ -29,7 +32,12 @@ namespace PortableApp
             {
                 plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
                 if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
+                ChangeFilterColors(browseFilter);
                 base.OnAppearing();
+            } 
+            else
+            {
+                ChangeFilterColors(searchFilter);
             }
         }
 
@@ -51,18 +59,17 @@ namespace PortableApp
             plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Add browse filter
-            Button browseFilter = new Button
+            browseFilter = new Button
             {
                 Style = Application.Current.Resources["plantFilterButton"] as Style,
                 Text = "Browse",
-                Margin = new Thickness(2, 5),
-                BackgroundColor = Color.FromHex("99000000")
+                Margin = new Thickness(2, 5)
             };
             browseFilter.Clicked += FilterPlants;
             plantFilterGroup.Children.Add(browseFilter, 0, 0);
 
             // Add Search filter
-            Button searchFilter = new Button
+            searchFilter = new Button
             {
                 Style = Application.Current.Resources["plantFilterButton"] as Style,
                 Text = "Search",
@@ -75,7 +82,7 @@ namespace PortableApp
             plantFilterGroup.Children.Add(searchFilter, 1, 0);
 
             // Add Favorites filter
-            Button favoritesFilter = new Button
+            favoritesFilter = new Button
             {
                 Style = Application.Current.Resources["plantFilterButton"] as Style,
                 Text = "Favorites",
@@ -195,19 +202,24 @@ namespace PortableApp
         public void FilterPlants(object sender, EventArgs e)
         {
             Button filter = (Button)sender;
-            foreach (Button button in plantFilterGroup.Children)
-            {
-                if (button.Text == filter.Text)
-                    button.BackgroundColor = Color.FromHex("cc000000");
-                else
-                    button.BackgroundColor = Color.FromHex("66000000");
-            }
+            ChangeFilterColors(filter);
             if (filter.Text == "Browse")
                 plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
             else if (filter.Text == "Favorites")
                 plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetFavoritePlants());
             
             wetlandPlantsList.ItemsSource = plants;
+        }
+
+        public void ChangeFilterColors(Button selectedFilter)
+        {
+            foreach (Button button in plantFilterGroup.Children)
+            {
+                if (button.Text == selectedFilter.Text)
+                    button.BackgroundColor = Color.FromHex("cc000000");
+                else
+                    button.BackgroundColor = Color.FromHex("66000000");
+            }
         }
 
         private async void HandleRunSearch(object sender, EventArgs e)
