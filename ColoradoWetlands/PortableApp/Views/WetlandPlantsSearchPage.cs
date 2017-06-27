@@ -135,8 +135,9 @@ namespace PortableApp
                 SearchCharacteristic item = new SearchCharacteristic();
                 item.SetBinding(SearchCharacteristic.TextProperty, new Binding("Name"));
                 item.SetBinding(SearchCharacteristic.QueryProperty, new Binding("Query"));
-                item.SetBinding(SearchCharacteristic.ColumnsProperty, new Binding("Columns"));
-                item.SetBinding(SearchCharacteristic.SearchStringsProperty, new Binding("SearchStrings"));
+                item.SetBinding(SearchCharacteristic.Column1Property, new Binding("Column1"));
+                item.SetBinding(SearchCharacteristic.SearchString1Property, new Binding("SearchString1"));
+                searchCriteria.Add(item);
             }            
             return searchCriteria;
         }

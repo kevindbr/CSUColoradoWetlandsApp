@@ -21,6 +21,7 @@ namespace PortableApp
         Picker sortPicker = new Picker();
         Button sortButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "Scientific Name", BorderRadius = Device.OnPlatform(0, 1, 0) };
         Button sortDirection = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "\u25BC", BorderRadius = Device.OnPlatform(0, 1, 0) };
+        Grid plantFilterGroup;
 
         protected override void OnAppearing()
         {
@@ -42,8 +43,49 @@ namespace PortableApp
             Grid innerContainer = new Grid { Padding = new Thickness(0, Device.OnPlatform(10, 0, 0), 0, 0), ColumnSpacing = 0 };
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
+            // Construct filter button group
+            plantFilterGroup = new Grid { ColumnSpacing = 3 };
+            plantFilterGroup.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            // Add browse filter
+            Button browseFilter = new Button
+            {
+                Style = Application.Current.Resources["plantFilterButton"] as Style,
+                Text = "Browse",
+                Margin = new Thickness(2, 5),
+                BackgroundColor = Color.FromHex("99000000")
+            };
+            browseFilter.Clicked += FilterPlants;
+            plantFilterGroup.Children.Add(browseFilter, 0, 0);
+
+            // Add Search filter
+            Button searchFilter = new Button
+            {
+                Style = Application.Current.Resources["plantFilterButton"] as Style,
+                Text = "Search",
+                Margin = new Thickness(2, 5)
+            };
+            var SearchPage = new WetlandPlantsSearchPage();
+            searchFilter.Clicked += async (s, e) => { await Navigation.PushModalAsync(SearchPage); };
+            SearchPage.InitRunSearch += HandleRunSearch;
+            SearchPage.InitCloseSearch += HandleCloseSearch;
+            plantFilterGroup.Children.Add(searchFilter, 1, 0);
+
+            // Add Favorites filter
+            Button favoritesFilter = new Button
+            {
+                Style = Application.Current.Resources["plantFilterButton"] as Style,
+                Text = "Favorites",
+                Margin = new Thickness(2, 5)
+            };
+            favoritesFilter.Clicked += FilterPlants;
+            plantFilterGroup.Children.Add(favoritesFilter, 2, 0);
+
             // Add header to inner container
-            HeaderNavigationOptions navOptions = new HeaderNavigationOptions { titleText = "WETLAND PLANTS", backButtonVisible = true, homeButtonVisible = true };
+            HeaderNavigationOptions navOptions = new HeaderNavigationOptions { plantFiltersVisible = true, plantFilterGroupButtons = plantFilterGroup, backButtonVisible = true, homeButtonVisible = true };
             Grid navigationBar = ConstructNavigationBar(navOptions);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(navigationBar, 0, 0);
@@ -63,13 +105,9 @@ namespace PortableApp
                 Margin = new Thickness(10, 0, 10, 0)
             };
             buttonGroup.Children.Add(search, 0, 0);
-            //var SearchPage = new WetlandPlantsSearchPage();
-            //search.Clicked += async (s, e) => { await Navigation.PushModalAsync(SearchPage); };
-            //SearchPage.InitRunSearch += HandleRunSearch;
-            //SearchPage.InitCloseSearch += HandleCloseSearch;
 
             // Add sort container
-            Grid sortContainer = new Grid { ColumnSpacing = 0 };
+            Grid sortContainer = new Grid { ColumnSpacing = 3 };
             sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
             sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.2, GridUnitType.Star) });
             sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.1, GridUnitType.Star) });
@@ -152,6 +190,24 @@ namespace PortableApp
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
+        }
+
+        public void FilterPlants(object sender, EventArgs e)
+        {
+            Button filter = (Button)sender;
+            foreach (Button button in plantFilterGroup.Children)
+            {
+                if (button.Text == filter.Text)
+                    button.BackgroundColor = Color.FromHex("cc000000");
+                else
+                    button.BackgroundColor = Color.FromHex("66000000");
+            }
+            if (filter.Text == "Browse")
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+            else if (filter.Text == "Favorites")
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetFavoritePlants());
+            
+            wetlandPlantsList.ItemsSource = plants;
         }
 
         private async void HandleRunSearch(object sender, EventArgs e)

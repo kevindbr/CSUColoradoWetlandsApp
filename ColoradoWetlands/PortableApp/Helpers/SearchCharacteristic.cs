@@ -11,8 +11,8 @@ namespace PortableApp
     public class SearchCharacteristic : ImageButton
     {
         public static readonly BindableProperty QueryProperty = BindableProperty.Create("Query", typeof(bool), typeof(ImageButton), false);
-        public static readonly BindableProperty ColumnsProperty = BindableProperty.Create("Columns", typeof(string[]), typeof(ImageButton), null);
-        public static readonly BindableProperty SearchStringsProperty = BindableProperty.Create("SearchStrings", typeof(string[]), typeof(ImageButton), null);
+        public static readonly BindableProperty Column1Property = BindableProperty.Create("Column1", typeof(string), typeof(ImageButton), null);
+        public static readonly BindableProperty SearchString1Property = BindableProperty.Create("SearchString1", typeof(string), typeof(ImageButton), null);
 
         public bool Query
         {
@@ -20,16 +20,16 @@ namespace PortableApp
             set { SetValue(QueryProperty, value); }
         }
 
-        public string[] Columns
+        public string Column1
         {
-            get { return GetValue(ColumnsProperty) as string[]; }
-            set { SetValue(ColumnsProperty, value); }
+            get { return GetValue(Column1Property) as string; }
+            set { SetValue(Column1Property, value); }
         }
 
-        public string[] SearchStrings
+        public string SearchString1
         {
-            get { return GetValue(SearchStringsProperty) as string[]; }
-            set { SetValue(SearchStringsProperty, value); }
+            get { return GetValue(SearchString1Property) as string; }
+            set { SetValue(SearchString1Property, value); }
         }
 
         public SearchCharacteristic()

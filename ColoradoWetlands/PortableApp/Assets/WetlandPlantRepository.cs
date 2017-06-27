@@ -40,6 +40,12 @@ namespace PortableApp
             return conn.GetWithChildren<WetlandPlant>(plant.plantid);
         }
 
+        // get plants marked as favorites
+        public List<WetlandPlant> GetFavoritePlants()
+        {
+            return conn.Table<WetlandPlant>().Where(p => p.isFavorite == true).ToList();
+        }
+
         // get current search criteria (saved in db) and return appropriate list of Wetland Plants
         public IEnumerable<WetlandPlant> GetPlantsBySearchCriteria()
         {
@@ -76,6 +82,18 @@ namespace PortableApp
                 StatusMessage = string.Format("Failed to add {0}. Error: {1}", plant, ex.Message);
             }
             
+        }
+
+        public async Task UpdatePlantAsync(WetlandPlant plant)
+        {
+            try
+            {
+                await connAsync.UpdateAsync(plant);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = string.Format("Failed to update {0}. Error: {1}", plant, ex.Message);
+            }
         }
 
     }

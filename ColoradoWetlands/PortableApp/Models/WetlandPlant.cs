@@ -82,6 +82,8 @@ namespace PortableApp.Models
             get { return scinamenoauthor.Replace("<em>", "").Replace("</em>", ""); }
         }
 
+        public bool isFavorite { get; set; }
+
     }
 
 }

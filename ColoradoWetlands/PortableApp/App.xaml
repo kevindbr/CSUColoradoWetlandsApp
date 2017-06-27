@@ -13,6 +13,12 @@
         <Setter Property="FontSize" Value="15" />
         <Setter Property="Margin" Value="20, 0, 20, 0" />
       </Style>
+      <Style x:Key="plantFilterButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#66000000" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="HeightRequest" Value="40" />
+      </Style>
       <Style x:Key="outlineButton" TargetType="Button">
         <Setter Property="BackgroundColor" Value="#00000000" />
         <Setter Property="TextColor" Value="White" />

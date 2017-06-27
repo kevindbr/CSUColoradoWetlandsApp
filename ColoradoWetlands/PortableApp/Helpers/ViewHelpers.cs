@@ -66,14 +66,51 @@ namespace PortableApp
                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0) });
             }
 
-            // Construct title content section
-            StackLayout titleContent = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
-            Image logo = new Image { Source = ImageSource.FromResource("PortableApp.Resources.Icons.Co_Logo_40.png"), IsVisible = options.logoVisible };
-            Label title = new Label { Text = options.titleText, FontFamily = Device.OnPlatform("Montserrat-Medium", "Montserrat-Medium.ttf#Montserrat-Medium", null), TextColor = Color.White, FontSize = 16, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center };
-            titleContent.Children.Add(logo);
-            titleContent.Children.Add(title);
-            gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(6, GridUnitType.Star) });
-            gridLayout.Children.Add(titleContent, 1, 0);
+            // Construct favorites icon and add gesture recognizer
+            if (options.favoritesIconVisible)
+            {
+                string favoriteIcon = (options.plant.isFavorite) ? "favorite_icon_filled.png" : "favorite_icon_empty.png";
+                string favoriteIconOpposite = (!options.plant.isFavorite) ? "favorite_icon_filled.png" : "favorite_icon_empty.png";
+                Image favoriteImage = new Image
+                {
+                    Source = ImageSource.FromResource("PortableApp.Resources.Icons." + favoriteIcon),
+                    HeightRequest = 20,
+                    WidthRequest = 20,
+                    Margin = new Thickness(0, 15, 0, 15)
+                };
+                var favoriteGestureRecognizer = new TapGestureRecognizer();
+                favoriteGestureRecognizer.Tapped += async (sender, e) =>
+                {
+                    options.plant.isFavorite = (options.plant.isFavorite == true) ? false : true;
+                    favoriteImage.Source = ImageSource.FromResource("PortableApp.Resources.Icons." + favoriteIconOpposite);
+                    await App.WetlandPlantRepo.UpdatePlantAsync(options.plant);
+                };
+                favoriteImage.GestureRecognizers.Add(favoriteGestureRecognizer);
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                gridLayout.Children.Add(favoriteImage, 1, 0);
+            }
+            else
+            {
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0) });
+            }
+
+            if (options.plantFiltersVisible)
+            {
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(6, GridUnitType.Star) });
+                gridLayout.Children.Add(options.plantFilterGroupButtons, 2, 0);
+            }
+            else
+            {
+                // Construct title content section
+                StackLayout titleContent = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
+                Image logo = new Image { Source = ImageSource.FromResource("PortableApp.Resources.Icons.Co_Logo_40.png"), IsVisible = options.logoVisible };
+                Label title = new Label { Text = options.titleText, FontFamily = Device.OnPlatform("Montserrat-Medium", "Montserrat-Medium.ttf#Montserrat-Medium", null), TextColor = Color.White, FontSize = 16, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center };
+                titleContent.Children.Add(logo);
+                titleContent.Children.Add(title);
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(6, GridUnitType.Star) });
+                gridLayout.Children.Add(titleContent, 2, 0);
+            }
+
 
             // Construct home button and add gesture recognizer
             if (options.homeButtonVisible)
@@ -96,7 +133,7 @@ namespace PortableApp
                 };
                 homeImage.GestureRecognizers.Add(homeImageGestureRecognizer);
                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                gridLayout.Children.Add(homeImage, 2, 0);
+                gridLayout.Children.Add(homeImage, 3, 0);
             }
             // if Next and Previous buttons visible
             else if (options.nextAndPreviousVisible && options.plants != null)
@@ -155,19 +192,19 @@ namespace PortableApp
                 if (plantIndex > 0 && plantIndex < options.plants.Count - 1)
                 {
                     gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                    gridLayout.Children.Add(previousImage, 2, 0);
+                    gridLayout.Children.Add(previousImage, 3, 0);
                     gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                    gridLayout.Children.Add(nextImage, 3, 0);
+                    gridLayout.Children.Add(nextImage, 4, 0);
                 }
                 else if (plantIndex > 0)
                 {
                     gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                    gridLayout.Children.Add(previousImage, 2, 0);
+                    gridLayout.Children.Add(previousImage, 3, 0);
                 }
                 else if (plantIndex < options.plants.Count - 1)
                 {
                     gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                    gridLayout.Children.Add(nextImage, 2, 0);
+                    gridLayout.Children.Add(nextImage, 3, 0);
                 }
             }
             else
@@ -376,7 +413,10 @@ namespace PortableApp
     public class HeaderNavigationOptions
     {
         public string titleText { get; set; }
+        public bool plantFiltersVisible { get; set; }
+        public Grid plantFilterGroupButtons { get; set; }
         public bool backButtonVisible { get; set; }
+        public bool favoritesIconVisible { get; set; }
         public bool homeButtonVisible { get; set; }
         public bool logoVisible { get; set; }
         public bool nextAndPreviousVisible { get; set; }
