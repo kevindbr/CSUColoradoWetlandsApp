@@ -21,6 +21,7 @@ namespace PortableApp
         Picker sortPicker = new Picker();
         Button sortButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "Scientific Name", BorderRadius = Device.OnPlatform(0, 1, 0) };
         Button sortDirection = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "\u25BC", BorderRadius = Device.OnPlatform(0, 1, 0) };
+        WetlandSetting sortField;
         Grid plantFilterGroup;
         Button browseFilter;
         Button searchFilter;
@@ -34,12 +35,11 @@ namespace PortableApp
                 plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
                 if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
                 ChangeFilterColors(browseFilter);
+                sortPicker.SelectedIndex = (int)App.WetlandSettingsRepo.GetSetting("Sort Field").valueint;
                 base.OnAppearing();
             } 
             else
-            {
                 ChangeFilterColors(searchFilter);
-            }
         }
 
         public WetlandPlantsPage()
@@ -257,7 +257,7 @@ namespace PortableApp
             SortItems(sender, e);
         }
 
-        private void SortItems(object sender, EventArgs e)
+        private async void SortItems(object sender, EventArgs e)
         {
             sortButton.Text = sortPicker.Items[sortPicker.SelectedIndex];
             wetlandPlantsList.ItemsSource = null;
@@ -270,6 +270,7 @@ namespace PortableApp
             else if (sortButton.Text == "Group")
                 plants.Sort(i => i.sections, sortDirection.Text);
 
+            await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "Sort Field", valuetext = sortButton.Text, valueint = sortPicker.SelectedIndex });
             wetlandPlantsList.ItemsSource = plants;
         }
 
@@ -301,8 +302,13 @@ namespace PortableApp
 
     public class WetlandPlantsItemTemplate : ViewCell
     {
+        WetlandSetting sortField;
+
         public WetlandPlantsItemTemplate()
         {
+            sortField = App.WetlandSettingsRepo.GetSetting("Sort Field");
+            string[] labelValues = GetLabelValues();
+
             // Construct grid, the cell container
             Grid cell = new Grid
             {
@@ -322,27 +328,41 @@ namespace PortableApp
             // Add text section
             StackLayout textSection = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 2 };
 
-            Label scientificName = new Label { TextColor = Color.White, FontSize = 12, FontAttributes = FontAttributes.Bold | FontAttributes.Italic };
-            scientificName.SetBinding(Label.TextProperty, new Binding("scinamenoauthorstripped"));
-            textSection.Children.Add(scientificName);
+            Label label1 = new Label { TextColor = Color.White, FontSize = 12, FontAttributes = FontAttributes.Bold };
+            label1.SetBinding(Label.TextProperty, new Binding(labelValues[0]));
+            if (labelValues[0] == "scinamenoauthorstripped") label1.FontAttributes = FontAttributes.Italic;
+            textSection.Children.Add(label1);
 
             var divider = new BoxView { HeightRequest = 1, WidthRequest = 500, BackgroundColor = Color.White };
             textSection.Children.Add(divider);
 
-            Label commonName = new Label { TextColor = Color.White, FontSize = 12 };
-            commonName.SetBinding(Label.TextProperty, new Binding("commonname"));
-            textSection.Children.Add(commonName);
+            Label label2 = new Label { TextColor = Color.White, FontSize = 12 };
+            label2.SetBinding(Label.TextProperty, new Binding(labelValues[1]));
+            if (labelValues[1] == "scinamenoauthorstripped") label2.FontAttributes = FontAttributes.Italic;
+            textSection.Children.Add(label2);
 
-            Label family = new Label { TextColor = Color.White, FontSize = 12 };
-            family.SetBinding(Label.TextProperty, new Binding("family"));
-            textSection.Children.Add(family);
+            Label label3 = new Label { TextColor = Color.White, FontSize = 12 };
+            label3.SetBinding(Label.TextProperty, new Binding(labelValues[2]));
+            textSection.Children.Add(label3);
 
-            Label group = new Label { TextColor = Color.White, FontSize = 12 };
-            group.SetBinding(Label.TextProperty, new Binding("sections"));
-            textSection.Children.Add(group);
+            Label label4 = new Label { TextColor = Color.White, FontSize = 12 };
+            label4.SetBinding(Label.TextProperty, new Binding(labelValues[3]));
+            textSection.Children.Add(label4);
 
             cell.Children.Add(textSection, 1, 0);
             View = cell;
+        }
+
+        private string[] GetLabelValues()
+        {
+            if (sortField.valuetext == "Common Name")
+                return new string[] { "commonname", "scinamenoauthorstripped", "family", "sections" };
+            if (sortField.valuetext == "Family")
+                return new string[] { "family", "scinamenoauthorstripped", "commonname", "sections" };
+            if (sortField.valuetext == "Group")
+                return new string[] { "sections", "scinamenoauthorstripped", "commonname", "family" };
+            else
+                return new string[] { "scinamenoauthorstripped", "commonname", "family", "sections" };
         }
 
     }

@@ -18,7 +18,8 @@ namespace PortableApp
             // Create the Wetland Setting table (only if it's not yet created)
             //conn.DropTable<WetlandSetting>();
             conn.CreateTable<WetlandSetting>();
-		}
+            SeedDB();
+        }
 
         // return a list of Wetlandplants saved to the WetlandSetting table in the database
         public List<WetlandSetting> GetAllWetlandSettings()
@@ -101,6 +102,13 @@ namespace PortableApp
                 StatusMessage = string.Format("Failed to add/update {0}. Error: {1}", setting, ex.Message);
             }
             
+        }
+
+        // Seed database with essential settings
+        public void SeedDB()
+        {
+            if (GetSetting("Sort Field") == null)
+                conn.Insert(new WetlandSetting { name = "Sort Field", valuetext = "Scientific Name" });
         }
 
     }
