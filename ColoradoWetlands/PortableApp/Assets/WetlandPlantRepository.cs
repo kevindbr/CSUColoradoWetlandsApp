@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using PortableApp.Models;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System;
 using SQLiteNetExtensions.Extensions;
@@ -44,6 +43,12 @@ namespace PortableApp
         public List<WetlandPlant> GetFavoritePlants()
         {
             return GetAllWetlandPlants().Where(p => p.isFavorite == true).ToList();
+        }
+
+        // get plants through term supplied in quick search
+        public List<WetlandPlant> WetlandPlantsQuickSearch(string searchTerm)
+        {
+            return GetAllWetlandPlants().Where(p => p.scinameauthorstripped.ToLower().Contains(searchTerm.ToLower()) || p.commonname.ToLower().Contains(searchTerm.ToLower())).ToList();
         }
 
         // get current search criteria (saved in db) and return appropriate list of Wetland Plants

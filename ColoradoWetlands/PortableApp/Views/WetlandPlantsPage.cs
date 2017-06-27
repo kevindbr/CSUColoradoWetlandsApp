@@ -25,6 +25,7 @@ namespace PortableApp
         Button browseFilter;
         Button searchFilter;
         Button favoritesFilter;
+        SearchBar searchBar;
 
         protected override void OnAppearing()
         {
@@ -98,23 +99,24 @@ namespace PortableApp
             innerContainer.Children.Add(navigationBar, 0, 0);
 
             // Add button group grid
-            Grid buttonGroup = new Grid();
-            buttonGroup.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
-            buttonGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            buttonGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            Grid searchSortGroup = new Grid();
+            searchSortGroup.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
+            searchSortGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.7, GridUnitType.Star) });
+            searchSortGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Add search button
-            Button search = new Button
+            searchBar = new CustomSearchBar
             {
-                Style = Application.Current.Resources["semiTransparentPlantButton"] as Style,
-                Text = "Search",
-                BorderRadius = Device.OnPlatform(0, 1, 0),
-                Margin = new Thickness(10, 0, 10, 0)
+                Placeholder = "Scientific or Common Name...",
+                FontSize = 12,
+                Margin = new Thickness(Device.OnPlatform(10, 0, 0), 0, 0, 0),
+                SearchCommand = new Command(() => {  })
             };
-            buttonGroup.Children.Add(search, 0, 0);
+            searchBar.TextChanged += SearchBarOnChange;
+            searchSortGroup.Children.Add(searchBar, 0, 0);
 
             // Add sort container
-            Grid sortContainer = new Grid { ColumnSpacing = 3 };
+            Grid sortContainer = new Grid { ColumnSpacing = 0 };
             sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
             sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.2, GridUnitType.Star) });
             sortContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.1, GridUnitType.Star) });
@@ -136,10 +138,10 @@ namespace PortableApp
             sortDirection.Clicked += ChangeSortDirection;
             sortContainer.Children.Add(sortDirection, 1, 0);
 
-            buttonGroup.Children.Add(sortContainer, 1, 0);
+            searchSortGroup.Children.Add(sortContainer, 1, 0);
 
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
-            innerContainer.Children.Add(buttonGroup, 0, 1);
+            innerContainer.Children.Add(searchSortGroup, 0, 1);
 
             // Create ListView container
             RelativeLayout listViewContainer = new RelativeLayout
@@ -152,6 +154,7 @@ namespace PortableApp
             wetlandPlantsList = new ListView { BackgroundColor = Color.Transparent, RowHeight = 100 };
             wetlandPlantsList.ItemTemplate = new DataTemplate(typeof(WetlandPlantsItemTemplate));
             wetlandPlantsList.ItemSelected += OnItemSelected;
+            wetlandPlantsList.SeparatorVisibility = SeparatorVisibility.None;
 
             listViewContainer.Children.Add(wetlandPlantsList,
                 Constraint.RelativeToParent((parent) => { return parent.X; }),
@@ -234,6 +237,14 @@ namespace PortableApp
         {
             cameFromSearch = true;
             await App.Current.MainPage.Navigation.PopModalAsync();
+        }
+
+        private void SearchBarOnChange(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(e.NewTextValue))
+                wetlandPlantsList.ItemsSource = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+            else
+                wetlandPlantsList.ItemsSource = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.WetlandPlantsQuickSearch(e.NewTextValue));
         }
 
         private void SortPickerTapped(object sender, EventArgs e)
@@ -333,6 +344,11 @@ namespace PortableApp
             cell.Children.Add(textSection, 1, 0);
             View = cell;
         }
+
+    }
+
+    public class CustomSearchBar : SearchBar
+    {
 
     }
 
