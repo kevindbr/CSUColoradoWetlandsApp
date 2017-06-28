@@ -298,7 +298,7 @@ namespace PortableApp
 
         public void FilterJumpList(string sortTerm)
         {
-            if (plants.Count > 10)
+            if (plants.Count > 20)
             { 
                 string fieldName = sortOptions.FirstOrDefault(x => x.Key == sortTerm).Value;
                 var field = plants[0].GetType().GetRuntimeProperties().FirstOrDefault(x => x.Name == fieldName);

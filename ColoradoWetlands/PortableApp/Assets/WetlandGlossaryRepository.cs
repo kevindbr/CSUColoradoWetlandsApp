@@ -25,13 +25,13 @@ namespace PortableApp
             return (from p in conn.Table<WetlandGlossary>() select p).ToList();
         }
 
-        public async Task AddTermAsync(WetlandGlossary term)
+        public async Task AddOrUpdateTermAsync(WetlandGlossary term)
         {
             try
             {
                 if (string.IsNullOrEmpty(term.name))
                     throw new Exception("Valid term required");
-                await connAsync.InsertAsync(term);
+                await connAsync.InsertOrReplaceAsync(term);
             }
             catch
             {

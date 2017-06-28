@@ -74,13 +74,13 @@ namespace PortableApp
             return plants;
         }
 
-        public async Task AddPlantAsync(WetlandPlant plant)
+        public async Task AddOrUpdatePlantAsync(WetlandPlant plant)
         {
             try
             {
                 if (string.IsNullOrEmpty(plant.commonname))
                     throw new Exception("Valid plant required");
-                await connAsync.InsertWithChildrenAsync(plant);
+                await connAsync.InsertOrReplaceWithChildrenAsync(plant);
             }
             catch (Exception ex)
             {

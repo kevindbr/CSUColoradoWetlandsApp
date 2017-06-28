@@ -115,14 +115,14 @@ namespace PortableApp
                 foreach (var plant in plants)
                 {
                     if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
-                    await App.WetlandPlantRepo.AddPlantAsync(plant);
+                    await App.WetlandPlantRepo.AddOrUpdatePlantAsync(plant);
                     plantsSaved += 1;
                     await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
                 }
                 foreach (var term in terms)
                 {
                     if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
-                    await App.WetlandGlossaryRepo.AddTermAsync(term);
+                    await App.WetlandGlossaryRepo.AddOrUpdateTermAsync(term);
                     plantsSaved += 1;
                     await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
                 }
