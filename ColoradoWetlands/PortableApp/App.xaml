@@ -17,7 +17,6 @@
         <Setter Property="BackgroundColor" Value="#66000000" />
         <Setter Property="TextColor" Value="White" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="HeightRequest" Value="40" />
       </Style>
       <Style x:Key="outlineButton" TargetType="Button">
         <Setter Property="BackgroundColor" Value="#00000000" />

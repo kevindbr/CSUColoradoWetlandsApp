@@ -84,6 +84,11 @@ namespace PortableApp.Models
 
         public bool isFavorite { get; set; }
 
+        public string scinamenoauthorFirstInitial { get { return scinamenoauthorstripped[0].ToString(); } }
+        public string commonnameFirstInitial { get { return commonname[0].ToString(); } }
+        public string familyFirstInitial { get { return family[0].ToString(); } }
+        public string sectionsFirstInitial { get { return sections[0].ToString(); } }
+
     }
 
 }

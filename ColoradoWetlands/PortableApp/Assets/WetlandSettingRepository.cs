@@ -108,7 +108,7 @@ namespace PortableApp
         public void SeedDB()
         {
             if (GetSetting("Sort Field") == null)
-                conn.Insert(new WetlandSetting { name = "Sort Field", valuetext = "Scientific Name" });
+                conn.Insert(new WetlandSetting { name = "Sort Field", valuetext = "Scientific Name", valueint = 0 });
         }
 
     }

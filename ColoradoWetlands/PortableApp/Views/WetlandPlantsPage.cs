@@ -7,14 +7,16 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Xamarin.Forms;
 using System.Linq;
+using System.Reflection;
 
 namespace PortableApp
 {
     public partial class WetlandPlantsPage : ViewHelpers
     {
         ObservableCollection<Grouping<string, WetlandPlant>> plantsGrouped;
-        List<string> jumpList;
         ListView wetlandPlantsList;
+        List<string> jumpList;
+        StackLayout jumpListContainer;
         ObservableCollection<WetlandPlant> plants;
         bool cameFromSearch;
         Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" }, { "Group", "sections" } };
@@ -30,16 +32,24 @@ namespace PortableApp
 
         protected override void OnAppearing()
         {
+            // Get filtered plant list if came from search
             if (!cameFromSearch)
             {
                 plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
                 if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
                 ChangeFilterColors(browseFilter);
-                sortPicker.SelectedIndex = (int)App.WetlandSettingsRepo.GetSetting("Sort Field").valueint;
                 base.OnAppearing();
             } 
             else
                 ChangeFilterColors(searchFilter);
+
+            // Set sort settings
+            sortField = App.WetlandSettingsRepo.GetSetting("Sort Field");
+            sortPicker.SelectedIndex = (int)sortField.valueint;
+            sortButton.Text = sortField.valuetext;
+
+            // filter jump list
+            FilterJumpList(sortButton.Text);
         }
 
         public WetlandPlantsPage()
@@ -53,44 +63,49 @@ namespace PortableApp
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             // Construct filter button group
-            plantFilterGroup = new Grid { ColumnSpacing = 3 };
-            plantFilterGroup.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
-            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantFilterGroup = new Grid { ColumnSpacing = -1, Margin = new Thickness(0, 8, 0, 5) };
+            plantFilterGroup.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40) });
 
             // Add browse filter
             browseFilter = new Button
             {
                 Style = Application.Current.Resources["plantFilterButton"] as Style,
-                Text = "Browse",
-                Margin = new Thickness(2, 5)
+                Text = "Browse"
             };
             browseFilter.Clicked += FilterPlants;
+            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             plantFilterGroup.Children.Add(browseFilter, 0, 0);
+
+            BoxView divider = new BoxView { HeightRequest = 40, WidthRequest = 1, BackgroundColor = Color.White };
+            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1) });
+            plantFilterGroup.Children.Add(divider, 1, 0);
 
             // Add Search filter
             searchFilter = new Button
             {
                 Style = Application.Current.Resources["plantFilterButton"] as Style,
-                Text = "Search",
-                Margin = new Thickness(2, 5)
+                Text = "Search"
             };
             var SearchPage = new WetlandPlantsSearchPage();
             searchFilter.Clicked += async (s, e) => { await Navigation.PushModalAsync(SearchPage); };
             SearchPage.InitRunSearch += HandleRunSearch;
             SearchPage.InitCloseSearch += HandleCloseSearch;
-            plantFilterGroup.Children.Add(searchFilter, 1, 0);
+            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantFilterGroup.Children.Add(searchFilter, 2, 0);
+
+            BoxView divider2 = new BoxView { HeightRequest = 40, WidthRequest = 1, BackgroundColor = Color.White };
+            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1) });
+            plantFilterGroup.Children.Add(divider2, 3, 0);
 
             // Add Favorites filter
             favoritesFilter = new Button
             {
                 Style = Application.Current.Resources["plantFilterButton"] as Style,
-                Text = "Favorites",
-                Margin = new Thickness(2, 5)
+                Text = "Favorites"
             };
             favoritesFilter.Clicked += FilterPlants;
-            plantFilterGroup.Children.Add(favoritesFilter, 2, 0);
+            plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantFilterGroup.Children.Add(favoritesFilter, 4, 0);
 
             // Add header to inner container
             HeaderNavigationOptions navOptions = new HeaderNavigationOptions { plantFiltersVisible = true, plantFilterGroupButtons = plantFilterGroup, backButtonVisible = true, homeButtonVisible = true };
@@ -127,7 +142,6 @@ namespace PortableApp
 
             foreach (string option in sortOptions.Keys) { sortPicker.Items.Add(option); }
             sortPicker.IsVisible = false;
-            sortPicker.SelectedIndex = 0;
             if (Device.OS == TargetPlatform.iOS)
                 sortPicker.Unfocused += SortOnUnfocused;
             else
@@ -163,22 +177,9 @@ namespace PortableApp
                 Constraint.RelativeToParent((parent) => { return parent.Height; })
             );
             
-            // Create jump list from termsGrouped
-            jumpList = new List<string>("ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray().Select(x => x.ToString()).ToList());
 
             // Add jump list to right side
-            StackLayout jumpListContainer = new StackLayout { Spacing = -1, Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
-            foreach (string letter in jumpList)
-            {
-                Label letterLabel = new Label { Text = letter, Style = Application.Current.Resources["jumpListLetter"] as Style };
-                var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.Tapped += (s, e) => {
-                    var firstRecordMatchingLetter = plants.Where(x => x.scinameauthorstripped[0].ToString() == letter).FirstOrDefault();
-                    wetlandPlantsList.ScrollTo(firstRecordMatchingLetter, ScrollToPosition.Start, true);
-                };
-                letterLabel.GestureRecognizers.Add(tapGestureRecognizer);
-                jumpListContainer.Children.Add(letterLabel);
-            }
+            jumpListContainer = new StackLayout { Spacing = -1, Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
 
             listViewContainer.Children.Add(jumpListContainer,
                 Constraint.RelativeToParent((parent) => { return parent.Width * .9; }),
@@ -212,16 +213,21 @@ namespace PortableApp
                 plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetFavoritePlants());
             
             wetlandPlantsList.ItemsSource = plants;
+            FilterJumpList(sortButton.Text);
         }
 
         public void ChangeFilterColors(Button selectedFilter)
         {
-            foreach (Button button in plantFilterGroup.Children)
+            foreach (var element in plantFilterGroup.Children)
             {
-                if (button.Text == selectedFilter.Text)
-                    button.BackgroundColor = Color.FromHex("cc000000");
-                else
-                    button.BackgroundColor = Color.FromHex("66000000");
+                if (element.GetType() == typeof(Button))
+                {
+                    Button button = (Button)element;
+                    if (button.Text == selectedFilter.Text)
+                        button.BackgroundColor = Color.FromHex("cc000000");
+                    else
+                        button.BackgroundColor = Color.FromHex("66000000");
+                }
             }
         }
 
@@ -242,9 +248,11 @@ namespace PortableApp
         private void SearchBarOnChange(object sender, TextChangedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(e.NewTextValue))
-                wetlandPlantsList.ItemsSource = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
             else
-                wetlandPlantsList.ItemsSource = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.WetlandPlantsQuickSearch(e.NewTextValue));
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.WetlandPlantsQuickSearch(e.NewTextValue));
+
+            wetlandPlantsList.ItemsSource = plants;
         }
 
         private void SortPickerTapped(object sender, EventArgs e)
@@ -272,6 +280,7 @@ namespace PortableApp
 
             await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "Sort Field", valuetext = sortButton.Text, valueint = sortPicker.SelectedIndex });
             wetlandPlantsList.ItemsSource = plants;
+            FilterJumpList(sortButton.Text);
         }
 
         private void ChangeSortDirection(object sender, EventArgs e)
@@ -286,7 +295,39 @@ namespace PortableApp
             }
             SortItems(sender, e);
         }
-        
+
+        public void FilterJumpList(string sortTerm)
+        {
+            if (plants.Count > 10)
+            { 
+                string fieldName = sortOptions.FirstOrDefault(x => x.Key == sortTerm).Value;
+                var field = plants[0].GetType().GetRuntimeProperties().FirstOrDefault(x => x.Name == fieldName);
+                var fieldFirstInitial = plants[0].GetType().GetRuntimeProperties().FirstOrDefault(x => x.Name == (fieldName + "FirstInitial"));
+
+                var sortedPlants = from plant in plants orderby field.GetValue(plant).ToString() group plant by fieldFirstInitial.GetValue(plant).ToString() into plantGroup select new Grouping<string, WetlandPlant>(plantGroup.Key, plantGroup);
+                plantsGrouped = new ObservableCollection<Grouping<string, WetlandPlant>>(sortedPlants);
+
+                // Create jump list from termsGrouped
+                jumpList = new List<string>();
+                foreach (Grouping<string, WetlandPlant> index in plantsGrouped) { jumpList.Add(fieldFirstInitial.GetValue(index[0]).ToString()); };
+
+                jumpListContainer.Children.Clear();
+                foreach (string letter in jumpList)
+                {
+                    Label letterLabel = new Label { Text = letter, Style = Application.Current.Resources["jumpListLetter"] as Style };
+                    var tapGestureRecognizer = new TapGestureRecognizer();
+                    tapGestureRecognizer.Tapped += (s, e) => {
+                        var firstRecordMatchingLetter = plants.FirstOrDefault(x => fieldFirstInitial.GetValue(x).ToString() == letter);
+                        wetlandPlantsList.ScrollTo(firstRecordMatchingLetter, ScrollToPosition.Start, true);
+                    };
+                    letterLabel.GestureRecognizers.Add(tapGestureRecognizer);
+                    jumpListContainer.Children.Add(letterLabel);
+                }
+            }
+            else
+                jumpListContainer.Children.Clear();
+        }
+
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (wetlandPlantsList.SelectedItem != null)
