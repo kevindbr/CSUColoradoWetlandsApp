@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PortableApp.Models
 {
@@ -67,8 +68,9 @@ namespace PortableApp.Models
         public List<WetlandPlantSimilarSpecies> SimilarSpecies { get; set; }
 
         public IFolder rootFolder { get { return FileSystem.Current.LocalStorage; } }
-        
-        public string ThumbnailPath { get { return rootFolder.Path + "/Images/" + plantscode + "_icon.jpg"; } }
+
+        public string ThumbnailPathDownloaded { get { return rootFolder.Path + "/Images/" + plantscode + "_icon.jpg"; } }
+        public string ThumbnailPathStreamed { get { return "http://sdt1.cas.colostate.edu/mobileapi/api/wetland/image_icons/" + plantscode; } }
 
         public string RangePath { get { return rootFolder.Path + "/Images/" + mapimg; } }
 

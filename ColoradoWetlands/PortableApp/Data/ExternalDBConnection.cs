@@ -65,6 +65,6 @@ namespace PortableApp
             resultStream = await client.GetStreamAsync(Url + "/image_zip_files/" + imageFileToDownload);
             return resultStream;
         }
-        
+
     }
 }

@@ -17,8 +17,12 @@ namespace PortableApp
 {
     public partial class DownloadWetlandPlantsPage : ViewHelpers
     {
+        public EventHandler InitFinishedDownload;
+        public EventHandler InitCancelDownload;
         bool updatePlants;
-        DateTime? datePlantDataUpdatedOnServer;
+        WetlandSetting datePlantDataUpdatedLocally;
+        WetlandSetting datePlantDataUpdatedOnServer;
+        bool downloadImages;
         List<WetlandSetting> imageFilesToDownload;
         ObservableCollection<WetlandPlant> plants;
         ObservableCollection<WetlandGlossary> terms;
@@ -48,19 +52,19 @@ namespace PortableApp
                 await UpdatePlants(token);
 
             // Save images to the database
-            if (imageFilesToDownload.Count > 0 && !token.IsCancellationRequested)
+            if (imageFilesToDownload.Count > 0 && downloadImages && !token.IsCancellationRequested)
                 await UpdatePlantImages(token);
 
-            // Pop modal off stack (and return to MainPage)
-            await App.Current.MainPage.Navigation.PopToRootAsync();
-
+            FinishDownload();
         }
 
-        public DownloadWetlandPlantsPage(bool updatePlantsNow, DateTime? datePlantDataUpdated, List<WetlandSetting> imageFilesNeedingDownloaded)
+        public DownloadWetlandPlantsPage(bool updatePlantsNow, WetlandSetting dateLocalPlantDataUpdated, WetlandSetting datePlantDataUpdated, List<WetlandSetting> imageFilesNeedingDownloaded, bool downloadImagesFromServer)
         {
             updatePlants = updatePlantsNow;
+            datePlantDataUpdatedLocally = dateLocalPlantDataUpdated;
             datePlantDataUpdatedOnServer = datePlantDataUpdated;
             imageFilesToDownload = imageFilesNeedingDownloaded;
+            downloadImages = downloadImagesFromServer;
 
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);
@@ -89,7 +93,7 @@ namespace PortableApp
                 Text = "CANCEL",
                 BorderRadius = Device.OnPlatform(0, 1, 0)
             };
-            cancelButton.Clicked += OnCancelButtonClicked;
+            cancelButton.Clicked += CancelDownload;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(cancelButton, 0, 3);
 
@@ -100,10 +104,16 @@ namespace PortableApp
             Content = pageContainer;
         }
 
-        //async void OnCancelButtonClicked(object sender, EventArgs args)
-        //{
-            
-        //}
+        private void FinishDownload()
+        {
+            InitFinishedDownload?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void CancelDownload(object sender, EventArgs e)
+        {
+            tokenSource.Cancel();
+            InitCancelDownload?.Invoke(this, EventArgs.Empty);
+        }
 
         // Get plants from MobileApi server and save locally
         public async Task UpdatePlants(CancellationToken token)
@@ -126,7 +136,8 @@ namespace PortableApp
                     plantsSaved += 1;
                     await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
                 }
-                await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "DatePlantsDownloaded", valuetimestamp = datePlantDataUpdatedOnServer });
+                datePlantDataUpdatedLocally.valuetimestamp = datePlantDataUpdatedOnServer.valuetimestamp;
+                await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(datePlantDataUpdatedLocally);
             }
             catch (OperationCanceledException e)
             {
@@ -202,10 +213,6 @@ namespace PortableApp
             }
                         
         }
-
-        public void OnCancelButtonClicked(object sender, EventArgs e)
-        {
-            tokenSource.Cancel();
-        }
+        
     }
 }

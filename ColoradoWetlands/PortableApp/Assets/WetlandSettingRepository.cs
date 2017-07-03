@@ -36,7 +36,7 @@ namespace PortableApp
         // get an individual setting based on its name
         public WetlandSetting GetSetting(string settingName)
         {
-            return conn.Table<WetlandSetting>().Where(s => s.name.Equals(settingName)).FirstOrDefault();
+            return conn.Table<WetlandSetting>().FirstOrDefault(s => s.name.Equals(settingName));
         }
 
         // (async) get an individual setting based on its name
@@ -109,6 +109,10 @@ namespace PortableApp
         {
             if (GetSetting("Sort Field") == null)
                 conn.Insert(new WetlandSetting { name = "Sort Field", valuetext = "Scientific Name", valueint = 0 });
+            if (GetSetting("Download Images") == null)
+                conn.Insert(new WetlandSetting { name = "Download Images", valuebool = false });
+            if (GetSetting("Date Plants Downloaded") == null)
+                conn.Insert(new WetlandSetting { name = "Date Plants Downloaded", valuetimestamp = new DateTime(2000, 1, 1) });
         }
 
     }

@@ -20,5 +20,13 @@ namespace PortableApp.Data
                 return false;
             }
         }
+        
+        public static bool checkConnection()
+        {
+            if (CrossConnectivity.Current.IsConnected)
+                return true;
+            else
+                return false;
+        }
     }
 }

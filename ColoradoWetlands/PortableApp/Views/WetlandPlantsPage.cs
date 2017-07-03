@@ -18,6 +18,8 @@ namespace PortableApp
         List<string> jumpList;
         StackLayout jumpListContainer;
         ObservableCollection<WetlandPlant> plants;
+        WetlandSetting downloadImagesSetting;
+        bool downloadImages;
         bool cameFromSearch;
         Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" }, { "Group", "sections" } };
         Picker sortPicker = new Picker();
@@ -54,6 +56,11 @@ namespace PortableApp
 
         public WetlandPlantsPage()
         {
+            // Initialize variables
+            sortField = new WetlandSetting();
+            downloadImagesSetting = App.WetlandSettingsRepo.GetSetting("Download Images");
+            downloadImages = (bool)downloadImagesSetting.valuebool;
+
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);
             AbsoluteLayout pageContainer = ConstructPageContainer();
@@ -166,7 +173,53 @@ namespace PortableApp
 
             // Add Plants ListView
             wetlandPlantsList = new ListView { BackgroundColor = Color.Transparent, RowHeight = 100 };
-            wetlandPlantsList.ItemTemplate = new DataTemplate(typeof(WetlandPlantsItemTemplate));
+            string[] labelValues = GetLabelValues();
+            wetlandPlantsList.ItemTemplate = new DataTemplate(() =>
+            {
+                // Construct grid, the cell container
+                Grid cell = new Grid
+                {
+                    BackgroundColor = Color.FromHex("88000000"),
+                    Padding = new Thickness(20, 5, 20, 5),
+                    Margin = new Thickness(0, 0, 0, 10)
+                };
+                cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.3, GridUnitType.Star) });
+                cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
+                cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(100) });
+
+                // Add image
+                var image = new Image { Aspect = Aspect.AspectFill, Margin = new Thickness(0, 0, 0, 20) };
+                string imageBinding = downloadImages ? "ThumbnailPathDownloaded" : "ThumbnailPathStreamed";
+                image.SetBinding(Image.SourceProperty, new Binding(imageBinding));
+                cell.Children.Add(image, 0, 0);
+
+                // Add text section
+                StackLayout textSection = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 2 };
+
+                Label label1 = new Label { TextColor = Color.White, FontSize = 12, FontAttributes = FontAttributes.Bold };
+                label1.SetBinding(Label.TextProperty, new Binding(labelValues[0]));
+                if (labelValues[0] == "scinamenoauthorstripped") label1.FontAttributes = FontAttributes.Italic;
+                textSection.Children.Add(label1);
+
+                var headerDivider = new BoxView { HeightRequest = 1, WidthRequest = 500, BackgroundColor = Color.White };
+                textSection.Children.Add(headerDivider);
+
+                Label label2 = new Label { TextColor = Color.White, FontSize = 12 };
+                label2.SetBinding(Label.TextProperty, new Binding(labelValues[1]));
+                if (labelValues[1] == "scinamenoauthorstripped") label2.FontAttributes = FontAttributes.Italic;
+                textSection.Children.Add(label2);
+
+                Label label3 = new Label { TextColor = Color.White, FontSize = 12 };
+                label3.SetBinding(Label.TextProperty, new Binding(labelValues[2]));
+                textSection.Children.Add(label3);
+
+                Label label4 = new Label { TextColor = Color.White, FontSize = 12 };
+                label4.SetBinding(Label.TextProperty, new Binding(labelValues[3]));
+                textSection.Children.Add(label4);
+
+                cell.Children.Add(textSection, 1, 0);
+                return new ViewCell { View = cell };
+            });
             wetlandPlantsList.ItemSelected += OnItemSelected;
             wetlandPlantsList.SeparatorVisibility = SeparatorVisibility.None;
 
@@ -201,6 +254,18 @@ namespace PortableApp
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
+        }
+
+        private string[] GetLabelValues()
+        {
+            if (sortField.valuetext == "Common Name")
+                return new string[] { "commonname", "scinamenoauthorstripped", "family", "sections" };
+            if (sortField.valuetext == "Family")
+                return new string[] { "family", "scinamenoauthorstripped", "commonname", "sections" };
+            if (sortField.valuetext == "Group")
+                return new string[] { "sections", "scinamenoauthorstripped", "commonname", "family" };
+            else
+                return new string[] { "scinamenoauthorstripped", "commonname", "family", "sections" };
         }
 
         public void FilterPlants(object sender, EventArgs e)
@@ -339,73 +404,6 @@ namespace PortableApp
                 await Navigation.PushAsync(detailPage);
             }
         }
-    }
-
-    public class WetlandPlantsItemTemplate : ViewCell
-    {
-        WetlandSetting sortField;
-
-        public WetlandPlantsItemTemplate()
-        {
-            sortField = App.WetlandSettingsRepo.GetSetting("Sort Field");
-            string[] labelValues = GetLabelValues();
-
-            // Construct grid, the cell container
-            Grid cell = new Grid
-            {
-                BackgroundColor = Color.FromHex("88000000"),
-                Padding = new Thickness(20, 5, 20, 5),
-                Margin = new Thickness(0, 0, 0, 10)
-            };
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.3, GridUnitType.Star) });
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
-            cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(100) });
-
-            // Add image
-            var image = new Image { Aspect = Aspect.AspectFill, Margin = new Thickness(0, 0, 0, 20) };
-            image.SetBinding(Image.SourceProperty, new Binding("ThumbnailPath"));
-            cell.Children.Add(image, 0, 0);
-
-            // Add text section
-            StackLayout textSection = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 2 };
-
-            Label label1 = new Label { TextColor = Color.White, FontSize = 12, FontAttributes = FontAttributes.Bold };
-            label1.SetBinding(Label.TextProperty, new Binding(labelValues[0]));
-            if (labelValues[0] == "scinamenoauthorstripped") label1.FontAttributes = FontAttributes.Italic;
-            textSection.Children.Add(label1);
-
-            var divider = new BoxView { HeightRequest = 1, WidthRequest = 500, BackgroundColor = Color.White };
-            textSection.Children.Add(divider);
-
-            Label label2 = new Label { TextColor = Color.White, FontSize = 12 };
-            label2.SetBinding(Label.TextProperty, new Binding(labelValues[1]));
-            if (labelValues[1] == "scinamenoauthorstripped") label2.FontAttributes = FontAttributes.Italic;
-            textSection.Children.Add(label2);
-
-            Label label3 = new Label { TextColor = Color.White, FontSize = 12 };
-            label3.SetBinding(Label.TextProperty, new Binding(labelValues[2]));
-            textSection.Children.Add(label3);
-
-            Label label4 = new Label { TextColor = Color.White, FontSize = 12 };
-            label4.SetBinding(Label.TextProperty, new Binding(labelValues[3]));
-            textSection.Children.Add(label4);
-
-            cell.Children.Add(textSection, 1, 0);
-            View = cell;
-        }
-
-        private string[] GetLabelValues()
-        {
-            if (sortField.valuetext == "Common Name")
-                return new string[] { "commonname", "scinamenoauthorstripped", "family", "sections" };
-            if (sortField.valuetext == "Family")
-                return new string[] { "family", "scinamenoauthorstripped", "commonname", "sections" };
-            if (sortField.valuetext == "Group")
-                return new string[] { "sections", "scinamenoauthorstripped", "commonname", "family" };
-            else
-                return new string[] { "scinamenoauthorstripped", "commonname", "family", "sections" };
-        }
-
     }
 
     public class CustomSearchBar : SearchBar
