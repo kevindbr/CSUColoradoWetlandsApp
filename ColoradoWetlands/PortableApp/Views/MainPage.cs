@@ -156,8 +156,8 @@ namespace PortableApp
             innerContainer.Children.Add(acknowledgementsButton, 0, 6);
 
             // Switch for downloading images
-            StackLayout downloadImagesLayout = new StackLayout { Orientation = StackOrientation.Horizontal, Margin = new Thickness(20, 0, 20, 0), HorizontalOptions = LayoutOptions.EndAndExpand };
-            downloadImagesSwitch = new Switch();
+            StackLayout downloadImagesLayout = new StackLayout { Orientation = StackOrientation.Horizontal, Margin = new Thickness(20, 0, 20, 0), HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
+            downloadImagesSwitch = new Switch { BackgroundColor = Color.FromHex("66000000") };
             downloadImagesSwitch.Toggled += ToggleDownloadImagesSwitch;
             Label downloadImagesLabel = new Label { Text = "Download Images", TextColor = Color.White };
             downloadImagesLayout.Children.Add(downloadImagesLabel);
