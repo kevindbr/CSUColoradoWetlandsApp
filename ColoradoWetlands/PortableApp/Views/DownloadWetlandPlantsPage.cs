@@ -22,7 +22,6 @@ namespace PortableApp
         bool updatePlants;
         WetlandSetting datePlantDataUpdatedLocally;
         WetlandSetting datePlantDataUpdatedOnServer;
-        bool downloadImages;
         List<WetlandSetting> imageFilesToDownload;
         ObservableCollection<WetlandPlant> plants;
         ObservableCollection<WetlandGlossary> terms;
@@ -63,7 +62,7 @@ namespace PortableApp
             updatePlants = updatePlantsNow;
             datePlantDataUpdatedLocally = dateLocalPlantDataUpdated;
             datePlantDataUpdatedOnServer = datePlantDataUpdated;
-            imageFilesToDownload = imageFilesNeedingDownloaded;
+            imageFilesToDownload = (imageFilesNeedingDownloaded == null) ? new List<WetlandSetting>() : imageFilesNeedingDownloaded;
             downloadImages = downloadImagesFromServer;
 
             // Turn off navigation bar and initialize pageContainer

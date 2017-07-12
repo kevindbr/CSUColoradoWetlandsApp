@@ -15,6 +15,7 @@ namespace PortableApp
     {
 
         public ExternalDBConnection externalConnection = new ExternalDBConnection();
+        public bool downloadImages = (bool)App.WetlandSettingsRepo.GetSetting("Download Images").valuebool;
 
         //
         // VIEWS
@@ -422,6 +423,7 @@ namespace PortableApp
         public bool nextAndPreviousVisible { get; set; }
         public WetlandPlant plant { get; set; }
         public ObservableCollection<WetlandPlant> plants { get; set; }
+        public bool downloadImages { get; set; }
     }
 
     public class FooterNavigationOptions

@@ -44,7 +44,8 @@ namespace PortableApp
 
                 // Add image
                 var image = new ZoomImage { Margin = new Thickness(10, 0, 10, 0) };
-                image.SetBinding(Image.SourceProperty, new Binding("ImagePath"));
+                string imageBinding = downloadImages ? "ImagePathDownloaded" : "ImagePathStreamed";
+                image.SetBinding(Image.SourceProperty, new Binding(imageBinding));
 
                 cell.Children.Add(image, 0, 1);
 

@@ -18,8 +18,6 @@ namespace PortableApp
         List<string> jumpList;
         StackLayout jumpListContainer;
         ObservableCollection<WetlandPlant> plants;
-        WetlandSetting downloadImagesSetting;
-        bool downloadImages;
         bool cameFromSearch;
         Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" }, { "Group", "sections" } };
         Picker sortPicker = new Picker();
@@ -58,8 +56,6 @@ namespace PortableApp
         {
             // Initialize variables
             sortField = new WetlandSetting();
-            downloadImagesSetting = App.WetlandSettingsRepo.GetSetting("Download Images");
-            downloadImages = (bool)downloadImagesSetting.valuebool;
 
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);

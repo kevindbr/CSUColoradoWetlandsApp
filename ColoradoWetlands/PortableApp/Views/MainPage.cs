@@ -15,7 +15,8 @@ namespace PortableApp
         private bool isConnected;
         private bool isConnectedToWiFi;
         private Grid innerContainer;
-        private bool downloadImages;
+        private Switch downloadImagesSwitch;
+        private WetlandSetting downloadImagesSetting;
         private int numberOfPlants;
         private bool updatePlants = false;
         DownloadWetlandPlantsPage downloadPage;
@@ -23,7 +24,7 @@ namespace PortableApp
         private bool canceledDownload = false;
         private WetlandSetting datePlantDataUpdatedLocally;
         private WetlandSetting datePlantDataUpdatedOnServer;
-        private List<WetlandSetting> imageFilesToDownload;
+        private List<WetlandSetting> imageFilesToDownload = new List<WetlandSetting>();
         private IEnumerable<WetlandSetting> imageFileSettingsOnServer;
 
         protected override async void OnAppearing()
@@ -31,10 +32,10 @@ namespace PortableApp
             // Initiate variables
             isConnected = Connectivity.checkConnection();
             isConnectedToWiFi = Connectivity.checkWiFiConnection();
-            WetlandSetting downloadImagesSetting = await App.WetlandSettingsRepo.GetSettingAsync("Download Images");
+            downloadImagesSetting = await App.WetlandSettingsRepo.GetSettingAsync("Download Images");
             downloadImages = (bool)downloadImagesSetting.valuebool;
+            downloadImagesSwitch.IsToggled = downloadImages;
             numberOfPlants = new List<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants()).Count;
-            imageFilesToDownload = new List<WetlandSetting>();
 
             // if connected to WiFi and updates are needed, show download button
             if (isConnected && !canceledDownload && !finishedDownload)
@@ -58,10 +59,14 @@ namespace PortableApp
                     }
                 }
 
-                if (imageFilesToDownload.Count > 0 && downloadImages == true)
+                // If there are image zip files to download and the user has selected to downloaded images (and updatePlants has not triggered adding of download page to the stack)
+                if (imageFilesToDownload != null && downloadImages == true && !updatePlants)
                 {
-                    ToDownloadPage();
+                    updatePlants = false;
+                    if (imageFilesToDownload.Count > 0)
+                        ToDownloadPage();
                 }
+
                 //// If can't get setting on server, add connection error message
                 //else if (datePlantDataUpdatedOnServer == null)
                 //{
@@ -102,23 +107,8 @@ namespace PortableApp
             innerContainer.Children.Add(navigationBar, 0, 0);
 
             // Add empty space
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(0.6, GridUnitType.Star) });
-
-            // Add download button
-            //downloadDataButton = new ImageButton
-            //{
-            //    Text = "DOWNLOAD DATA",
-            //    FontSize = 15,
-            //    TextColor = Color.Black,
-            //    BackgroundColor = Color.FromHex("ccc9d845"),
-            //    WidthRequest = 300,
-            //    Margin = new Thickness(50, 0, 50, 0),
-            //    Orientation = ImageOrientation.ImageToRight,
-            //    Image = "download.png"
-            //};
-            //downloadDataButton.Clicked += DownloadData;
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            
             // Add navigation buttons
             Button introductionButton = new Button
             {
@@ -127,7 +117,7 @@ namespace PortableApp
             };
             introductionButton.Clicked += ToIntroduction;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(introductionButton, 0, 3);
+            innerContainer.Children.Add(introductionButton, 0, 2);
 
             Button wetlandPlantsButton = new Button
             {
@@ -136,7 +126,7 @@ namespace PortableApp
             };
             wetlandPlantsButton.Clicked += ToWetlandPlants;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(wetlandPlantsButton, 0, 4);
+            innerContainer.Children.Add(wetlandPlantsButton, 0, 3);
 
             Button wetlandMapsButton = new Button
             {
@@ -145,7 +135,7 @@ namespace PortableApp
             };
             wetlandMapsButton.Clicked += ToWetlandMaps;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(wetlandMapsButton, 0, 5);
+            innerContainer.Children.Add(wetlandMapsButton, 0, 4);
 
             Button wetlandTypesButton = new Button
             {
@@ -154,7 +144,7 @@ namespace PortableApp
             };
             wetlandTypesButton.Clicked += ToWetlandTypes;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(wetlandTypesButton, 0, 6);
+            innerContainer.Children.Add(wetlandTypesButton, 0, 5);
 
             Button acknowledgementsButton = new Button
             {
@@ -163,7 +153,17 @@ namespace PortableApp
             };
             acknowledgementsButton.Clicked += ToAcknowledgements;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(acknowledgementsButton, 0, 7);
+            innerContainer.Children.Add(acknowledgementsButton, 0, 6);
+
+            // Switch for downloading images
+            StackLayout downloadImagesLayout = new StackLayout { Orientation = StackOrientation.Horizontal, Margin = new Thickness(20, 0, 20, 0), HorizontalOptions = LayoutOptions.EndAndExpand };
+            downloadImagesSwitch = new Switch();
+            downloadImagesSwitch.Toggled += ToggleDownloadImagesSwitch;
+            Label downloadImagesLabel = new Label { Text = "Download Images", TextColor = Color.White };
+            downloadImagesLayout.Children.Add(downloadImagesLabel);
+            downloadImagesLayout.Children.Add(downloadImagesSwitch);            
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
+            innerContainer.Children.Add(downloadImagesLayout, 0, 7);
 
             // Add empty space
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -221,6 +221,20 @@ namespace PortableApp
                 if (imageFileLocalSetting == null)
                     imageFilesToDownload.Add(imageFile);
             }
+        }
+
+        private async void ToggleDownloadImagesSwitch(object sender, ToggledEventArgs e)
+        {
+            if (downloadImagesSwitch.IsToggled == true)
+            {
+                downloadImagesSetting.valuebool = true;
+                if (imageFilesToDownload.Count > 0)
+                    ToDownloadPage();
+            }                
+            else
+                downloadImagesSetting.valuebool = false;
+            
+            await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(downloadImagesSetting);
         }
     }
 }
