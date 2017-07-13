@@ -8,10 +8,15 @@ namespace PortableApp
 {
     public partial class App : Application
     {
+        public static double ScreenHeight;
+        public static double ScreenWidth;
+
         public static WetlandPlantRepository WetlandPlantRepo { get; private set; }
         public static WetlandPlantImageRepository WetlandPlantImageRepo { get; private set; }
         public static WetlandPlantSimilarSpeciesRepository WetlandPlantSimilarSpeciesRepo { get; private set; }
         public static WetlandPlantReferenceRepository WetlandPlantReferenceRepo { get; private set; }
+        public static WetlandMapOverlayCoordinateRepository WetlandMapOverlayCoordinateRepo { get; private set; }
+        public static WetlandMapOverlayRepository WetlandMapOverlayRepo { get; private set; }
         public static WetlandGlossaryRepository WetlandGlossaryRepo { get; private set; }
         public static WetlandTypeRepository WetlandTypeRepo { get; private set; }
         public static WetlandSettingRepository WetlandSettingsRepo { get; private set; }
@@ -33,6 +38,8 @@ namespace PortableApp
             WetlandPlantImageRepo = new WetlandPlantImageRepository();
             WetlandPlantSimilarSpeciesRepo = new WetlandPlantSimilarSpeciesRepository();
             WetlandPlantReferenceRepo = new WetlandPlantReferenceRepository();
+            WetlandMapOverlayCoordinateRepo = new WetlandMapOverlayCoordinateRepository();
+            WetlandMapOverlayRepo = new WetlandMapOverlayRepository();
             WetlandGlossaryRepo = new WetlandGlossaryRepository();
             WetlandTypeRepo = new WetlandTypeRepository();
             WetlandSettingsRepo = new WetlandSettingRepository();

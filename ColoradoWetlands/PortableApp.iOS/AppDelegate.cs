@@ -22,6 +22,7 @@ namespace PortableApp.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            Xamarin.FormsMaps.Init();
             CarouselViewRenderer.Init();
 
             string dbPath = FileAccessHelper.GetLocalFilePath("db.db3");

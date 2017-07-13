@@ -1,6 +1,7 @@
 ﻿using PortableApp.Models;
 using System.Collections.Generic;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace PortableApp
 {
@@ -25,9 +26,16 @@ namespace PortableApp
             innerContainer.Children.Add(navigationBar, 0, 0);
 
             // Add map to layout
-            Label map = new Label { Text = "MAP GOES HERE IN PLACE OF THIS LABEL" };
+            var customMap = new CustomMap
+            {
+                MapType = MapType.Satellite,
+                WidthRequest = App.ScreenWidth,
+                HeightRequest = App.ScreenHeight
+            };
+            var position = new Position(37.79752, -122.40183); // Latitude, Longitude
+            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(37.79752, -122.40183), Distance.FromMiles(1)));
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            innerContainer.Children.Add(map, 0, 1);
+            innerContainer.Children.Add(customMap, 0, 1);
 
             // Add FooterBar
             FooterNavigationOptions footerOptions = new FooterNavigationOptions { mapsFooter = true };
@@ -40,5 +48,15 @@ namespace PortableApp
             Content = pageContainer;
         }        
 
+    }
+
+    public class CustomMap : Map
+    {
+        public List<WetlandMapOverlay> Overlays { get; set; }
+
+        public CustomMap()
+        {
+            Overlays = new List<WetlandMapOverlay>(App.WetlandMapOverlayRepo.GetAllWetlandMapOverlays());
+        }
     }
 }
