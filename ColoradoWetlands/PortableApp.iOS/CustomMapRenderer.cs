@@ -7,7 +7,6 @@ using Xamarin.Forms;
 using Xamarin.Forms.Maps.iOS;
 using Xamarin.Forms.Platform.iOS;
 using System.Collections.Generic;
-using System;
 using PortableApp.Models;
 using Xamarin.Forms.Maps;
 
@@ -16,10 +15,14 @@ namespace PortableApp.iOS
 {
     public class CustomMapRenderer : MapRenderer
     {
+        CustomMap formsMap;
         List<MKPolygon> polygonOverlays = new List<MKPolygon>();
-        MKPolygonRenderer polygonRenderer;
-        List<MKPolygonRenderer> polygonRenderers = new List<MKPolygonRenderer>();
+        //List<MKPolygonRenderer> polygonRenderers = new List<MKPolygonRenderer>();
         WetlandMapOverlay overlay;
+        string pinId = "PinnAnnotation";
+        List<UIColor> overlayColors = new List<UIColor>();
+        int colorIndex = 0;
+        UIColor legendColor;
 
         protected override void OnElementChanged(ElementChangedEventArgs<View> e)
         {
@@ -35,17 +38,20 @@ namespace PortableApp.iOS
             // create new map
             if (e.NewElement != null)
             {
-                var formsMap = (CustomMap)e.NewElement;
+                formsMap = (CustomMap)e.NewElement;
                 var nativeMap = Control as MKMapView;
 
                 for (int i = 0; i < formsMap.Overlays.Count; i++)
                 {
+                    overlay = formsMap.Overlays[i];
+                    UIColor color = DetermineOverlayColor(overlay.legendColor);
+                    overlayColors.Add(color);
+
                     nativeMap.OverlayRenderer = GetOverlayRenderer;
 
-                    overlay = formsMap.Overlays[i];
                     List<WetlandMapOverlayCoordinate> coordinatePairs = formsMap.Overlays[i].overlayCoordinates;
                     CLLocationCoordinate2D[] coords = new CLLocationCoordinate2D[coordinatePairs.Count];
-
+                    
                     int index = 0;
                     foreach (var position in coordinatePairs)
                     {
@@ -56,24 +62,22 @@ namespace PortableApp.iOS
                     var blockOverlay = MKPolygon.FromCoordinates(coords);
                     nativeMap.AddOverlay(blockOverlay);
 
-                    formsMap.Pins.Add(new Pin { Label = "", Position = new Position(coordinatePairs[0].latitude, coordinatePairs[0].longitude) });
-
+                    formsMap.Pins.Add(new Pin { Label = overlay.mapKeyName, Position = new Position(coordinatePairs[0].latitude, coordinatePairs[0].longitude) });
                     nativeMap.GetViewForAnnotation = GetViewForAnnotation;
 
                 }
             }
         }
 
-
-
         // Create instance of MKPolygon overlay renderer and return
-        MKOverlayRenderer GetOverlayRenderer (MKMapView mapView, IMKOverlay overlay)
+        MKOverlayRenderer GetOverlayRenderer(MKMapView mapView, IMKOverlay overlay)
         {
-            polygonRenderer = new MKPolygonRenderer(overlay as MKPolygon);
-            polygonRenderer.FillColor = UIColor.Red;
-            polygonRenderer.StrokeColor = UIColor.Blue;
-            polygonRenderer.Alpha = 0.4f;
-            polygonRenderer.LineWidth = 9;
+            MKPolygonRenderer polygonRenderer = new MKPolygonRenderer(overlay as MKPolygon);
+            polygonRenderer.FillColor = overlayColors[colorIndex];
+            colorIndex++;
+            polygonRenderer.StrokeColor = UIColor.Gray;
+            polygonRenderer.Alpha = 0.8f;
+            polygonRenderer.LineWidth = 1;
             return polygonRenderer;
         }
 
@@ -85,14 +89,26 @@ namespace PortableApp.iOS
             if (annotation is MKUserLocation)
                 return null;
             
-            annotationView = mapView.DequeueReusableAnnotation("0");
+            annotationView = mapView.DequeueReusableAnnotation(pinId);
             if (annotationView == null)
             {
-                annotationView = new MKAnnotationView(annotation, "0");
-                annotationView.Image = UIImage.FromFile("MapLabels/" + overlay.mapKeyName + ".png");
+                annotationView = new MKAnnotationView(annotation, pinId);
+                annotationView.Image = UIImage.FromFile("MapLabels/" + annotation.GetTitle() + ".png");
             }
 
             return annotationView;
+        }
+
+        UIColor DetermineOverlayColor(string legendName)
+        {
+            if (legendName == "Emergent")
+                legendColor = UIColor.Green;
+            else if (legendName == "Forested")
+                legendColor = UIColor.Brown;
+            else if (legendName == "Lake")
+                legendColor = UIColor.Blue;
+
+            return legendColor;
         }
     }
 }

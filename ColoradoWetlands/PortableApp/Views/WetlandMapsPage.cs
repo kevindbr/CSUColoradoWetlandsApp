@@ -1,5 +1,8 @@
-﻿using PortableApp.Models;
+﻿using Plugin.Geolocator;
+using PortableApp.Models;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -7,6 +10,7 @@ namespace PortableApp
 {
     public partial class WetlandMapsPage : ViewHelpers
     {
+        Position savedPosition;
         
         public WetlandMapsPage()
         {
@@ -32,8 +36,11 @@ namespace PortableApp
                 WidthRequest = App.ScreenWidth,
                 HeightRequest = App.ScreenHeight
             };
+
+            GetCurrentLocation();
+
             var position = new Position(37.79752, -122.40183); // Latitude, Longitude
-            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(37.79752, -122.40183), Distance.FromMiles(1)));
+            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromMiles(1)));
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(customMap, 0, 1);
 
@@ -47,6 +54,15 @@ namespace PortableApp
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
         }        
+
+        private async void GetCurrentLocation()
+        {
+            var locator = CrossGeolocator.Current;
+            locator.DesiredAccuracy = 50;
+            var location = await locator.GetPositionAsync(TimeSpan.FromSeconds(10));
+            //var cachedLocation = await CrossGeolocator.Current.GetLastKnownLocationAsync();
+            savedPosition = new Position(location.Latitude, location.Longitude);
+        }
 
     }
 

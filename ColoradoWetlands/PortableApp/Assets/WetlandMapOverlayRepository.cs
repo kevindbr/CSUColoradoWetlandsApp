@@ -42,6 +42,13 @@ namespace PortableApp
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 2, latitude = 37.788433, longitude = -122.402256 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 2, latitude = 37.788582, longitude = -122.401071 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 2, latitude = 37.788082, longitude = -122.400971 });
+
+            conn.Insert(new WetlandMapOverlay { mapKeyName = "PEMG", legendColor = "Lake" });
+            conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 3, latitude = 37.777513, longitude = -122.402058 });
+            conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 3, latitude = 37.778433, longitude = -122.403256 });
+            conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 3, latitude = 37.778582, longitude = -122.401071 });
+            conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 3, latitude = 37.778082, longitude = -122.400971 });
+            conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 3, latitude = 37.776082, longitude = -122.400971 });
         }
 
     }

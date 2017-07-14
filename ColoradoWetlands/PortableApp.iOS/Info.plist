@@ -62,8 +62,6 @@
 	<key>UIRequiresFullScreen</key>
 	<true/>
 
-  <key>NSLocationAlwaysUsageDescription</key>
-  <string>Can we use your location</string>
   <key>NSLocationWhenInUseUsageDescription</key>
   <string>We are using your location</string>
 </dict>
