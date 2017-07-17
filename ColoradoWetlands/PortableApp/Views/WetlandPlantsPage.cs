@@ -122,7 +122,7 @@ namespace PortableApp
             searchSortGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.7, GridUnitType.Star) });
             searchSortGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
-            // Add search button
+            // Add search bar
             searchBar = new CustomSearchBar
             {
                 Placeholder = "Scientific or Common Name...",
