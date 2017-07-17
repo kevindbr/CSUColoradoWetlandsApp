@@ -40,6 +40,7 @@ namespace PortableApp.iOS
             {
                 formsMap = (CustomMap)e.NewElement;
                 var nativeMap = Control as MKMapView;
+                nativeMap.ShowsScale = true;
 
                 for (int i = 0; i < formsMap.Overlays.Count; i++)
                 {
