@@ -1,4 +1,6 @@
-﻿using Plugin.Geolocator;
+﻿using Plugin.Compass;
+using Plugin.Compass.Abstractions;
+using Plugin.Geolocator;
 using PortableApp.Models;
 using System;
 using System.Collections.Generic;
@@ -14,10 +16,11 @@ namespace PortableApp
         CustomSearchBar searchBar;
         Position savedPosition;
         Geocoder geoCoder;
-        
+        Label compassDirection;
+        event EventHandler<CompassChangedEventArgs> CompassChanged;
+
         public WetlandMapsPage()
         {
-
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);
             AbsoluteLayout pageContainer = ConstructPageContainer();
@@ -57,6 +60,17 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(customMap, 0, 2);
 
+            // Add compass
+            if (CrossCompass.IsSupported)
+            { 
+                compassDirection = new Label { Text = "Direction: ", TextColor = Color.White };
+                CrossCompass.Current.CompassChanged += (s, e) =>
+                {
+                    compassDirection.Text = $"Direction: {e.Heading}";
+                };
+                CrossCompass.Current.Start();
+            }
+
             // Add FooterBar
             FooterNavigationOptions footerOptions = new FooterNavigationOptions { mapsFooter = true };
             Grid footerBar = ConstructFooterBar(footerOptions);
@@ -66,7 +80,12 @@ namespace PortableApp
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
-        }        
+        }
+
+        private void CustomMap_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
         private async void GetCurrentLocation()
         {
