@@ -382,13 +382,13 @@ namespace PortableApp
         public async void ToMapsKey(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            //await Navigation.PushAsync(new WetlandPlantsPage());
+            await Navigation.PushModalAsync(new WetlandMapsKeyPage());
         }
 
         public async void ToMapsLegend(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            //await Navigation.PushAsync(new WetlandPlantsPage());
+            await Navigation.PushModalAsync(new WetlandMapsLegendPage());
         }
 
         public async void ToMapsHelp(object sender, EventArgs e)
