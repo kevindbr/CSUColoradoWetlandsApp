@@ -16,8 +16,6 @@ namespace PortableApp.iOS
     public class CustomMapRenderer : MapRenderer
     {
         CustomMap formsMap;
-        List<MKPolygon> polygonOverlays = new List<MKPolygon>();
-        //List<MKPolygonRenderer> polygonRenderers = new List<MKPolygonRenderer>();
         WetlandMapOverlay overlay;
         string pinId = "PinnAnnotation";
         List<UIColor> overlayColors = new List<UIColor>();
@@ -45,8 +43,7 @@ namespace PortableApp.iOS
                 for (int i = 0; i < formsMap.Overlays.Count; i++)
                 {
                     overlay = formsMap.Overlays[i];
-                    UIColor color = DetermineOverlayColor(overlay.legendColor);
-                    overlayColors.Add(color);
+                    overlayColors.Add(overlay.legendColor.ToUIColor());
 
                     nativeMap.OverlayRenderer = GetOverlayRenderer;
 
@@ -98,18 +95,6 @@ namespace PortableApp.iOS
             }
 
             return annotationView;
-        }
-
-        UIColor DetermineOverlayColor(string legendName)
-        {
-            if (legendName == "Emergent")
-                legendColor = UIColor.Green;
-            else if (legendName == "Forested")
-                legendColor = UIColor.Brown;
-            else if (legendName == "Lake")
-                legendColor = UIColor.Blue;
-
-            return legendColor;
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using SQLite.Net.Attributes;
+﻿using SQLite.Net.Attributes;
 using SQLiteNetExtensions.Attributes;
 using System.Collections.Generic;
+using Xamarin.Forms;
 
 namespace PortableApp.Models
 {
@@ -13,16 +13,31 @@ namespace PortableApp.Models
 
         public string mapKeyName { get; set; }
 
-        public string legendColor { get; set; }
+        public string legendName { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<WetlandMapOverlayCoordinate> overlayCoordinates { get; set; }
+
+        public Color legendColor
+        {
+            get
+            {
+                if (legendName == "Emergent")
+                    return Color.Green;
+                else if (legendName == "Forested")
+                    return Color.Brown;
+                else if (legendName == "Lake")
+                    return Color.Blue;
+                else
+                    return Color.Transparent;
+            }
+        }
 
         //public IEnumerable<WetlandMapOverlayCoordinate> overlayCoordinates
         //{
         //    get { return JsonConvert.DeserializeObject<IList<WetlandMapOverlayCoordinate>>(coordinatesString); }
         //}
-        
+
     }
 
     [Table("wetland_map_overlay_coordinate")]

@@ -53,9 +53,16 @@ namespace PortableApp
                 HeightRequest = App.ScreenHeight
             };
 
+            customMap.ShapeCoordinates.Add(new Position(37.797513, -122.402058));
+            customMap.ShapeCoordinates.Add(new Position(37.798433, -122.402256));
+            customMap.ShapeCoordinates.Add(new Position(37.798582, -122.401071));
+            customMap.ShapeCoordinates.Add(new Position(37.797658, -122.400888));
+
+
             // Add location
             GetCurrentLocation();
             var caliPosition = new Position(37.79752, -122.40183); // Latitude, Longitude
+            
             customMap.MoveToRegion(MapSpan.FromCenterAndRadius(caliPosition, Distance.FromMiles(1)));
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(customMap, 0, 2);
@@ -197,9 +204,11 @@ namespace PortableApp
     public class CustomMap : Map
     {
         public List<WetlandMapOverlay> Overlays { get; set; }
+        public List<Position> ShapeCoordinates { get; set; }
 
         public CustomMap()
         {
+            ShapeCoordinates = new List<Position>();
             Overlays = new List<WetlandMapOverlay>(App.WetlandMapOverlayRepo.GetAllWetlandMapOverlays());
         }
     }

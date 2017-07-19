@@ -31,19 +31,19 @@ namespace PortableApp
         // Seed database with essential settings
         public void SeedDB()
         {
-            conn.Insert(new WetlandMapOverlay { mapKeyName = "PEMC", legendColor = "Emergent" });
+            conn.Insert(new WetlandMapOverlay { mapKeyName = "PEMC", legendName = "Emergent" });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 1, latitude = 37.797513, longitude = -122.402058 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 1, latitude = 37.798433, longitude = -122.402256 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 1, latitude = 37.798582, longitude = -122.401071 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 1, latitude = 37.798082, longitude = -122.400971 });
 
-            conn.Insert(new WetlandMapOverlay { mapKeyName = "PEMG", legendColor = "Forested" });
+            conn.Insert(new WetlandMapOverlay { mapKeyName = "PEMG", legendName = "Forested" });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 2, latitude = 37.787513, longitude = -122.402058 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 2, latitude = 37.788433, longitude = -122.402256 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 2, latitude = 37.788582, longitude = -122.401071 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 2, latitude = 37.788082, longitude = -122.400971 });
 
-            conn.Insert(new WetlandMapOverlay { mapKeyName = "PEMG", legendColor = "Lake" });
+            conn.Insert(new WetlandMapOverlay { mapKeyName = "PEMG", legendName = "Lake" });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 3, latitude = 37.777513, longitude = -122.402058 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 3, latitude = 37.778433, longitude = -122.403256 });
             conn.Insert(new WetlandMapOverlayCoordinate { overlayid = 3, latitude = 37.778582, longitude = -122.401071 });
