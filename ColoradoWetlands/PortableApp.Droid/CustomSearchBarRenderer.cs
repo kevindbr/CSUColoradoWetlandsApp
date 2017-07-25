@@ -5,7 +5,6 @@ using PortableApp.Droid;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using G = Android.Graphics;
-using System;
 
 [assembly: ExportRenderer(typeof(CustomSearchBar), typeof(CustomSearchBarRenderer))]
 

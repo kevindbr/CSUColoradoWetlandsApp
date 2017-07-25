@@ -18,7 +18,7 @@ namespace PortableApp
         Geocoder geoCoder;
         Label compassDirection;
         event EventHandler<CompassChangedEventArgs> CompassChanged;
-
+        
         public WetlandMapsPage()
         {
             // Turn off navigation bar and initialize pageContainer
@@ -52,12 +52,6 @@ namespace PortableApp
                 WidthRequest = App.ScreenWidth,
                 HeightRequest = App.ScreenHeight
             };
-
-            customMap.ShapeCoordinates.Add(new Position(37.797513, -122.402058));
-            customMap.ShapeCoordinates.Add(new Position(37.798433, -122.402256));
-            customMap.ShapeCoordinates.Add(new Position(37.798582, -122.401071));
-            customMap.ShapeCoordinates.Add(new Position(37.797658, -122.400888));
-
 
             // Add location
             GetCurrentLocation();
@@ -109,7 +103,8 @@ namespace PortableApp
             if (!string.IsNullOrWhiteSpace(searchBar.Text))
             {
                 IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(searchBar.Text);
-                customMap.MoveToRegion(MapSpan.FromCenterAndRadius(approximateLocations.First(), Distance.FromMiles(1)));
+                if (approximateLocations.Count() != 0)
+                    customMap.MoveToRegion(MapSpan.FromCenterAndRadius(approximateLocations.First(), Distance.FromMiles(1)));
             }
         }
 
@@ -204,11 +199,9 @@ namespace PortableApp
     public class CustomMap : Map
     {
         public List<WetlandMapOverlay> Overlays { get; set; }
-        public List<Position> ShapeCoordinates { get; set; }
 
         public CustomMap()
         {
-            ShapeCoordinates = new List<Position>();
             Overlays = new List<WetlandMapOverlay>(App.WetlandMapOverlayRepo.GetAllWetlandMapOverlays());
         }
     }

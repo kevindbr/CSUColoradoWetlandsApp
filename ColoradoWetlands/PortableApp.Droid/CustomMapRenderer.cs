@@ -56,6 +56,7 @@ namespace PortableApp.Droid
 
                 map.AddPolygon(polygonOptions);
             }
+            map.UiSettings.SetAllGesturesEnabled(true);
         }
 
         private void InvokeOnMapReadyBaseClassHack(GoogleMap googleMap)
