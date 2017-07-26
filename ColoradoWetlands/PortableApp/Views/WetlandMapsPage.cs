@@ -45,19 +45,20 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(searchBar, 0, 1);
 
-            // Add map to layout
+            // Instantiate map
             customMap = new CustomMap
             {
-                MapType = MapType.Satellite,
+                //MapType = MapType.Satellite,
                 WidthRequest = App.ScreenWidth,
                 HeightRequest = App.ScreenHeight
             };
 
             // Add location
             GetCurrentLocation();
-            var caliPosition = new Position(37.79752, -122.40183); // Latitude, Longitude
-            
-            customMap.MoveToRegion(MapSpan.FromCenterAndRadius(caliPosition, Distance.FromMiles(1)));
+            //var caliPosition = new Position(37.79752, -122.40183); // Latitude, Longitude            
+            //customMap.MoveToRegion(MapSpan.FromCenterAndRadius(caliPosition, Distance.FromMiles(1)));
+
+            // Add map to layout
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(customMap, 0, 2);
 
@@ -103,8 +104,8 @@ namespace PortableApp
             if (!string.IsNullOrWhiteSpace(searchBar.Text))
             {
                 IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(searchBar.Text);
-                if (approximateLocations.Count() != 0)
-                    customMap.MoveToRegion(MapSpan.FromCenterAndRadius(approximateLocations.First(), Distance.FromMiles(1)));
+                //if (approximateLocations.Count() != 0)
+                    //customMap.MoveToRegion(MapSpan.FromCenterAndRadius(approximateLocations.First(), Distance.FromMiles(1)));
             }
         }
 
@@ -196,7 +197,7 @@ namespace PortableApp
         }
     }
 
-    public class CustomMap : Map
+    public partial class CustomMap : View
     {
         public List<WetlandMapOverlay> Overlays { get; set; }
 
