@@ -1,14 +1,9 @@
-using CoreLocation;
-using MapKit;
 using PortableApp.iOS;
 using PortableApp;
 using UIKit;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps.iOS;
 using Xamarin.Forms.Platform.iOS;
 using System.Collections.Generic;
-using PortableApp.Models;
-using Xamarin.Forms.Maps;
 using Esri.ArcGISRuntime.UI.Controls;
 using Esri.ArcGISRuntime.Mapping;
 using System;
@@ -18,13 +13,6 @@ namespace PortableApp.iOS
 {
     public class CustomMapRenderer : ViewRenderer
     {
-        //CustomMap formsMap;
-        //WetlandMapOverlay overlay;
-        string pinId = "PinnAnnotation";
-        List<UIColor> overlayColors = new List<UIColor>();
-        int colorIndex = 0;
-        //UIColor legendColor;
-
         protected override void OnElementChanged(ElementChangedEventArgs<View> e)
         {
             base.OnElementChanged(e);
@@ -44,77 +32,26 @@ namespace PortableApp.iOS
                 mapView = new MapView();
 
                 // create two layers
-                var baselayer = new ArcGISTiledLayer(new Uri("https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer"));
-                var overlay = new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer"));
+                var wetlandsMapBase = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/Colorado_Wetlands_NWI/MapServer"));
+                var satelliteMap = new ArcGISTiledLayer(new Uri("https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer"));
+                //var counties = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/CO_counties_Appservice/MapServer"));
+                //var elev = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/elevation_poly_Appservice/MapServer"));
+                var wetlandsMap = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/Colorado_Wetlands_NWI/MapServer"));
 
                 // create a new basemap; add the layers (BaseLayers property)
                 var basemap = new Basemap();
-                basemap.BaseLayers.Add(baselayer);
-                basemap.BaseLayers.Add(overlay);
+                basemap.BaseLayers.Add(wetlandsMapBase);
+                basemap.BaseLayers.Add(satelliteMap);
+                //basemap.BaseLayers.Add(counties);
+                //basemap.BaseLayers.Add(elev);
+                basemap.BaseLayers.Add(wetlandsMap);
 
-                // create a new Map to display the basemap and assign to mapView, set native control
-                mapView.Map = new Esri.ArcGISRuntime.Mapping.Map(basemap);
+                // create a new Map to display the basemap and assign to mapView, set native control 
+                var map = new Esri.ArcGISRuntime.Mapping.Map { Basemap = basemap, InitialViewpoint = new Viewpoint(40.5592, -105.0781, 100000000) };
+                mapView.Map = map;
                 SetNativeControl(mapView);
-
-                //formsMap = (CustomMap)e.NewElement;
-                //var nativeMap = Control as MKMapView;
-                //nativeMap.ShowsScale = true;
-
-                //for (int i = 0; i < formsMap.Overlays.Count; i++)
-                //{
-                //    overlay = formsMap.Overlays[i];
-                //    overlayColors.Add(overlay.legendColor.ToUIColor());
-
-                //    nativeMap.OverlayRenderer = GetOverlayRenderer;
-
-                //    List<WetlandMapOverlayCoordinate> coordinatePairs = formsMap.Overlays[i].overlayCoordinates;
-                //    CLLocationCoordinate2D[] coords = new CLLocationCoordinate2D[coordinatePairs.Count];
-                    
-                //    int index = 0;
-                //    foreach (var position in coordinatePairs)
-                //    {
-                //        coords[index] = new CLLocationCoordinate2D(position.latitude, position.longitude);
-                //        index++;
-                //    }
-
-                //    var blockOverlay = MKPolygon.FromCoordinates(coords);
-                //    nativeMap.AddOverlay(blockOverlay);
-
-                //    formsMap.Pins.Add(new Pin { Label = overlay.mapKeyName, Position = new Position(coordinatePairs[0].latitude, coordinatePairs[0].longitude) });
-                //    nativeMap.GetViewForAnnotation = GetViewForAnnotation;
-
-                //}
+                
             }
-        }
-
-        //// Create instance of MKPolygon overlay renderer and return
-        //MKOverlayRenderer GetOverlayRenderer(MKMapView mapView, IMKOverlay overlay)
-        //{
-        //    MKPolygonRenderer polygonRenderer = new MKPolygonRenderer(overlay as MKPolygon);
-        //    polygonRenderer.FillColor = overlayColors[colorIndex];
-        //    colorIndex++;
-        //    polygonRenderer.StrokeColor = UIColor.Gray;
-        //    polygonRenderer.Alpha = 0.8f;
-        //    polygonRenderer.LineWidth = 1;
-        //    return polygonRenderer;
-        //}
-
-        //// Create custom pin
-        //MKAnnotationView GetViewForAnnotation(MKMapView mapView, IMKAnnotation annotation)
-        //{
-        //    MKAnnotationView annotationView = null;
-
-        //    if (annotation is MKUserLocation)
-        //        return null;
-            
-        //    annotationView = mapView.DequeueReusableAnnotation(pinId);
-        //    if (annotationView == null)
-        //    {
-        //        annotationView = new MKAnnotationView(annotation, pinId);
-        //        annotationView.Image = UIImage.FromFile("MapLabels/" + annotation.GetTitle() + ".png");
-        //    }
-
-        //    return annotationView;
-        //}
+        }        
     }
 }
