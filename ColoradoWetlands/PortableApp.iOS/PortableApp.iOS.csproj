@@ -435,10 +435,10 @@
     <BundleResource Include="Resources\WetlandRegions.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\MapLabels\PEMC.png" />
+    <BundleResource Include="Resources\location-white.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\MapLabels\PEMG.png" />
+    <BundleResource Include="Resources\location-white-outline.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

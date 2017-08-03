@@ -4,7 +4,9 @@ using Plugin.Geolocator;
 using PortableApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -18,6 +20,30 @@ namespace PortableApp
         Geocoder geoCoder;
         Label compassDirection;
         event EventHandler<CompassChangedEventArgs> CompassChanged;
+
+        protected override async void OnAppearing()
+        {
+            try
+            {
+                var locator = CrossGeolocator.Current;
+                locator.DesiredAccuracy = 50;
+
+                var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10));
+
+                customMap.CurrentLatitude = position.Latitude;
+                if (customMap.CurrentLatitude == null)
+                    return;
+
+                Debug.WriteLine("Position Status: {0}", position.Timestamp);
+                Debug.WriteLine("Position Latitude: {0}", position.Latitude);
+                Debug.WriteLine("Position Longitude: {0}", position.Longitude);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Unable to get location, may need to increase timeout: " + ex);
+            }
+            
+        }
         
         public WetlandMapsPage()
         {
@@ -48,30 +74,24 @@ namespace PortableApp
             // Instantiate map
             customMap = new CustomMap
             {
-                //MapType = MapType.Satellite,
                 WidthRequest = App.ScreenWidth,
                 HeightRequest = App.ScreenHeight
             };
-
-            // Add location
-            GetCurrentLocation();
-            //var caliPosition = new Position(37.79752, -122.40183); // Latitude, Longitude            
-            //customMap.MoveToRegion(MapSpan.FromCenterAndRadius(caliPosition, Distance.FromMiles(1)));
 
             // Add map to layout
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(customMap, 0, 2);
 
-            // Add compass
-            if (CrossCompass.IsSupported)
-            { 
-                compassDirection = new Label { Text = "Direction: ", TextColor = Color.White };
-                CrossCompass.Current.CompassChanged += (s, e) =>
-                {
-                    compassDirection.Text = $"Direction: {e.Heading}";
-                };
-                CrossCompass.Current.Start();
-            }
+            //// Add compass
+            //if (CrossCompass.IsSupported)
+            //{ 
+            //    compassDirection = new Label { Text = "Direction: ", TextColor = Color.White };
+            //    CrossCompass.Current.CompassChanged += (s, e) =>
+            //    {
+            //        compassDirection.Text = $"Direction: {e.Heading}";
+            //    };
+            //    CrossCompass.Current.Start();
+            //}
 
             // Add FooterBar
             FooterNavigationOptions footerOptions = new FooterNavigationOptions { mapsFooter = true };
@@ -87,15 +107,6 @@ namespace PortableApp
         private void CustomMap_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             throw new NotImplementedException();
-        }
-
-        private async void GetCurrentLocation()
-        {
-            var locator = CrossGeolocator.Current;
-            locator.DesiredAccuracy = 50;
-            var location = await locator.GetPositionAsync(TimeSpan.FromSeconds(10));
-            //var cachedLocation = await CrossGeolocator.Current.GetLastKnownLocationAsync();
-            savedPosition = new Position(location.Latitude, location.Longitude);
         }
 
         private async void ProcessSearch(object sender, EventArgs e)
@@ -199,11 +210,16 @@ namespace PortableApp
 
     public partial class CustomMap : View
     {
-        public List<WetlandMapOverlay> Overlays { get; set; }
+        public static readonly BindableProperty CurrentLatitudeProperty = BindableProperty.Create("CurrentLatitude", typeof(double), typeof(CustomMap), 0.0);
 
         public CustomMap()
         {
-            Overlays = new List<WetlandMapOverlay>(App.WetlandMapOverlayRepo.GetAllWetlandMapOverlays());
+        }
+
+        public double CurrentLatitude
+        {
+            get { return (double)GetValue(CurrentLatitudeProperty); }
+            set { SetValue(CurrentLatitudeProperty, value); }
         }
     }
 }

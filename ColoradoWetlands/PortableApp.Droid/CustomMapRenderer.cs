@@ -42,10 +42,26 @@ namespace PortableApp.Droid
                 //basemap.BaseLayers.Add(elev);
                 basemap.BaseLayers.Add(wetlandsMap);
 
+
+
                 // create a new Map to display the basemap and assign to mapView, set native control 
                 var map = new Esri.ArcGISRuntime.Mapping.Map { Basemap = basemap, InitialViewpoint = new Viewpoint(40.5592, -105.0781, 100000000) };
-
                 mapView.Map = map;
+
+                //mapView.LocationDisplay.IsEnabled = true;
+                //if (mapView.LocationDisplay.IsEnabled)
+                //{
+                //    // Get the current AutoPanMode setting as it is automatically disabled when calling MyMapView.SetView().
+                //    var PanMode = mapView.LocationDisplay.AutoPanMode;
+
+                //    mapView.SetViewpointRotationAsync(0);
+                //    mapView.SetViewpoint(mapView.GetCurrentViewpoint(ViewpointType.BoundingGeometry));
+
+                //    // Reset the AutoPanMode 
+                //    mapView.LocationDisplay.AutoPanMode = PanMode;
+                //}
+                mapView.SetViewpoint(new Viewpoint(40.5592, -105.0781, 1000000000));
+
                 SetNativeControl(mapView);
                 
             }
