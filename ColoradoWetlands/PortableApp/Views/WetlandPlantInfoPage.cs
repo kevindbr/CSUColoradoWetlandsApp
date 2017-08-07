@@ -90,9 +90,7 @@ namespace PortableApp
             if (plant.keychar5 != null && plant.keychar5 != "") { html += "<li>" + plant.keychar5 + "</li>"; };
             if (plant.keychar6 != null && plant.keychar6 != "") { html += "<li>" + plant.keychar6 + "</li>"; };
             html += "</ul>";
-
-            html += "<div class='section_header'>SIMILAR PLANTS</div>" + plant.similarsp;
-
+            
             html += "<div class='section_header'>REFERENCES</div>";
 
             html += "<ul>";
