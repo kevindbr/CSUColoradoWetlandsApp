@@ -25,6 +25,7 @@ namespace PortableApp
         Button sortDirection = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "\u25BC", BorderRadius = Device.OnPlatform(0, 1, 0) };
         WetlandSetting sortField;
         Grid plantFilterGroup;
+        string[] labelValues;
         Button browseFilter;
         Button searchFilter;
         Button favoritesFilter;
@@ -44,8 +45,8 @@ namespace PortableApp
                 ChangeFilterColors(searchFilter);
 
             // Set sort settings and filter jump list
-            sortField = App.WetlandSettingsRepo.GetSetting("Sort Field");
-            sortButton.Text = sortField.valuetext;
+            GetSortField();
+
             if (sortField.valuetext == "Sort")
             {
                 sortPicker.SelectedIndex = 0;
@@ -175,9 +176,51 @@ namespace PortableApp
 
             // Add Plants ListView
             wetlandPlantsList = new ListView { BackgroundColor = Color.Transparent, RowHeight = 100 };
-            string[] labelValues = GetLabelValues();
-            wetlandPlantsList.ItemTemplate = new DataTemplate(() =>
-            {
+            wetlandPlantsList.ItemTemplate = CellTemplate();
+            wetlandPlantsList.ItemSelected += OnItemSelected;
+            wetlandPlantsList.SeparatorVisibility = SeparatorVisibility.None;
+
+            listViewContainer.Children.Add(wetlandPlantsList,
+                Constraint.RelativeToParent((parent) => { return parent.X; }),
+                Constraint.RelativeToParent((parent) => { return parent.Y - 105; }),
+                Constraint.RelativeToParent((parent) => { return parent.Width * .9; }),
+                Constraint.RelativeToParent((parent) => { return parent.Height; })
+            );
+            
+
+            // Add jump list to right side
+            jumpListContainer = new StackLayout { Spacing = -1, Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
+
+            listViewContainer.Children.Add(jumpListContainer,
+                Constraint.RelativeToParent((parent) => { return parent.Width * .9; }),
+                Constraint.RelativeToParent((parent) => { return parent.Y - 105; }),
+                Constraint.RelativeToParent((parent) => { return parent.Width * .1; }),
+                Constraint.RelativeToParent((parent) => { return parent.Height; })
+            );
+
+            // Add ListView and Jump List to grid
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            innerContainer.Children.Add(listViewContainer, 0, 2);
+
+            // Add FooterBar
+            FooterNavigationOptions footerOptions = new FooterNavigationOptions { plantsFooter = true };
+            Grid footerBar = ConstructFooterBar(footerOptions);
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
+            innerContainer.Children.Add(footerBar, 0, 3);
+
+            // Add inner container to page container and set as page content
+            pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
+            Content = pageContainer;
+        }
+
+        private DataTemplate CellTemplate()
+        {
+            // Get correct order of labels on each plant
+            GetSortField();
+            labelValues = GetLabelValues();
+
+            var cellTemplate = new DataTemplate(() => {                 
+
                 // Construct grid, the cell container
                 Grid cell = new Grid
                 {
@@ -222,40 +265,7 @@ namespace PortableApp
                 cell.Children.Add(textSection, 1, 0);
                 return new ViewCell { View = cell };
             });
-            wetlandPlantsList.ItemSelected += OnItemSelected;
-            wetlandPlantsList.SeparatorVisibility = SeparatorVisibility.None;
-
-            listViewContainer.Children.Add(wetlandPlantsList,
-                Constraint.RelativeToParent((parent) => { return parent.X; }),
-                Constraint.RelativeToParent((parent) => { return parent.Y - 105; }),
-                Constraint.RelativeToParent((parent) => { return parent.Width * .9; }),
-                Constraint.RelativeToParent((parent) => { return parent.Height; })
-            );
-            
-
-            // Add jump list to right side
-            jumpListContainer = new StackLayout { Spacing = -1, Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
-
-            listViewContainer.Children.Add(jumpListContainer,
-                Constraint.RelativeToParent((parent) => { return parent.Width * .9; }),
-                Constraint.RelativeToParent((parent) => { return parent.Y - 105; }),
-                Constraint.RelativeToParent((parent) => { return parent.Width * .1; }),
-                Constraint.RelativeToParent((parent) => { return parent.Height; })
-            );
-
-            // Add ListView and Jump List to grid
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            innerContainer.Children.Add(listViewContainer, 0, 2);
-
-            // Add FooterBar
-            FooterNavigationOptions footerOptions = new FooterNavigationOptions { plantsFooter = true };
-            Grid footerBar = ConstructFooterBar(footerOptions);
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
-            innerContainer.Children.Add(footerBar, 0, 3);
-
-            // Add inner container to page container and set as page content
-            pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
-            Content = pageContainer;
+            return cellTemplate;
         }
 
         private string[] GetLabelValues()
@@ -268,6 +278,12 @@ namespace PortableApp
                 return new string[] { "sections", "scinamenoauthorstripped", "commonname", "family" };
             else
                 return new string[] { "scinamenoauthorstripped", "commonname", "family", "sections" };
+        }
+
+        private void GetSortField()
+        { 
+            sortField = App.WetlandSettingsRepo.GetSetting("Sort Field");
+            sortButton.Text = sortField.valuetext;
         }
 
         public void FilterPlants(object sender, EventArgs e)
@@ -332,7 +348,7 @@ namespace PortableApp
             SortItems(sender, e);
         }
 
-        private async void SortItems(object sender, EventArgs e)
+        private void SortItems(object sender, EventArgs e)
         {
             sortButton.Text = sortPicker.Items[sortPicker.SelectedIndex];
             wetlandPlantsList.ItemsSource = null;
@@ -345,7 +361,8 @@ namespace PortableApp
             else if (sortButton.Text == "Group")
                 plants.Sort(i => i.sections, sortDirection.Text);                
 
-            await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "Sort Field", valuetext = sortButton.Text, valueint = sortPicker.SelectedIndex });
+            App.WetlandSettingsRepo.AddOrUpdateSetting(new WetlandSetting { name = "Sort Field", valuetext = sortButton.Text, valueint = sortPicker.SelectedIndex });
+            wetlandPlantsList.ItemTemplate = CellTemplate();
             wetlandPlantsList.ItemsSource = plants;
             FilterJumpList(sortButton.Text);
         }
