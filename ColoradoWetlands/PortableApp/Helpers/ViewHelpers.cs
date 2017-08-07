@@ -28,7 +28,7 @@ namespace PortableApp
             Image backgroundImage = new Image {
                 Source = ImageSource.FromResource("PortableApp.Resources.Images.background.jpg"),
                 Aspect = Aspect.AspectFill,
-                Opacity = 0.7
+                Opacity = 0.6
             };
             pageContainer.Children.Add(backgroundImage, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             return pageContainer;
