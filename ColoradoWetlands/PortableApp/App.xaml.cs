@@ -1,4 +1,5 @@
-﻿using SQLite.Net;
+﻿using PortableApp.Models;
+using SQLite.Net;
 using SQLite.Net.Async;
 using SQLite.Net.Interop;
 using System;
@@ -52,11 +53,14 @@ namespace PortableApp
         protected override void OnStart()
         {
             // Handle when your app starts
+
+            App.WetlandSettingsRepo.AddOrUpdateSetting(new WetlandSetting { name = "Sort Field", valuetext = "Sort", valueint = 0 });
         }
 
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+
         }
 
         protected override void OnResume()

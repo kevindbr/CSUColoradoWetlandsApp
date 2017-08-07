@@ -21,7 +21,7 @@ namespace PortableApp
         bool cameFromSearch;
         Dictionary<string, string> sortOptions = new Dictionary<string, string> { { "Scientific Name", "scinamenoauthor" }, { "Common Name", "commonname" }, { "Family", "family" }, { "Group", "sections" } };
         Picker sortPicker = new Picker();
-        Button sortButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "Scientific Name", BorderRadius = Device.OnPlatform(0, 1, 0) };
+        Button sortButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "Sort", BorderRadius = Device.OnPlatform(0, 1, 0) };
         Button sortDirection = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "\u25BC", BorderRadius = Device.OnPlatform(0, 1, 0) };
         WetlandSetting sortField;
         Grid plantFilterGroup;
@@ -43,13 +43,19 @@ namespace PortableApp
             else
                 ChangeFilterColors(searchFilter);
 
-            // Set sort settings
+            // Set sort settings and filter jump list
             sortField = App.WetlandSettingsRepo.GetSetting("Sort Field");
-            sortPicker.SelectedIndex = (int)sortField.valueint;
             sortButton.Text = sortField.valuetext;
-
-            // filter jump list
-            FilterJumpList(sortButton.Text);
+            if (sortField.valuetext == "Sort")
+            {
+                sortPicker.SelectedIndex = 0;
+                FilterJumpList("Scientific Name");
+            } 
+            else
+            {
+                sortPicker.SelectedIndex = (int)sortField.valueint;
+                FilterJumpList(sortButton.Text);
+            }
         }
 
         public WetlandPlantsPage()
@@ -337,7 +343,7 @@ namespace PortableApp
             else if (sortButton.Text == "Family")
                 plants.Sort(i => i.family, sortDirection.Text);
             else if (sortButton.Text == "Group")
-                plants.Sort(i => i.sections, sortDirection.Text);
+                plants.Sort(i => i.sections, sortDirection.Text);                
 
             await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(new WetlandSetting { name = "Sort Field", valuetext = sortButton.Text, valueint = sortPicker.SelectedIndex });
             wetlandPlantsList.ItemsSource = plants;

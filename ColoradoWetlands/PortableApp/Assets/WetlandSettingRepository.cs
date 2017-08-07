@@ -68,7 +68,7 @@ namespace PortableApp
 
         }
 
-        // add a setting
+        // add a setting async
         public async Task AddSettingAsync(WetlandSetting setting)
         {
             try
@@ -77,6 +77,24 @@ namespace PortableApp
                     throw new Exception("Valid setting name required");
 
                 var result = await connAsync.InsertAsync(setting);
+                StatusMessage = string.Format("{0} record(s) added [Name: {1})", result, setting);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = string.Format("Failed to add/update {0}. Error: {1}", setting, ex.Message);
+            }
+
+        }
+
+        // add or update a setting
+        public void AddOrUpdateSetting(WetlandSetting setting)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(setting.name))
+                    throw new Exception("Valid setting name required");
+
+                var result = conn.InsertOrReplace(setting);
                 StatusMessage = string.Format("{0} record(s) added [Name: {1})", result, setting);
             }
             catch (Exception ex)
