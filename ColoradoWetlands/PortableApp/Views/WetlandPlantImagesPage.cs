@@ -38,7 +38,7 @@ namespace PortableApp
                 cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
                 // Add image credit
-                var imageCredit = new Label { FontSize = 16, TextColor = Color.White, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(0, 10, 0, 0) };
+                var imageCredit = new Label { FontSize = 14, TextColor = Color.White, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(0, 10, 0, 0) };
                 imageCredit.SetBinding(Label.TextProperty, new Binding("ImageCredit"));
                 cell.Children.Add(imageCredit, 0, 0);
 
