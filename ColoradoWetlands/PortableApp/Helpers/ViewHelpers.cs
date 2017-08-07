@@ -226,13 +226,13 @@ namespace PortableApp
             {
                 Button terms = new Button
                 {
-                    Text = "TERMS",
+                    Text = "GLOSSARY",
                     Style = Application.Current.Resources["footerBarButton"] as Style,
                     BorderRadius = Device.OnPlatform(0, 1, 0)
                 };
                 Device.OnPlatform(iOS: () => terms.Margin = new Thickness(5, 5, 5, 5));
                 terms.Clicked += ToGlossary;
-                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(75) });
+                gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(90) });
                 gridLayout.Children.Add(terms, 1, 0);
 
                 Button maps = new Button
@@ -253,7 +253,7 @@ namespace PortableApp
                     BorderRadius = Device.OnPlatform(0, 1, 0)
                 };
                 Device.OnPlatform(iOS: () => help.Margin = new Thickness(5, 5, 5, 5));
-                help.Clicked += ToPlantsHelp;
+                help.Clicked += ToHowToUse;
                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30) });
                 gridLayout.Children.Add(help, 3, 0);
             }
@@ -349,7 +349,7 @@ namespace PortableApp
         // NAVIGATION
         //
 
-        public async void ToIntroduction(object sender, EventArgs e)
+        public async void ToHowToUse(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
             await Navigation.PushAsync(new HTMLPage("Introduction.html", "INTRODUCTION"));

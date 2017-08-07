@@ -110,14 +110,14 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             
             // Add navigation buttons
-            Button introductionButton = new Button
+            Button howToUseButton = new Button
             {
                 Style = Application.Current.Resources["semiTransparentButton"] as Style,
                 Text = "HOW TO USE"
             };
-            introductionButton.Clicked += ToIntroduction;
+            howToUseButton.Clicked += ToHowToUse;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(introductionButton, 0, 2);
+            innerContainer.Children.Add(howToUseButton, 0, 2);
 
             Button whatAreWetlandsButton = new Button
             {
