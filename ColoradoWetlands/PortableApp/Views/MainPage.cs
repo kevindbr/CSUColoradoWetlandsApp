@@ -113,11 +113,20 @@ namespace PortableApp
             Button introductionButton = new Button
             {
                 Style = Application.Current.Resources["semiTransparentButton"] as Style,
-                Text = "INTRODUCTION"
+                Text = "HOW TO USE"
             };
             introductionButton.Clicked += ToIntroduction;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
             innerContainer.Children.Add(introductionButton, 0, 2);
+
+            Button whatAreWetlandsButton = new Button
+            {
+                Style = Application.Current.Resources["semiTransparentButton"] as Style,
+                Text = "WHAT ARE WETLANDS?"
+            };
+            whatAreWetlandsButton.Clicked += ToWhatAreWetlands;
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
+            innerContainer.Children.Add(whatAreWetlandsButton, 0, 3);
 
             Button wetlandPlantsButton = new Button
             {
@@ -126,7 +135,7 @@ namespace PortableApp
             };
             wetlandPlantsButton.Clicked += ToWetlandPlants;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(wetlandPlantsButton, 0, 3);
+            innerContainer.Children.Add(wetlandPlantsButton, 0, 4);
 
             Button wetlandMapsButton = new Button
             {
@@ -135,16 +144,7 @@ namespace PortableApp
             };
             wetlandMapsButton.Clicked += ToWetlandMaps;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(wetlandMapsButton, 0, 4);
-
-            Button wetlandTypesButton = new Button
-            {
-                Style = Application.Current.Resources["semiTransparentButton"] as Style,
-                Text = "WETLAND TYPES"
-            };
-            wetlandTypesButton.Clicked += ToWetlandTypes;
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(wetlandTypesButton, 0, 5);
+            innerContainer.Children.Add(wetlandMapsButton, 0, 5);
 
             Button acknowledgementsButton = new Button
             {
@@ -170,13 +170,13 @@ namespace PortableApp
 
             // Add bottom icons
             Grid bottomIcons = new Grid();
-            bottomIcons.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            bottomIcons.RowDefinitions.Add(new RowDefinition { Height = new GridLength(75) });
             bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(75) });
             bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(75) });
             bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(75) });
             bottomIcons.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             Image CNHPButton = new Image { Source = ImageSource.FromResource("PortableApp.Resources.Icons.CNHP.png") };
             bottomIcons.Children.Add(CNHPButton, 1, 0);
@@ -185,7 +185,7 @@ namespace PortableApp
             Image CSUButton = new Image { Source = ImageSource.FromResource("PortableApp.Resources.Icons.CSU.png") };
             bottomIcons.Children.Add(CSUButton, 5, 0);
 
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(75) });
             innerContainer.Children.Add(bottomIcons, 0, 9);
 
             // Add inner container to page container and set as page content

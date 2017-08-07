@@ -397,10 +397,10 @@ namespace PortableApp
             await Navigation.PushAsync(new HTMLPage("MapsHelp.html", "MAPS HELP"));
         }
 
-        public async void ToWetlandTypes(object sender, EventArgs e)
+        public async void ToWhatAreWetlands(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new WetlandTypesPage());
+            await Navigation.PushAsync(new WhatAreWetlandsPage());
         }
 
         public async void ToAcknowledgements(object sender, EventArgs e)

@@ -5,11 +5,11 @@ using Xamarin.Forms;
 
 namespace PortableApp
 {
-    public partial class WetlandTypesPage : ViewHelpers
+    public partial class WhatAreWetlandsPage : ViewHelpers
     {
         ListView wetlandTypesList;
 
-        public WetlandTypesPage()
+        public WhatAreWetlandsPage()
         {
 
             // Turn off navigation bar and initialize pageContainer
