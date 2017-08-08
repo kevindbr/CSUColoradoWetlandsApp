@@ -6,8 +6,8 @@ namespace PortableApp.Models
     [Table("wetland_plant_references")]
     public class WetlandPlantReference
     {
-        [PrimaryKey, AutoIncrement, Unique]
-        public int Id { get; set; }
+        [PrimaryKey, Unique]
+        public int ReferenceId { get; set; }
 
         [ForeignKey(typeof(WetlandPlant))]
         public int PlantId { get; set; }
