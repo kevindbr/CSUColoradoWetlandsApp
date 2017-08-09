@@ -72,8 +72,9 @@ namespace PortableApp.Models
         public string ThumbnailPathDownloaded { get { return rootFolder.Path + "/Images/" + plantscode + "_icon.jpg"; } }
         public string ThumbnailPathStreamed { get { return "http://sdt1.cas.colostate.edu/mobileapi/api/wetland/image_icons/" + plantscode; } }
 
-        public string RangePath { get { return rootFolder.Path + "/Images/" + mapimg; } }
-
+        public string RangePathDownloaded { get { return rootFolder.Path + "/Images/" + mapimg; } }
+        public string RangePathStreamed { get { return "http://sdt1.cas.colostate.edu/mobileapi/api/wetland/range_images/" + mapimg.Replace(".png", ""); } }
+        
         public string scinameauthorstripped
         {
             get { return scinameauthor.Replace("<em>", "").Replace("</em>", ""); }

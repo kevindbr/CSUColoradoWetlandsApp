@@ -30,9 +30,11 @@ namespace PortableApp
                 Margin = new Thickness(0, 0, 0, 0)
             };
             StackLayout contentContainer = new StackLayout();
-
+            
             Image rangeImage = new Image { Aspect = Aspect.AspectFill, Margin = new Thickness(10, 0, 10, 0) };
-            rangeImage.SetBinding(Image.SourceProperty, new Binding("RangePath"));
+            rangeImage.BindingContext = plant;
+            string imageBinding = downloadImages ? "RangePathDownloaded" : "RangePathStreamed";
+            rangeImage.SetBinding(Image.SourceProperty, new Binding(imageBinding));
             contentContainer.Children.Add(rangeImage);
 
             Label elevationLabel = new Label {
