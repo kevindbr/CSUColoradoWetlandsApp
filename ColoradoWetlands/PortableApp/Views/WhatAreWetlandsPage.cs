@@ -59,6 +59,51 @@ namespace PortableApp
                 Title = "MESIC MEADOW",
                 Description = "WetlandType-MesicMeadow.html"
             });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "FEN",
+                Description = "WetlandType-Fen.html"
+            });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "PLAYA",
+                Description = "WetlandType-Playa.html"
+            });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "SUBALPINE RIPARIAN WOODLAND",
+                Description = "WetlandType-SubalpineRiparianWoodland.html"
+            });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "SUBALPINE RIPARIAN SHRUBLAND",
+                Description = "WetlandType-SubalpineRiparianShrubland.html"
+            });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "FOOTHILLS RIPARIAN",
+                Description = "WetlandType-FoothillsRiparian.html"
+            });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "PLAINS RIPARIAN",
+                Description = "WetlandType-PlainsRiparian.html"
+            });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "PLAINS FLOODPLAIN",
+                Description = "WetlandType-PlainsFloodplain.html"
+            });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "GREASEWOOD FLATS",
+                Description = "WetlandType-GreasewoodFlats.html"
+            });
+            wetlandTypes.Add(new WetlandType
+            {
+                Title = "HANGING GARDEN",
+                Description = "WetlandType-HangingGarden.html"
+            });
             return wetlandTypes;
         }
 

@@ -402,7 +402,7 @@ namespace PortableApp
                     var tapGestureRecognizer = new TapGestureRecognizer();
                     tapGestureRecognizer.Tapped += (s, e) => {
                         var firstRecordMatchingLetter = plants.FirstOrDefault(x => fieldFirstInitial.GetValue(x).ToString() == letter);
-                        wetlandPlantsList.ScrollTo(firstRecordMatchingLetter, ScrollToPosition.Start, true);
+                        wetlandPlantsList.ScrollTo(firstRecordMatchingLetter, ScrollToPosition.Start, false);
                     };
                     letterLabel.GestureRecognizers.Add(tapGestureRecognizer);
                     jumpListContainer.Children.Add(letterLabel);

@@ -283,6 +283,33 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\CNHP.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-Fen.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-Playa.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-SubalpineRiparianWoodland.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-SubalpineRiparianShrubland.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-FoothillsRiparian.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-PlainsRiparian.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-PlainsFloodplain.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-GreasewoodFlats.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WetlandType-HangingGarden.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

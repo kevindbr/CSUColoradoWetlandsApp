@@ -43,7 +43,8 @@ namespace PortableApp
 
         async void OnDismissButtonClicked(object sender, EventArgs args)
         {
-            await Navigation.PopModalAsync();
+            await Navigation.PopModalAsync();   
         }
+        
     }
 }
