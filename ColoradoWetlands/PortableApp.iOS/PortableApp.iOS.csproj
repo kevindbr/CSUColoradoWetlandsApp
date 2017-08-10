@@ -440,6 +440,9 @@
   <ItemGroup>
     <BundleResource Include="Resources\location-white-outline.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\compass-icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

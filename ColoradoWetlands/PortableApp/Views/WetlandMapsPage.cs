@@ -30,10 +30,6 @@ namespace PortableApp
 
                 var position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10));
 
-                customMap.CurrentLatitude = position.Latitude;
-                if (customMap.CurrentLatitude == null)
-                    return;
-
                 Debug.WriteLine("Position Status: {0}", position.Timestamp);
                 Debug.WriteLine("Position Latitude: {0}", position.Latitude);
                 Debug.WriteLine("Position Longitude: {0}", position.Longitude);
@@ -61,15 +57,15 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
             innerContainer.Children.Add(navigationBar, 0, 0);
 
-            searchBar = new CustomSearchBar
-            {
-                Placeholder = "Search for address or city...",
-                FontSize = 12,
-                SearchCommand = new Command(() => { })
-            };
-            searchBar.SearchButtonPressed += ProcessSearch;
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
-            innerContainer.Children.Add(searchBar, 0, 1);
+            //searchBar = new CustomSearchBar
+            //{
+            //    Placeholder = "Search for address or city...",
+            //    FontSize = 12,
+            //    SearchCommand = new Command(() => { })
+            //};
+            //searchBar.SearchButtonPressed += ProcessSearch;
+            //innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50) });
+            //innerContainer.Children.Add(searchBar, 0, 1);
 
             // Instantiate map
             customMap = new CustomMap
@@ -80,7 +76,7 @@ namespace PortableApp
 
             // Add map to layout
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            innerContainer.Children.Add(customMap, 0, 2);
+            innerContainer.Children.Add(customMap, 0, 1);
 
             //// Add compass
             //if (CrossCompass.IsSupported)
@@ -97,7 +93,7 @@ namespace PortableApp
             FooterNavigationOptions footerOptions = new FooterNavigationOptions { mapsFooter = true };
             Grid footerBar = ConstructFooterBar(footerOptions);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(35) });
-            innerContainer.Children.Add(footerBar, 0, 3);
+            innerContainer.Children.Add(footerBar, 0, 2);
 
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
@@ -109,16 +105,16 @@ namespace PortableApp
             throw new NotImplementedException();
         }
 
-        private async void ProcessSearch(object sender, EventArgs e)
-        {
-            geoCoder = new Geocoder();
-            if (!string.IsNullOrWhiteSpace(searchBar.Text))
-            {
-                IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(searchBar.Text);
-                //if (approximateLocations.Count() != 0)
-                    //customMap.MoveToRegion(MapSpan.FromCenterAndRadius(approximateLocations.First(), Distance.FromMiles(1)));
-            }
-        }
+        //private async void ProcessSearch(object sender, EventArgs e)
+        //{
+        //    geoCoder = new Geocoder();
+        //    if (!string.IsNullOrWhiteSpace(searchBar.Text))
+        //    {
+        //        IEnumerable<Position> approximateLocations = await geoCoder.GetPositionsForAddressAsync(searchBar.Text);
+        //        //if (approximateLocations.Count() != 0)
+        //            //customMap.MoveToRegion(MapSpan.FromCenterAndRadius(approximateLocations.First(), Distance.FromMiles(1)));
+        //    }
+        //}
 
     }
 
@@ -210,16 +206,9 @@ namespace PortableApp
 
     public partial class CustomMap : View
     {
-        public static readonly BindableProperty CurrentLatitudeProperty = BindableProperty.Create("CurrentLatitude", typeof(double), typeof(CustomMap), 0.0);
-
         public CustomMap()
         {
         }
-
-        public double CurrentLatitude
-        {
-            get { return (double)GetValue(CurrentLatitudeProperty); }
-            set { SetValue(CurrentLatitudeProperty, value); }
-        }
+        
     }
 }
