@@ -63,6 +63,8 @@
 	<string>We are using your location</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+    <key>NSCalendarsUsageDescription</key>
+    <string>This app needs access to the calendar.</string>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 		<key>NSExceptionDomains</key>
