@@ -21,7 +21,7 @@ namespace PortableApp.iOS
     {
         UISearchBar searchBar;
         MapView mapView;
-        public Plugin.Geolocator.Abstractions.Position position;
+        Plugin.Geolocator.Abstractions.Position position;
         UIView layout;
         UIButton locationButton;
 

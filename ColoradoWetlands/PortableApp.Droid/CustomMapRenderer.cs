@@ -7,14 +7,18 @@ using PortableApp.Models;
 using Xamarin.Forms.Platform.Android;
 using Esri.ArcGISRuntime.Mapping;
 using Android.App;
+using Android.Views;
+using Plugin.Geolocator;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace PortableApp.Droid
 {
     public class CustomMapRenderer : ViewRenderer<CustomMap, Android.Views.ViewGroup>
     {
-        global::Android.Views.ViewGroup viewGroup;
+        global::Android.Widget.RelativeLayout mapContainer;
         Esri.ArcGISRuntime.UI.Controls.MapView mapView;
+        global::Android.Widget.ImageButton locationButton;
+        Plugin.Geolocator.Abstractions.Position position;
 
         protected override void OnElementChanged(ElementChangedEventArgs<CustomMap> e)
         {
@@ -22,21 +26,25 @@ namespace PortableApp.Droid
             
             if (Control == null)
             {
+                var container = new Android.Widget.LinearLayout(this.Context);
+                container.Orientation = Android.Widget.Orientation.Vertical;
+                container.Measure(Android.Views.ViewGroup.LayoutParams.MatchParent, Android.Views.ViewGroup.LayoutParams.MatchParent);
 
-                //viewGroup = ViewGroup;
+                // prepare search bar
+                var searchBar = new Android.Widget.SearchView(this.Context);
+                searchBar.Measure(Android.Views.ViewGroup.LayoutParams.MatchParent, 50);
+                searchBar.SetBackgroundColor(Android.Graphics.Color.LightGray);
+                searchBar.SetQueryHint("Search for address or city...");
+                searchBar.QueryTextSubmit += ProcessSearch;
+                container.AddView(searchBar);
 
-                //global::Android.Widget.RelativeLayout layout = new global::Android.Widget.RelativeLayout(viewGroup.Context);
-
-                //// prepare search bar
-                //var searchFrame = new CGRect(0, 0, UIScreen.MainScreen.Bounds.Width, 44);
-                //searchBar = new UISearchBar(searchFrame);
-                //searchBar.Placeholder = "Search for address or city...";
-                //searchBar.SearchButtonClicked += ProcessSearch;
-                //layout.AddSubview(searchBar);
+                // construct container for mapview
+                mapContainer = new Android.Widget.RelativeLayout(this.Context);
+                mapContainer.Measure(Android.Views.ViewGroup.LayoutParams.MatchParent, Android.Views.ViewGroup.LayoutParams.MatchParent);
 
                 // prepare mapview
                 mapView = new Esri.ArcGISRuntime.UI.Controls.MapView();
-                mapView.Layout(0, 0, 0, 0);
+                mapView.Measure(Android.Views.ViewGroup.LayoutParams.MatchParent, Android.Views.ViewGroup.LayoutParams.MatchParent);
 
                 // create two layers
                 var wetlandsMapBase = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/Colorado_Wetlands_NWI/MapServer"));
@@ -44,7 +52,7 @@ namespace PortableApp.Droid
                 var wetlandsMap = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/Colorado_Wetlands_NWI/MapServer"));
 
                 // create a new basemap; add the layers (BaseLayers property)
-                var basemap = new Basemap();
+                var basemap = new Basemap(); 
                 basemap.BaseLayers.Add(wetlandsMapBase);
                 basemap.BaseLayers.Add(satelliteMap);
                 basemap.BaseLayers.Add(wetlandsMap);
@@ -52,23 +60,23 @@ namespace PortableApp.Droid
                 // create a new Map to display the basemap and assign to mapView, add to layout
                 var map = new Esri.ArcGISRuntime.Mapping.Map { Basemap = basemap, InitialViewpoint = new Viewpoint(40.5592, -105.0781, 100000000) };
                 mapView.Map = map;
-                
-                //layout.AddView(mapView);
-                //viewGroup.AddView(layout);
+                mapContainer.AddView(mapView);
+
+                // create current location button
+                locationButton = new Android.Widget.ImageButton(this.Context);
+                locationButton.SetImageResource(Resource.Drawable.gpsoutline);
+                locationButton.Measure(25, 25);
+                locationButton.SetPadding(25, 25, 0, 0);
+                locationButton.SetBackgroundColor(Android.Graphics.Color.Transparent);
+                locationButton.Click += delegate {
+                    ToggleLocation();
+                };
+                mapContainer.AddView(locationButton);
+
+                container.AddView(mapContainer);
 
                 // set native control to layout
-                SetNativeControl(mapView);
-
-                //layout.AddSubview(mapView);
-
-                //// create current location button
-                //locationButton = UIButton.FromType(UIButtonType.Custom);
-                //locationButton.SetImage(UIImage.FromFile("location-white-outline.png"), UIControlState.Normal);
-                //locationButton.Frame = new CGRect(20, 64, 28, 28);
-                //locationButton.TouchUpInside += delegate {
-                //    ToggleLocation();
-                //};
-                //layout.AddSubview(locationButton);
+                SetNativeControl(container);
 
                 //// prepare compass
                 //UIImageView compass = new UIImageView(UIImage.FromFile("compass-icon.png"));
@@ -79,49 +87,52 @@ namespace PortableApp.Droid
                 //};
                 //layout.AddSubview(compass);
 
+            }
+        }
 
+        // process address search
+        private async void ProcessSearch(object sender, EventArgs e)
+        {
+            var search = (Android.Widget.SearchView)sender;
+            if (search.Query != "")
+            {
+                var uri = new Uri("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
+                var locatorTask = new Esri.ArcGISRuntime.Tasks.Geocoding.LocatorTask(uri);
+                var info = locatorTask.LocatorInfo;
 
-                //// prepare mapview
-                //var mapView = Control as Esri.ArcGISRuntime.UI.Controls.MapView;
-                //mapView = new Esri.ArcGISRuntime.UI.Controls.MapView();
+                var matches = await locatorTask.GeocodeAsync(search.Query);
 
-                //// create two layers
-                //var wetlandsMapBase = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/Colorado_Wetlands_NWI/MapServer"));
-                //var satelliteMap = new ArcGISTiledLayer(new Uri("https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer"));                
-                ////var counties = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/CO_counties_Appservice/MapServer"));
-                ////var elev = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/elevation_poly_Appservice/MapServer"));
-                //var wetlandsMap = new ArcGISMapImageLayer(new Uri("http://cnhp.colostate.edu/arcgis/rest/services/wetlands/Colorado_Wetlands_NWI/MapServer"));
+                if (matches.Count != 0)
+                    await mapView.SetViewpointCenterAsync(matches[0].DisplayLocation);
+            }
+        }
 
-                //// create a new basemap; add the layers (BaseLayers property)
-                //var basemap = new Basemap();
-                //basemap.BaseLayers.Add(wetlandsMapBase);
-                //basemap.BaseLayers.Add(satelliteMap);
-                ////basemap.BaseLayers.Add(counties);
-                ////basemap.BaseLayers.Add(elev);
-                //basemap.BaseLayers.Add(wetlandsMap);
+        private async void ToggleLocation()
+        {
+            if (mapView.LocationDisplay.IsEnabled)
+            {
+                mapView.LocationDisplay.IsEnabled = false;
+                locationButton.SetImageResource(Resource.Drawable.gpsoutline);
+            }
+            else
+            {
+                try
+                {
+                    var locator = CrossGeolocator.Current;
+                    locator.DesiredAccuracy = 50;
 
+                    position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10));
+                    if (position == null)
+                        return;
 
-
-                //// create a new Map to display the basemap and assign to mapView, set native control 
-                //var map = new Esri.ArcGISRuntime.Mapping.Map { Basemap = basemap, InitialViewpoint = new Viewpoint(40.5592, -105.0781, 100000000) };
-                //mapView.Map = map;
-
-                ////mapView.LocationDisplay.IsEnabled = true;
-                ////if (mapView.LocationDisplay.IsEnabled)
-                ////{
-                ////    // Get the current AutoPanMode setting as it is automatically disabled when calling MyMapView.SetView().
-                ////    var PanMode = mapView.LocationDisplay.AutoPanMode;
-
-                ////    mapView.SetViewpointRotationAsync(0);
-                ////    mapView.SetViewpoint(mapView.GetCurrentViewpoint(ViewpointType.BoundingGeometry));
-
-                ////    // Reset the AutoPanMode 
-                ////    mapView.LocationDisplay.AutoPanMode = PanMode;
-                ////}
-                //mapView.SetViewpoint(new Viewpoint(40.5592, -105.0781, 1000000000));
-
-                //SetNativeControl(mapView);
-
+                    mapView.LocationDisplay.IsEnabled = true;
+                    locationButton.SetImageResource(Resource.Drawable.gpsfilled);
+                    await mapView.SetViewpointAsync(new Viewpoint(position.Latitude, position.Longitude, 10000000));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Unable to get location, may need to increase timeout: " + ex);
+                }
             }
         }
     }
