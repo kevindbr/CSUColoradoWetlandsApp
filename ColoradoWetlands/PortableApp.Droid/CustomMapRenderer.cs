@@ -1,13 +1,9 @@
 using PortableApp.Droid;
 using PortableApp;
 using Xamarin.Forms;
-using Android.Gms.Maps;
 using System;
-using PortableApp.Models;
 using Xamarin.Forms.Platform.Android;
 using Esri.ArcGISRuntime.Mapping;
-using Android.App;
-using Android.Views;
 using Plugin.Geolocator;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
@@ -26,6 +22,7 @@ namespace PortableApp.Droid
             
             if (Control == null)
             {
+                // create linear layout container for search and map
                 var container = new Android.Widget.LinearLayout(this.Context);
                 container.Orientation = Android.Widget.Orientation.Vertical;
                 container.Measure(Android.Views.ViewGroup.LayoutParams.MatchParent, Android.Views.ViewGroup.LayoutParams.MatchParent);
@@ -73,19 +70,11 @@ namespace PortableApp.Droid
                 };
                 mapContainer.AddView(locationButton);
 
+                // add map to layout container
                 container.AddView(mapContainer);
 
                 // set native control to layout
                 SetNativeControl(container);
-
-                //// prepare compass
-                //UIImageView compass = new UIImageView(UIImage.FromFile("compass-icon.png"));
-                //compass.Frame = new CGRect(UIScreen.MainScreen.Bounds.Width - 50, 64, 30, 30);
-                //mapView.ViewpointChanged += (sender, args) =>
-                //{
-                //    compass.Transform = CGAffineTransform.MakeRotation((float)-mapView.MapRotation/100);
-                //};
-                //layout.AddSubview(compass);
 
             }
         }
