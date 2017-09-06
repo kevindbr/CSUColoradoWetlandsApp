@@ -3,6 +3,7 @@ using Xamarin.Forms;
 
 namespace PortableApp.Helpers
 {
+    // Allows for image pinch- and tap-to-zoom. Pan is disabled as it produces a UX quirk on iOS
     public class ZoomImage : Image
     {
         private const double MIN_SCALE = 1;

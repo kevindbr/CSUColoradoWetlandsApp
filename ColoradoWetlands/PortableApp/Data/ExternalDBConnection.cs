@@ -13,6 +13,7 @@ using System.Diagnostics;
 
 namespace PortableApp
 {
+    // This class creates an external connection (to the Mobile API server) for use in pulling down plant data, images, and settings
     public class ExternalDBConnection
     {
         // Declare variables

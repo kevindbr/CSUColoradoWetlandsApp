@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace PortableApp.Helpers
 {
+    // This class creates a Grouping and is primarily used to sort the plants and terms jump lists
     public class Grouping<K, T> : ObservableCollection<T>
     {
         public K Key { get; private set; }

@@ -8,6 +8,7 @@ using XLabs.Forms.Controls;
 
 namespace PortableApp
 {
+    // This class inherits from ImageButton, allowing for clickable images, and creates bindable properties to wire up search characteristics to WetlandSearch records
     public class SearchCharacteristic : ImageButton
     {
         public static readonly BindableProperty QueryProperty = BindableProperty.Create("Query", typeof(bool), typeof(ImageButton), false);

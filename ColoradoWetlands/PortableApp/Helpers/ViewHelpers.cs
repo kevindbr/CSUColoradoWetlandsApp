@@ -216,6 +216,7 @@ namespace PortableApp
             return gridLayout;
         }
 
+        // Construct Footer Bar (for use in plants list and maps)
         public Grid ConstructFooterBar(FooterNavigationOptions options)
         {
             Grid gridLayout = new Grid { BackgroundColor = Color.FromHex("44000000"), VerticalOptions = LayoutOptions.FillAndExpand, HorizontalOptions = LayoutOptions.FillAndExpand, ColumnSpacing = 0 };
@@ -310,11 +311,11 @@ namespace PortableApp
             return gridLayout;
         }
 
+        // Creates a flexible method to pass in a URL or file location (for PDFs) to display content
         public WebView HTMLProcessor(string location)
         {
             // Generate WebView container
             var browser = new TransparentWebView();
-            //var pdfBrowser = new CustomWebView { Uri = location, HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand };
             string htmlText;
 
             // Get file locally unless the location is a web address
@@ -337,6 +338,7 @@ namespace PortableApp
             return browser;
         }
 
+        // Change button collor when a button is clicked
         protected async void ChangeButtonColor(object sender, EventArgs e)
         {
             var button = (Button)sender;
@@ -411,6 +413,7 @@ namespace PortableApp
 
     }
 
+    // HeaderNavigationOptions allows for dynamic construction of header based on the parameters passed (and the configuration of the properties below)
     public class HeaderNavigationOptions
     {
         public string titleText { get; set; }
@@ -426,12 +429,14 @@ namespace PortableApp
         public bool downloadImages { get; set; }
     }
 
+    // Allows for clear direction on what to render on the Footer, based on whether it's the plants footer or maps footer
     public class FooterNavigationOptions
     {
         public bool plantsFooter { get; set; }
         public bool mapsFooter { get; set; }
     }
 
+    // Sort method used for sorting plants list
     static class Extensions
     {
         public static void Sort<TSource, TKey>(this Collection<TSource> source, Func<TSource, TKey> keySelector, string sortDirection)
