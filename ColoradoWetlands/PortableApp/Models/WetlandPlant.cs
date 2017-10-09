@@ -57,6 +57,12 @@ namespace PortableApp.Models
         public string synonyms { get; set; }
         public string topimgtopimg { get; set; }
         public string duration { get; set; }
+        public string color { get; set; }
+        public string leafdivision { get; set; }
+        public string leafshape { get; set; }
+        public string leafarrangement { get; set; }
+        public string plantsize { get; set; }
+
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<WetlandPlantImage> Images { get; set; }

@@ -51,6 +51,7 @@
     <Compile Include="Data\DBConnection.cs" />
     <Compile Include="Data\ExternalDBConnection.cs" />
     <Compile Include="Helpers\Grouping.cs" />
+    <Compile Include="Helpers\PredicateBuilder.cs" />
     <Compile Include="Helpers\ZoomImage.cs" />
     <Compile Include="Helpers\SearchCharacteristic.cs" />
     <Compile Include="Models\WetlandMapOverlay.cs" />
@@ -201,7 +202,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\HTML\Introduction.html" />
+    <EmbeddedResource Include="Views\HTML\HowToUse.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\HTML\Acknowledgements.html" />
@@ -309,6 +310,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\HTML\WetlandType-HangingGarden.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\WhatAreWetlands.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\HowToUsePlants.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\HTML\HowToUseMaps.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

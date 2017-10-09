@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System;
 using SQLiteNetExtensions.Extensions;
 using SQLiteNetExtensionsAsync.Extensions;
+using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 
 namespace PortableApp
 {
@@ -99,6 +101,81 @@ namespace PortableApp
             {
                 StatusMessage = string.Format("Failed to update {0}. Error: {1}", plant, ex.Message);
             }
+        }
+
+        public async Task<ObservableCollection<WetlandPlant>> FilterPlantsBySearchCriteria()
+        {
+            // get search criteria and plants
+            List<WetlandSearch> selectCritList = await App.WetlandSearchRepo.GetQueryableSearchCriteriaAsync();
+            List<WetlandPlant> plants;
+
+            // execute filtering
+            if (selectCritList.Count() > 0)
+            {
+                var predicate = ConstructPredicate(selectCritList);
+                plants = conn.Table<WetlandPlant>().AsQueryable().Where(predicate).ToList();
+            }
+            else
+            {
+                plants = GetAllWetlandPlants();
+            }
+
+            return new ObservableCollection<WetlandPlant>(plants);
+
+        }
+
+        // Construct Predicate for plants query, filtering based on selected criteria
+        // Solution taken from http://www.albahari.com/nutshell/predicatebuilder.aspx
+        private Expression<Func<WetlandPlant, bool>> ConstructPredicate(List<WetlandSearch> selectCritList)
+        {
+            var overallQuery = PredicateBuilder.True<WetlandPlant>();
+
+            // Add selected Leaf Type characteristics
+            var queryColors = selectCritList.Where(x => x.Characteristic.Contains("color"));
+            if (queryColors.Count() > 0)
+            {
+                var colorQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var color in queryColors) { colorQuery = colorQuery.Or(x => x.color.Contains(color.SearchString1)); }
+                overallQuery = overallQuery.And(colorQuery);
+            }
+
+            // Add selected Flower Color characteristics
+            var queryLeafDivision = selectCritList.Where(x => x.Characteristic.Contains("leafdivision"));
+            if (queryLeafDivision.Count() > 0)
+            {
+                var leafdivisionQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var leafdivision in queryLeafDivision) { leafdivisionQuery = leafdivisionQuery.Or(x => x.leafdivision.Contains(leafdivision.SearchString1)); }
+                overallQuery = overallQuery.And(leafdivisionQuery);
+            }
+
+            // Add selected Flower Color characteristics
+            var queryLeafShape = selectCritList.Where(x => x.Characteristic.Contains("leafshape"));
+            if (queryLeafShape.Count() > 0)
+            {
+                var leafShapeQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var leafshape in queryLeafShape) { leafShapeQuery = leafShapeQuery.Or(x => x.leafshape.Contains(leafshape.SearchString1)); }
+                overallQuery = overallQuery.And(leafShapeQuery);
+            }
+
+            // Add selected Flower Color characteristics
+            var queryLeafArrangement = selectCritList.Where(x => x.Characteristic.Contains("leafarrangement"));
+            if (queryLeafArrangement.Count() > 0)
+            {
+                var leafArrangementeQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var leafarrangement in queryLeafArrangement) { leafArrangementeQuery = leafArrangementeQuery.Or(x => x.leafarrangement.Contains(leafarrangement.SearchString1)); }
+                overallQuery = overallQuery.And(leafArrangementeQuery);
+            }
+
+            // Add selected Flower Color characteristics
+            var queryPlantSize = selectCritList.Where(x => x.Characteristic.Contains("plantsize"));
+            if (queryPlantSize.Count() > 0)
+            {
+                var plantSizeQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var plantsize in queryPlantSize) { plantSizeQuery = plantSizeQuery.Or(x => x.plantsize.Contains(plantsize.SearchString1)); }
+                overallQuery = overallQuery.And(plantSizeQuery);
+            }
+
+            return overallQuery;
         }
 
     }

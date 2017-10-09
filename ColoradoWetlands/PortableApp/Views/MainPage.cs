@@ -128,6 +128,15 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
             innerContainer.Children.Add(whatAreWetlandsButton, 0, 3);
 
+            Button wetlandTypesButton = new Button
+            {
+                Style = Application.Current.Resources["semiTransparentButton"] as Style,
+                Text = "WETLAND TYPES"
+            };
+            wetlandTypesButton.Clicked += ToWetlandTypes;
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
+            innerContainer.Children.Add(wetlandTypesButton, 0, 4);
+
             Button wetlandPlantsButton = new Button
             {
                 Style = Application.Current.Resources["semiTransparentButton"] as Style,
@@ -135,7 +144,7 @@ namespace PortableApp
             };
             wetlandPlantsButton.Clicked += ToWetlandPlants;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(wetlandPlantsButton, 0, 4);
+            innerContainer.Children.Add(wetlandPlantsButton, 0, 5);
 
             Button wetlandMapsButton = new Button
             {
@@ -144,7 +153,7 @@ namespace PortableApp
             };
             wetlandMapsButton.Clicked += ToWetlandMaps;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(wetlandMapsButton, 0, 5);
+            innerContainer.Children.Add(wetlandMapsButton, 0, 6);
 
             Button acknowledgementsButton = new Button
             {
@@ -153,7 +162,7 @@ namespace PortableApp
             };
             acknowledgementsButton.Clicked += ToAcknowledgements;
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(acknowledgementsButton, 0, 6);
+            innerContainer.Children.Add(acknowledgementsButton, 0, 7);
 
             // Switch for downloading images
             StackLayout downloadImagesLayout = new StackLayout { Orientation = StackOrientation.Horizontal, Margin = new Thickness(20, 0, 20, 0), HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
@@ -163,7 +172,7 @@ namespace PortableApp
             downloadImagesLayout.Children.Add(downloadImagesLabel);
             downloadImagesLayout.Children.Add(downloadImagesSwitch);            
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
-            innerContainer.Children.Add(downloadImagesLayout, 0, 7);
+            innerContainer.Children.Add(downloadImagesLayout, 0, 8);
 
             // Add empty space
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
@@ -186,7 +195,7 @@ namespace PortableApp
             bottomIcons.Children.Add(CSUButton, 5, 0);
 
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(75) });
-            innerContainer.Children.Add(bottomIcons, 0, 9);
+            innerContainer.Children.Add(bottomIcons, 0, 10);
 
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);

@@ -254,7 +254,7 @@ namespace PortableApp
                     BorderRadius = Device.OnPlatform(0, 1, 0)
                 };
                 Device.OnPlatform(iOS: () => help.Margin = new Thickness(5, 5, 5, 5));
-                help.Clicked += ToHowToUse;
+                help.Clicked += ToPlantsHelp;
                 gridLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30) });
                 gridLayout.Children.Add(help, 3, 0);
             }
@@ -354,19 +354,23 @@ namespace PortableApp
         public async void ToHowToUse(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new HTMLPage("Introduction.html", "INTRODUCTION"));
+            await Navigation.PushAsync(new HTMLPage("HowToUse.html", "HOW TO USE"));
+        }
+        public async void ToPlantsHelp(object sender, EventArgs e)
+        {
+            ChangeButtonColor(sender, e);
+            await Navigation.PushAsync(new HTMLPage("HowToUsePlants.html", "HOW TO USE"));
+        }
+        public async void ToMapsHelp(object sender, EventArgs e)
+        {
+            ChangeButtonColor(sender, e);
+            await Navigation.PushAsync(new HTMLPage("HowToUseMaps.html", "HOW TO USE"));
         }
 
         public async void ToWetlandPlants(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
             await Navigation.PushAsync(new WetlandPlantsPage());
-        }
-
-        public async void ToPlantsHelp(object sender, EventArgs e)
-        {
-            ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new HTMLPage("PlantsHelp.html", "PLANTS HELP"));
         }
 
         public async void ToGlossary(object sender, EventArgs e)
@@ -393,13 +397,14 @@ namespace PortableApp
             await Navigation.PushModalAsync(new WetlandMapsLegendPage());
         }
 
-        public async void ToMapsHelp(object sender, EventArgs e)
+        public async void ToWhatAreWetlands(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new HTMLPage("MapsHelp.html", "MAPS HELP"));
+            await Navigation.PushAsync(new HTMLPage("WhatAreWetlands.html", "WHAT ARE WETLANDS?"));
+            //await Navigation.PushAsync(new WhatAreWetlandsPage());
         }
 
-        public async void ToWhatAreWetlands(object sender, EventArgs e)
+        public async void ToWetlandTypes(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
             await Navigation.PushAsync(new WhatAreWetlandsPage());

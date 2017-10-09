@@ -55,11 +55,23 @@ namespace PortableApp
             }            
         }
 
+        public async Task<List<WetlandSearch>> GetQueryableSearchCriteriaAsync()
+        {
+            return await connAsync.Table<WetlandSearch>().Where(x => x.Query == true).ToListAsync();
+        }
+
         // Seed database with Search Criteria
         public void SeedDB()
         {
-            conn.Insert(new WetlandSearch() { Name = "Poaceae", Query = false, Column1 = "family", SearchString1 = "Poaceae" });
-            conn.Insert(new WetlandSearch() { Name = "Bentgrass", Query = false, Column1 = "commonname", SearchString1 = "Bentgrass" });
+            conn.Insert(new WetlandSearch() { Characteristic = "color-Yellow", Name = "Yellow", Query = false, Column1 = "color", SearchString1 = "yellow" });
+            conn.Insert(new WetlandSearch() { Characteristic = "color-Blue", Name = "Blue", Query = false, Column1 = "color", SearchString1 = "blue" });
+            conn.Insert(new WetlandSearch() { Characteristic = "color-Red", Name = "Red", Query = false, Column1 = "color", SearchString1 = "red" });
+            conn.Insert(new WetlandSearch() { Characteristic = "color-Green", Name = "Green", Query = false, Column1 = "color", SearchString1 = "green" });
+            conn.Insert(new WetlandSearch() { Characteristic = "color-Orange", Name = "Orange", Query = false, Column1 = "color", SearchString1 = "orange" });
+            conn.Insert(new WetlandSearch() { Characteristic = "color-Pink", Name = "Pink", Query = false, Column1 = "color", SearchString1 = "pink" });
+            conn.Insert(new WetlandSearch() { Characteristic = "color-Purple", Name = "Purple", Query = false, Column1 = "color", SearchString1 = "purple" });
+            conn.Insert(new WetlandSearch() { Characteristic = "color-Brown", Name = "Brown", Query = false, Column1 = "color", SearchString1 = "brown" });
+
         }
     }
 }

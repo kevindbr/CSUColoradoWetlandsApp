@@ -96,13 +96,14 @@ namespace PortableApp
                 Style = Application.Current.Resources["plantFilterButton"] as Style,
                 Text = "Search"
             };
+            /*
             var SearchPage = new WetlandPlantsSearchPage();
             searchFilter.Clicked += async (s, e) => { await Navigation.PushModalAsync(SearchPage); };
             SearchPage.InitRunSearch += HandleRunSearch;
             SearchPage.InitCloseSearch += HandleCloseSearch;
             plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             plantFilterGroup.Children.Add(searchFilter, 2, 0);
-
+            */
             BoxView divider2 = new BoxView { HeightRequest = 40, WidthRequest = 1, BackgroundColor = Color.White };
             plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1) });
             plantFilterGroup.Children.Add(divider2, 3, 0);
@@ -224,9 +225,9 @@ namespace PortableApp
                 // Construct grid, the cell container
                 Grid cell = new Grid
                 {
-                    BackgroundColor = Color.FromHex("88000000"),
+                    BackgroundColor = Color.FromHex("DD000000"),
                     Padding = new Thickness(20, 5, 20, 5),
-                    Margin = new Thickness(0, 0, 0, 10)
+                    Margin = new Thickness(0, 0, 0, 2)
                 };
                 cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.3, GridUnitType.Star) });
                 cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
@@ -316,7 +317,7 @@ namespace PortableApp
 
         private async void HandleRunSearch(object sender, EventArgs e)
         {
-            plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetPlantsBySearchCriteria());
+            plants = await App.WetlandPlantRepo.FilterPlantsBySearchCriteria();
             wetlandPlantsList.ItemsSource = plants;
             cameFromSearch = true;
             await App.Current.MainPage.Navigation.PopModalAsync();

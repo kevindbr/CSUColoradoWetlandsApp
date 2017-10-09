@@ -1,5 +1,6 @@
 ﻿using PortableApp.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Xamarin.Forms;
@@ -12,8 +13,14 @@ namespace PortableApp
         public EventHandler InitRunSearch;
         public EventHandler InitCloseSearch;
 
+        public ObservableCollection<WetlandPlant> plants;
         public ObservableCollection<WetlandSearch> searchCriteriaDB;
         public ObservableCollection<SearchCharacteristic> searchCriteria;
+
+
+        StackLayout leafTypesLayout;
+        List<SearchCharacteristic> leafTypes;
+        Button searchButton;
 
         public WetlandPlantsSearchPage()
         {
@@ -46,18 +53,40 @@ namespace PortableApp
             typesOfPlantsLayout.Children.Add(posceaeFamily);
 
             searchFilters.Children.Add(typesOfPlantsLayout);
-
+            
             // Add Type of Plant
-            Label commonnameLabel = new Label { Text = "Common Name:", Style = Application.Current.Resources["sectionHeader"] as Style };
-            searchFilters.Children.Add(commonnameLabel);
+            Label flowerColorLabel = new Label { Text = "Flower Color:", Style = Application.Current.Resources["sectionHeader"] as Style };
+            searchFilters.Children.Add(flowerColorLabel);
 
-            StackLayout commonnameLayout = new StackLayout { Orientation = StackOrientation.Horizontal, Spacing = 5 };
+            StackLayout flowerColorLayout = new StackLayout { Orientation = StackOrientation.Horizontal, Spacing = 5 };
 
-            ImageButton bentgrassCommonname = searchCriteria[1];
-            bentgrassCommonname.Clicked += ProcessSearchFilter;
-            commonnameLayout.Children.Add(bentgrassCommonname);
+            SearchCharacteristic yellowFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Yellow");
+            flowerColorLayout.Children.Add(yellowFlowerColor);
 
-            searchFilters.Children.Add(commonnameLayout);
+            SearchCharacteristic blueFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Blue");
+            flowerColorLayout.Children.Add(blueFlowerColor);
+
+            SearchCharacteristic redFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Red");
+            flowerColorLayout.Children.Add(redFlowerColor);
+
+            SearchCharacteristic orangeFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Orange");
+            flowerColorLayout.Children.Add(orangeFlowerColor);
+
+            SearchCharacteristic pinkFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Pink");
+            flowerColorLayout.Children.Add(pinkFlowerColor);
+
+            SearchCharacteristic greenFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Green");
+            flowerColorLayout.Children.Add(greenFlowerColor);
+
+            SearchCharacteristic purpleFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Purple");
+            flowerColorLayout.Children.Add(purpleFlowerColor);
+
+            SearchCharacteristic brownFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Brown");
+            flowerColorLayout.Children.Add(brownFlowerColor);
+
+
+
+            searchFilters.Children.Add(flowerColorLayout);
 
             innerContainer.Children.Add(searchFilters, 0, 0);
 
@@ -102,6 +131,7 @@ namespace PortableApp
 
         private async void ProcessSearchFilter(object sender, EventArgs e)
         {
+            /*
             var button = (SearchCharacteristic)sender;
             var correspondingDBRecord = (WetlandSearch)sender;
             if (button.Query == true)
@@ -114,7 +144,25 @@ namespace PortableApp
                 correspondingDBRecord.Query = true;
                 button.BorderWidth = 1;
             }
+            await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(correspondingDBRecord);*/
+            // Update record in database and add or remove border
+            SearchCharacteristic button = (SearchCharacteristic)sender;
+            WetlandSearch correspondingDBRecord = searchCriteriaDB.First(x => x.Characteristic == button.Characteristic);
+            if (button.Query == true)
+            {
+                correspondingDBRecord.Query = button.Query = false;
+                button.BorderWidth = 0;
+            }
+            else if (button.Query == false)
+            {
+                correspondingDBRecord.Query = button.Query = true;
+                button.BorderWidth = 1;
+            }
             await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(correspondingDBRecord);
+
+            plants = await App.WetlandPlantRepo.FilterPlantsBySearchCriteria();
+            searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
+
         }
 
         private void RunSearch(object sender, EventArgs e)
@@ -133,10 +181,15 @@ namespace PortableApp
             foreach (WetlandSearch searchItem in searchCriteriaDB)
             {
                 SearchCharacteristic item = new SearchCharacteristic();
+                item.BindingContext = searchItem;
+                item.SetBinding(SearchCharacteristic.CharacteristicProperty, new Binding("Characteristic"));
                 item.SetBinding(SearchCharacteristic.TextProperty, new Binding("Name"));
+                item.SetBinding(SearchCharacteristic.ImageProperty, new Binding("IconFileName"));
                 item.SetBinding(SearchCharacteristic.QueryProperty, new Binding("Query"));
                 item.SetBinding(SearchCharacteristic.Column1Property, new Binding("Column1"));
                 item.SetBinding(SearchCharacteristic.SearchString1Property, new Binding("SearchString1"));
+                item.Clicked += ProcessSearchFilter;
+                item.BorderWidth = item.Query ? 1 : 0;
                 searchCriteria.Add(item);
             }            
             return searchCriteria;
