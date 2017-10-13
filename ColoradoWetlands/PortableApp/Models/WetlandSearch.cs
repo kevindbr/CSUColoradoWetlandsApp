@@ -10,6 +10,7 @@ namespace PortableApp.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
+        [Unique]
         public string Characteristic { get; set; }
         public string Name { get; set; }
         public bool? Query { get; set; }

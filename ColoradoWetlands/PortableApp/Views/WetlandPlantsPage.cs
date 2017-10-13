@@ -96,14 +96,14 @@ namespace PortableApp
                 Style = Application.Current.Resources["plantFilterButton"] as Style,
                 Text = "Search"
             };
-            /*
+            
             var SearchPage = new WetlandPlantsSearchPage();
             searchFilter.Clicked += async (s, e) => { await Navigation.PushModalAsync(SearchPage); };
             SearchPage.InitRunSearch += HandleRunSearch;
             SearchPage.InitCloseSearch += HandleCloseSearch;
             plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             plantFilterGroup.Children.Add(searchFilter, 2, 0);
-            */
+            
             BoxView divider2 = new BoxView { HeightRequest = 40, WidthRequest = 1, BackgroundColor = Color.White };
             plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1) });
             plantFilterGroup.Children.Add(divider2, 3, 0);

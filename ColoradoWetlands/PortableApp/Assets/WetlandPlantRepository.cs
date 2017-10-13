@@ -124,6 +124,13 @@ namespace PortableApp
 
         }
 
+        // return a list of WetlandPlants saved to the WetlandPlant table in the database
+        public async Task<ObservableCollection<WetlandPlant>> GetAllWetlandPlantsAsync()
+        {
+            List<WetlandPlant> list = await connAsync.GetAllWithChildrenAsync <WetlandPlant>();
+            return new ObservableCollection<WetlandPlant>(list);
+        }
+
         // Construct Predicate for plants query, filtering based on selected criteria
         // Solution taken from http://www.albahari.com/nutshell/predicatebuilder.aspx
         private Expression<Func<WetlandPlant, bool>> ConstructPredicate(List<WetlandSearch> selectCritList)
