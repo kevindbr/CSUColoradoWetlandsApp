@@ -22,6 +22,7 @@ namespace PortableApp
         public static WetlandTypeRepository WetlandTypeRepo { get; private set; }
         public static WetlandSettingRepository WetlandSettingsRepo { get; private set; }
         public static WetlandSearchRepository WetlandSearchRepo { get; private set; }
+        public static WetlandPlantFruitsRepository WetlandPlantFruitsRepo { get; private set; }
 
         public App(ISQLitePlatform sqliteplatform, string dbPath)
         {
@@ -38,6 +39,7 @@ namespace PortableApp
             WetlandPlantRepo = new WetlandPlantRepository();
             WetlandPlantImageRepo = new WetlandPlantImageRepository();
             WetlandPlantSimilarSpeciesRepo = new WetlandPlantSimilarSpeciesRepository();
+            WetlandPlantFruitsRepo = new WetlandPlantFruitsRepository();
             WetlandPlantReferenceRepo = new WetlandPlantReferenceRepository();
             WetlandMapOverlayCoordinateRepo = new WetlandMapOverlayCoordinateRepository();
             WetlandMapOverlayRepo = new WetlandMapOverlayRepository();
@@ -56,7 +58,7 @@ namespace PortableApp
 
             App.WetlandSettingsRepo.AddOrUpdateSetting(new WetlandSetting { name = "Sort Field", valuetext = "Sort", valueint = 0 });
         }
-
+        /*
         protected override void OnSleep()
         {
             // Handle when your app sleeps
@@ -67,5 +69,6 @@ namespace PortableApp
         {
             // Handle when your app resumes
         }
+        */
     }
 }

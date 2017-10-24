@@ -113,7 +113,16 @@ namespace PortableApp
             if (selectCritList.Count() > 0)
             {
                 var predicate = ConstructPredicate(selectCritList);
-                plants = conn.Table<WetlandPlant>().AsQueryable().Where(predicate).ToList();
+                try
+                {
+                    plants = conn.Table<WetlandPlant>().AsQueryable().Where(predicate).ToList();
+                }
+                catch(NullReferenceException e)
+                {
+                    List<WetlandPlant> emptyPlants = new List<WetlandPlant>();
+                    plants = emptyPlants;
+                }
+
             }
             else
             {
@@ -142,16 +151,16 @@ namespace PortableApp
             if (queryColors.Count() > 0)
             {
                 var colorQuery = PredicateBuilder.False<WetlandPlant>();
-                foreach (var color in queryColors) { colorQuery = colorQuery.Or(x => x.color.Contains(color.SearchString1)); }
+                foreach (var color in queryColors) { colorQuery = colorQuery.Or(x => x.color == (color.SearchString1)); }
                 overallQuery = overallQuery.And(colorQuery);
             }
-
-            // Add selected Flower Color characteristics
+            
+            //Add selected Flower Color characteristics
             var queryLeafDivision = selectCritList.Where(x => x.Characteristic.Contains("leafdivision"));
             if (queryLeafDivision.Count() > 0)
             {
                 var leafdivisionQuery = PredicateBuilder.False<WetlandPlant>();
-                foreach (var leafdivision in queryLeafDivision) { leafdivisionQuery = leafdivisionQuery.Or(x => x.leafdivision.Contains(leafdivision.SearchString1)); }
+                foreach (var leafdivision in queryLeafDivision) { leafdivisionQuery = leafdivisionQuery.Or(x => x.leafdivision == (leafdivision.SearchString1)); }
                 overallQuery = overallQuery.And(leafdivisionQuery);
             }
 
@@ -160,7 +169,7 @@ namespace PortableApp
             if (queryLeafShape.Count() > 0)
             {
                 var leafShapeQuery = PredicateBuilder.False<WetlandPlant>();
-                foreach (var leafshape in queryLeafShape) { leafShapeQuery = leafShapeQuery.Or(x => x.leafshape.Contains(leafshape.SearchString1)); }
+                foreach (var leafshape in queryLeafShape) { leafShapeQuery = leafShapeQuery.Or(x => x.leafshape ==  (leafshape.SearchString1)); }
                 overallQuery = overallQuery.And(leafShapeQuery);
             }
 
@@ -169,7 +178,7 @@ namespace PortableApp
             if (queryLeafArrangement.Count() > 0)
             {
                 var leafArrangementeQuery = PredicateBuilder.False<WetlandPlant>();
-                foreach (var leafarrangement in queryLeafArrangement) { leafArrangementeQuery = leafArrangementeQuery.Or(x => x.leafarrangement.Contains(leafarrangement.SearchString1)); }
+                foreach (var leafarrangement in queryLeafArrangement) { leafArrangementeQuery = leafArrangementeQuery.Or(x => x.leafarrangement == (leafarrangement.SearchString1)); }
                 overallQuery = overallQuery.And(leafArrangementeQuery);
             }
 
@@ -178,9 +187,11 @@ namespace PortableApp
             if (queryPlantSize.Count() > 0)
             {
                 var plantSizeQuery = PredicateBuilder.False<WetlandPlant>();
-                foreach (var plantsize in queryPlantSize) { plantSizeQuery = plantSizeQuery.Or(x => x.plantsize.Contains(plantsize.SearchString1)); }
+                foreach (var plantsize in queryPlantSize) { plantSizeQuery = plantSizeQuery.Or(x => x.plantsize == (plantsize.SearchString1)); }
                 overallQuery = overallQuery.And(plantSizeQuery);
             }
+            
+            //if(overallQuery)
 
             return overallQuery;
         }

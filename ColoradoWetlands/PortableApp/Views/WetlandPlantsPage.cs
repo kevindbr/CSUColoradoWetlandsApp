@@ -33,6 +33,7 @@ namespace PortableApp
 
         protected override void OnAppearing()
         {
+         
             // Get filtered plant list if came from search
             if (!cameFromSearch)
             {

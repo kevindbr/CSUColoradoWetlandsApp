@@ -366,10 +366,11 @@ namespace PortableApp
             ChangeButtonColor(sender, e);
             await Navigation.PushAsync(new HTMLPage("HowToUseMaps.html", "HOW TO USE"));
         }
-
+        
         public async void ToWetlandPlants(object sender, EventArgs e)
         {
-            ChangeButtonColor(sender, e);
+           
+            ChangeButtonColor(sender, e);       
             await Navigation.PushAsync(new WetlandPlantsPage());
         }
 

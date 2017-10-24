@@ -73,6 +73,23 @@ namespace PortableApp.Models
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<WetlandPlantSimilarSpecies> SimilarSpecies { get; set; }
 
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<WetlandPlantFruits> fruits { get; set; }
+        /*
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<WetlandPlantSize> size { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<WetlandPlantShape> shape { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<WetlandPlantArrangement> arrangement { get; set; }
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<WetlandPlantDivision> division { get; set; }
+        */
+
+
         public IFolder rootFolder { get { return FileSystem.Current.LocalStorage; } }
 
         public string ThumbnailPathDownloaded { get { return rootFolder.Path + "/Images/" + plantscode + "_icon.jpg"; } }

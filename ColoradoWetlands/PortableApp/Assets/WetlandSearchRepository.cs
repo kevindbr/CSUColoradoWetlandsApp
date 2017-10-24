@@ -94,7 +94,7 @@ namespace PortableApp
             conn.Insert(new WetlandSearch() { Characteristic = "plantsize-Small", Name = "Small", Query = false, Column1 = "plantsize", SearchString1 = "small" });
             conn.Insert(new WetlandSearch() { Characteristic = "plantsize-Medium", Name = "Medium", Query = false, Column1 = "plantsize", SearchString1 = "medium" });
             conn.Insert(new WetlandSearch() { Characteristic = "plantsize-Large", Name = "Large", Query = false, Column1 = "plantsize", SearchString1 = "large" });
-
+            
         }
     }
 }

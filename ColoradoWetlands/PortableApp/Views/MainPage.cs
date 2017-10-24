@@ -91,10 +91,23 @@ namespace PortableApp
         }
 
         public MainPage()
-        {
+        {/*
+            var activityIndicator = new ActivityIndicator
+            {
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                Color = Color.Black,
+            };
+            activityIndicator.IsRunning = true;
+            activityIndicator.IsEnabled = true;
+            activityIndicator.BindingContext = this;
+            activityIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, "IsBusy");
+            activityIndicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsBusy");
+            */
+
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);
             AbsoluteLayout pageContainer = ConstructPageContainer();
+           
 
             // Initialize grid for inner container
             innerContainer = new Grid { Padding = new Thickness(0, Device.OnPlatform(10, 0, 0), 0, 0) };
