@@ -25,24 +25,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Colorado Wetlands</string>
 	<key>CFBundleVersion</key>
-	<string>1.07</string>
-	<key>CFBundleIconFiles</key>
-	<array>
-		<string>Icon-72.png</string>
-		<string>Icon@2x.png</string>
-		<string>Icon.png</string>
-		<string>Icon-60@2x.png</string>
-		<string>Icon-76.png</string>
-		<string>Icon-76@2x.png</string>
-		<string>Default.png</string>
-		<string>Default@2x.png</string>
-		<string>Default-568h@2x.png</string>
-		<string>Default-Portrait.png</string>
-		<string>Default-Portrait@2x.png</string>
-		<string>Icon-Small-40@2x.png</string>
-		<string>Icon-Small.png</string>
-		<string>Icon-Small@2x.png</string>
-	</array>
+	<string>1.09.7</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Fonts/Montserrat-Light.ttf</string>
@@ -78,5 +61,11 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>XSLaunchImageAssets</key>
+	<string>Assets.xcassets/LaunchImage.launchimage</string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
 </dict>
 </plist>
