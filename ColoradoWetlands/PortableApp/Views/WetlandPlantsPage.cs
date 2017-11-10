@@ -33,11 +33,11 @@ namespace PortableApp
 
         protected override void OnAppearing()
         {
-         
+            IsLoading = true;
             // Get filtered plant list if came from search
             if (!cameFromSearch)
             {
-                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
                 if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
                 ChangeFilterColors(browseFilter);
                 base.OnAppearing();
@@ -58,6 +58,7 @@ namespace PortableApp
                 sortPicker.SelectedIndex = (int)sortField.valueint;
                 FilterJumpList(sortButton.Text);
             }
+            IsLoading = false;
         }
 
         public WetlandPlantsPage()
@@ -177,7 +178,8 @@ namespace PortableApp
             };
 
             // Add Plants ListView
-            wetlandPlantsList = new ListView { BackgroundColor = Color.Transparent, RowHeight = 100 };
+            wetlandPlantsList = new ListView(ListViewCachingStrategy.RecycleElement) { BackgroundColor = Color.Transparent, RowHeight = 100 };
+           
             wetlandPlantsList.ItemTemplate = CellTemplate();
             wetlandPlantsList.ItemSelected += OnItemSelected;
             wetlandPlantsList.SeparatorVisibility = SeparatorVisibility.None;
@@ -293,9 +295,9 @@ namespace PortableApp
             Button filter = (Button)sender;
             ChangeFilterColors(filter);
             if (filter.Text == "Browse")
-                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
             else if (filter.Text == "Favorites")
-                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetFavoritePlants());
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetFavoritePlants());
             
             wetlandPlantsList.ItemsSource = plants;
             FilterJumpList(sortButton.Text);
@@ -318,7 +320,7 @@ namespace PortableApp
 
         private async void HandleRunSearch(object sender, EventArgs e)
         {
-            plants = await App.WetlandPlantRepo.FilterPlantsBySearchCriteria();
+            plants = await App.WetlandPlantRepoLocal.FilterPlantsBySearchCriteria();
             wetlandPlantsList.ItemsSource = plants;
             cameFromSearch = true;
             await App.Current.MainPage.Navigation.PopModalAsync();
@@ -333,9 +335,9 @@ namespace PortableApp
         private void SearchBarOnChange(object sender, TextChangedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(e.NewTextValue))
-                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
             else
-                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.WetlandPlantsQuickSearch(e.NewTextValue));
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.WetlandPlantsQuickSearch(e.NewTextValue));
 
             wetlandPlantsList.ItemsSource = plants;
         }

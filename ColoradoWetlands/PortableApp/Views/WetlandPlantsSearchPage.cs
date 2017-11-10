@@ -21,7 +21,7 @@ namespace PortableApp
 
         public WetlandPlantsSearchPage()
         {
-            plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants());
+            plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
             searchCriteriaDB = new ObservableCollection<WetlandSearch>(App.WetlandSearchRepo.GetAllWetlandSearchCriteria());
             searchCriteria = SearchCharacteristicsCollection();
 
@@ -243,7 +243,7 @@ namespace PortableApp
                 correspondingDBRecord.Query = false;
                 await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(correspondingDBRecord);
             }
-            plants = await App.WetlandPlantRepo.GetAllWetlandPlantsAsync();
+            plants = await App.WetlandPlantRepoLocal.GetAllWetlandPlantsAsync();
             searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
         }
 
@@ -278,7 +278,7 @@ namespace PortableApp
             }
             await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(correspondingDBRecord);
 
-            plants = await App.WetlandPlantRepo.FilterPlantsBySearchCriteria();
+            plants = await App.WetlandPlantRepoLocal.FilterPlantsBySearchCriteria();
             searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
 
         }

@@ -26,16 +26,17 @@ namespace PortableApp
         private WetlandSetting datePlantDataUpdatedOnServer;
         private List<WetlandSetting> imageFilesToDownload = new List<WetlandSetting>();
         private IEnumerable<WetlandSetting> imageFileSettingsOnServer;
-
+ 
         protected override async void OnAppearing()
         {
+            IsLoading = true;
             // Initiate variables
             isConnected = Connectivity.checkConnection();
             isConnectedToWiFi = Connectivity.checkWiFiConnection();
             downloadImagesSetting = await App.WetlandSettingsRepo.GetSettingAsync("Download Images");
             downloadImages = (bool)downloadImagesSetting.valuebool;
             downloadImagesSwitch.IsToggled = downloadImages;
-            numberOfPlants = new List<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants()).Count;
+            numberOfPlants = new List<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants()).Count;
 
             // if connected to WiFi and updates are needed, show download button
             if (isConnected && !canceledDownload && !finishedDownload)
@@ -86,6 +87,8 @@ namespace PortableApp
                 if (numberOfPlants == 0)
                     await DisplayAlert("Connection Needed", "Please connect to WiFi or cell network to download plant data and images", "OK");
             }
+
+            IsLoading = false;
 
             base.OnAppearing();
         }
