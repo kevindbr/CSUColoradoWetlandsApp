@@ -24,6 +24,30 @@ namespace PortableApp
         public static WetlandSearchRepository WetlandSearchRepo { get; private set; }
         public static WetlandPlantFruitsRepository WetlandPlantFruitsRepo { get; private set; }
 
+        public static WetlandPlantRepositoryLocal WetlandPlantRepoLocal { get; private set; }
+        public static WetlandPlantImageRepositoryLocal WetlandPlantImageRepoLocal { get; private set; }
+       // public static WetlandPlantSimilarSpeciesRepositoryLocal WetlandPlantSimilarSpeciesRepoLocal { get; private set; }
+        public static WetlandPlantReferenceRepositoryLocal WetlandPlantReferenceRepoLocal { get; private set; }
+       // public static WetlandMapOverlayCoordinateRepositoryLocal WetlandMapOverlayCoordinateRepoLocal { get; private set; }
+        public static WetlandMapOverlayRepositoryLocal WetlandMapOverlayRepoLocal { get; private set; }
+        public static WetlandGlossaryRepositoryLocal WetlandGlossaryRepoLocal { get; private set; }
+        public static WetlandTypeRepositoryLocal WetlandTypeRepoLocal { get; private set; }
+        public static WetlandSettingRepositoryLocal WetlandSettingsRepoLocal { get; private set; }
+        public static WetlandSearchRepositoryLocal WetlandSearchRepoLocal { get; private set; }
+        public static WetlandPlantFruitsRepositoryLocal WetlandPlantFruitsRepoLocal { get; private set; }
+
+        /*
+         New starting workflow
+
+         1.)Check if we have local plants
+            a.) We do
+            1.) Check last updated column local mobile DB vs on remote DB (Postgres DB) 
+                a) If different 
+                1.) Update their data? 
+            b.) We don't
+            1.) Fetch all 
+
+             */
         public App(ISQLitePlatform sqliteplatform, string dbPath)
         {
             InitializeComponent();
@@ -47,6 +71,9 @@ namespace PortableApp
             WetlandTypeRepo = new WetlandTypeRepository();
             WetlandSettingsRepo = new WetlandSettingRepository();
             WetlandSearchRepo = new WetlandSearchRepository();
+
+            WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(WetlandPlantRepo.GetAllWetlandPlants());
+
 
             // Set MainPage
             this.MainPage = new NavigationPage(new MainPage());
