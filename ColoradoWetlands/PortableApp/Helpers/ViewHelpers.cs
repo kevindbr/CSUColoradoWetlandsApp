@@ -3,6 +3,7 @@ using PortableApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,8 +12,30 @@ using Xamarin.Forms;
 
 namespace PortableApp
 {
-    public class ViewHelpers : ContentPage
+    public class ViewHelpers : ContentPage, INotifyPropertyChanged
     {
+
+        private bool isLoading;
+        public bool IsLoading
+        {
+            get
+            {
+                return this.isLoading;
+            }
+
+            set
+            {
+                this.isLoading = value;
+                RaisePropertyChanged("IsLoading");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged(string pName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(pName));
+        }
 
         public ExternalDBConnection externalConnection = new ExternalDBConnection();
         public bool downloadImages = (bool)App.WetlandSettingsRepo.GetSetting("Download Images").valuebool;
@@ -25,12 +48,31 @@ namespace PortableApp
         public AbsoluteLayout ConstructPageContainer()
         {
             AbsoluteLayout pageContainer = new AbsoluteLayout { BackgroundColor = Color.Black };
+
             Image backgroundImage = new Image {
                 Source = ImageSource.FromResource("PortableApp.Resources.Images.background.jpg"),
                 Aspect = Aspect.AspectFill,
                 Opacity = 0.6
             };
+
+            var indicator = new ActivityIndicator()
+            {
+                HorizontalOptions = LayoutOptions.CenterAndExpand
+             
+            };
+
+            indicator.IsVisible = true;
+            indicator.IsEnabled = true;
+            indicator.IsRunning = true;
+            indicator.Color = Color.Blue;
+
+           // indicator.SetBinding(ActivityIndicator.IsVisibleProperty, "isLoading", BindingMode.OneWay);
+           // indicator.SetBinding(ActivityIndicator.IsRunningProperty, "isLoading", BindingMode.OneWay);
+
             pageContainer.Children.Add(backgroundImage, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
+            pageContainer.Children.Add(indicator, new Rectangle(0,0,1,1), AbsoluteLayoutFlags.All);
+
+
             return pageContainer;
         }
 
