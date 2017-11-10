@@ -61,10 +61,11 @@ namespace PortableApp
              
             };
 
-            indicator.IsVisible = true;
-            indicator.IsEnabled = true;
-            indicator.IsRunning = true;
+          //  indicator.IsVisible = isLoading;
+          //  indicator.IsEnabled = true;
+           // indicator.IsRunning = true;
             indicator.Color = Color.Blue;
+           // indicator.SetBinding(indicator.IsVisible, "isLoading");
 
            // indicator.SetBinding(ActivityIndicator.IsVisibleProperty, "isLoading", BindingMode.OneWay);
            // indicator.SetBinding(ActivityIndicator.IsRunningProperty, "isLoading", BindingMode.OneWay);
