@@ -74,7 +74,7 @@ namespace PortableApp.Models
         public List<WetlandPlantSimilarSpecies> SimilarSpecies { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<WetlandPlantFruits> fruits { get; set; }
+       // public List<WetlandPlantFruits> fruits { get; set; }
         /*
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<WetlandPlantSize> size { get; set; }
