@@ -13,6 +13,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Core;
 using System.Threading;
 
+
 namespace PortableApp
 {
     public partial class DownloadWetlandPlantsPage : ViewHelpers
@@ -26,7 +27,7 @@ namespace PortableApp
         ObservableCollection<WetlandPlant> plants;
         ObservableCollection<WetlandGlossary> terms;
         ProgressBar progressBar = new ProgressBar();
-        Label downloadLabel = new Label { Text = "", TextColor = Color.White, FontSize = 18, HorizontalTextAlignment = TextAlignment.Center };
+        Label downloadLabel = new Label { Text = "", TextColor = Color.White, HeightRequest = 40, FontSize = 18, HorizontalTextAlignment = TextAlignment.Center };
         Button cancelButton;
         CancellationTokenSource tokenSource;
         CancellationToken token;
@@ -51,10 +52,16 @@ namespace PortableApp
                 await UpdatePlants(token);
 
             // Save images to the database
-            if (imageFilesToDownload.Count > 0 && downloadImages && !token.IsCancellationRequested)
-                await UpdatePlantImages(token);
+         //   if (imageFilesToDownload.Count > 0 && downloadImages && !token.IsCancellationRequested)
+         //       await UpdatePlantImages(token);
 
-            FinishDownload();
+
+
+            if (token.IsCancellationRequested)
+                CancelDownload();
+
+            else
+                FinishDownload();
         }
 
         public DownloadWetlandPlantsPage(bool updatePlantsNow, WetlandSetting dateLocalPlantDataUpdated, WetlandSetting datePlantDataUpdated, List<WetlandSetting> imageFilesNeedingDownloaded, bool downloadImagesFromServer)
@@ -114,11 +121,18 @@ namespace PortableApp
             InitCancelDownload?.Invoke(this, EventArgs.Empty);
         }
 
+        private void CancelDownload()
+        {
+            tokenSource.Cancel();
+            InitCancelDownload?.Invoke(this, EventArgs.Empty);
+        }
+
         // Get plants from MobileApi server and save locally
         public async Task UpdatePlants(CancellationToken token)
         {
             try
             {
+
                 downloadLabel.Text = "Downloading Plants...";
                 int plantsSaved = 0;
                 foreach (var plant in plants)
@@ -127,6 +141,8 @@ namespace PortableApp
                     await App.WetlandPlantRepo.AddOrUpdatePlantAsync(plant);
                     plantsSaved += 1;
                     await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
+                    Double percent = (double)plantsSaved / (plants.Count + terms.Count);
+                    downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent* 100) + "%";
                 }
                 foreach (var term in terms)
                 {
@@ -134,16 +150,33 @@ namespace PortableApp
                     await App.WetlandGlossaryRepo.AddOrUpdateTermAsync(term);
                     plantsSaved += 1;
                     await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
+                    Double percent = (double)plantsSaved / (plants.Count + terms.Count);
+                    downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent* 100)+"%";
                 }
+
+                downloadLabel.Text = "Download Finished!";
                 datePlantDataUpdatedLocally.valuetimestamp = datePlantDataUpdatedOnServer.valuetimestamp;
                 await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(datePlantDataUpdatedLocally);
+                App.WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(App.WetlandPlantRepo.GetAllWetlandPlants());
+                App.WetlandPlantFruitsRepoLocal = new WetlandPlantFruitsRepositoryLocal(App.WetlandPlantFruitsRepo.GetAllWetlandFruits());
+                App.WetlandPlantDivisionRepoLocal = new WetlandPlantDivisionRepositoryLocal(App.WetlandPlantDivisionRepo.GetAllDivisions());
+                App.WetlandPlantShapeRepoLocal = new WetlandPlantShapeRepositoryLocal(App.WetlandPlantShapeRepo.GetAllShapes());
+                App.WetlandPlantLeafArrangementRepoLocal = new WetlandPlantLeafArrangementRepositoryLocal(App.WetlandPlantLeafArrangementRepo.GetAllArrangements());
+                App.WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(App.WetlandPlantSizeRepo.GetAllPlantSizes());
+
+                var allImages = App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages();
+
+                await UpdatePlantImages(token);
+                App.WetlandPlantImageRepoLocal = new WetlandPlantImageRepositoryLocal(App.WetlandPlantImageRepo.GetAllWetlandPlantImages());
             }
             catch (OperationCanceledException e)
             {
+                downloadLabel.Text = "Download Canceled!";
                 Debug.WriteLine("Canceled UpdatePlants {0}", e.Message);
-            }
+            }            
             catch (Exception e)
             {
+                downloadLabel.Text = "Error While Downloading Database!";
                 Debug.WriteLine("ex {0}", e.Message);
             }
         }
@@ -194,10 +227,15 @@ namespace PortableApp
                                 StreamUtils.Copy(zipInputStream, localStream, buffer);
                             }
                             receivedBytes += zipEntry.Size;
-                            double percentage = (double)receivedBytes / (double)totalBytes;
+                            double percentage = (((double)receivedBytes / (double)totalBytes)) ;
                             await progressBar.ProgressTo(percentage, 1, Easing.Linear);
                             zipEntry = zipInputStream.GetNextEntry();
+                            downloadLabel.Text = "Downloading Images..."+ Math.Round(percentage * 100)+"%";
                         }
+
+                        downloadImages = true;
+                        await App.WetlandSettingsRepo.AddSettingAsync(new WetlandSetting { name = "ImagesZipFile", valuebool=true });
+
                         await App.WetlandSettingsRepo.AddSettingAsync(new WetlandSetting { name = "ImagesZipFile", valuetimestamp = imageFileToDownload.valuetimestamp, valuetext = imageFileToDownload.valuetext });
                     }
                 }

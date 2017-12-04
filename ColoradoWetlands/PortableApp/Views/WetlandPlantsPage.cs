@@ -8,6 +8,9 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using System.Linq;
 using System.Reflection;
+using FFImageLoading;
+using FFImageLoading.Forms;
+using PortableApp.Views;
 
 namespace PortableApp
 {
@@ -63,6 +66,7 @@ namespace PortableApp
 
         public WetlandPlantsPage()
         {
+            GC.Collect();
             // Initialize variables
             sortField = new WetlandSetting();
 
@@ -215,6 +219,7 @@ namespace PortableApp
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
+            GC.Collect();
         }
 
         private DataTemplate CellTemplate()
@@ -237,10 +242,33 @@ namespace PortableApp
                 cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(100) });
 
                 // Add image
-                var image = new Image { Aspect = Aspect.AspectFill, Margin = new Thickness(0, 0, 0, 20) };
+                 // var image = new Image { Aspect = Aspect.AspectFill, Margin = new Thickness(0, 0, 0, 20) };
                 string imageBinding = downloadImages ? "ThumbnailPathDownloaded" : "ThumbnailPathStreamed";
-                image.SetBinding(Image.SourceProperty, new Binding(imageBinding));
-                cell.Children.Add(image, 0, 0);
+                var cachedImage = new CachedImage()
+                {
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    WidthRequest = 300,
+                    HeightRequest = 300,
+                    Aspect = Aspect.AspectFill,
+                    Margin = new Thickness(0, 0, 0, 20),
+                    CacheDuration = TimeSpan.FromDays(30),
+                    DownsampleToViewSize = true,
+                    RetryCount = 0,
+                    RetryDelay = 250,
+                    TransparencyEnabled = false,
+                    LoadingPlaceholder = "loading.png",
+                    ErrorPlaceholder = "error.png",
+                };
+
+                        
+                if (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages() != null)
+                    if (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages().Count > 0)
+                        imageBinding = "ThumbnailPathDownloaded";
+
+                
+                cachedImage.SetBinding(CachedImage.SourceProperty, new Binding(imageBinding));
+                cell.Children.Add(cachedImage, 0, 0);
 
                 // Add text section
                 StackLayout textSection = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 2 };
@@ -269,6 +297,7 @@ namespace PortableApp
                 cell.Children.Add(textSection, 1, 0);
                 return new ViewCell { View = cell };
             });
+              GC.Collect();
             return cellTemplate;
         }
 

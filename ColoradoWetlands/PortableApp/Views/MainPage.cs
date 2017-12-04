@@ -2,20 +2,24 @@
 using PortableApp.Data;
 using PortableApp.Models;
 using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using XLabs.Enums;
 using XLabs.Forms.Controls;
+using System.Diagnostics;
 
 namespace PortableApp
 {
-    public partial class MainPage : ViewHelpers
+    public partial class MainPage : ViewHelpers, INotifyPropertyChanged
     {
+    
         private bool isConnected;
         private bool isConnectedToWiFi;
         private Grid innerContainer;
-        private Switch downloadImagesSwitch;
+        // private Switch downloadImagesSwitch;
+        private Button downloadImagesButton = new Button { Style = Application.Current.Resources["semiTransparentButton"] as Style, Text = "Download" };
         private WetlandSetting downloadImagesSetting;
         private int numberOfPlants;
         private bool updatePlants = false;
@@ -26,86 +30,142 @@ namespace PortableApp
         private WetlandSetting datePlantDataUpdatedOnServer;
         private List<WetlandSetting> imageFilesToDownload = new List<WetlandSetting>();
         private IEnumerable<WetlandSetting> imageFileSettingsOnServer;
- 
+        private Label downloadImagesLabel = new Label {TextColor = Color.White, BackgroundColor = Color.Transparent };
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, e);
+            }
+        }
+        private string downloadButtonText = "Download Plant DB";
+        public string DownloadButtonText
+        {
+            get
+            {
+                return this.downloadButtonText;
+            }
+
+            set
+            {
+                this.downloadButtonText = value;
+                downloadImagesLabel.Text = this.downloadButtonText;
+                OnPropertyChanged(new PropertyChangedEventArgs("DownloadButtonText"));
+            }
+        }
+
         protected override async void OnAppearing()
         {
-            IsLoading = true;
-            // Initiate variables
-            isConnected = Connectivity.checkConnection();
-            isConnectedToWiFi = Connectivity.checkWiFiConnection();
-            downloadImagesSetting = await App.WetlandSettingsRepo.GetSettingAsync("Download Images");
-            downloadImages = (bool)downloadImagesSetting.valuebool;
-            downloadImagesSwitch.IsToggled = downloadImages;
-            numberOfPlants = new List<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants()).Count;
-
-            // if connected to WiFi and updates are needed, show download button
-            if (isConnected && !canceledDownload && !finishedDownload)
+            if (!canceledDownload)
             {
-                datePlantDataUpdatedLocally = App.WetlandSettingsRepo.GetSetting("Date Plants Downloaded");
-                try
-                {
-                    datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
-                    imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
-                    ImageFilesToDownload();
-                }
-                catch { }
+                // Initiate variables
+                isConnected = Connectivity.checkConnection();
+                isConnectedToWiFi = Connectivity.checkWiFiConnection();
+                downloadImagesSetting = await App.WetlandSettingsRepo.GetSettingAsync("Download Images");
+                downloadImages = (bool)downloadImagesSetting.valuebool;
 
-                // If valid date comparison and date on server is more recent than local date, show download button
-                if (datePlantDataUpdatedLocally != null && datePlantDataUpdatedOnServer != null)
+                numberOfPlants = new List<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants()).Count;
+
+                // if connected to WiFi and updates are needed
+                if (isConnected)
                 {
-                    if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || numberOfPlants == 0)
+                    datePlantDataUpdatedLocally = App.WetlandSettingsRepo.GetSetting("Date Plants Downloaded");
+                    try
                     {
-                        updatePlants = true;
-                        ToDownloadPage();
+                        datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();
+                        imageFileSettingsOnServer = await externalConnection.GetImageZipFileSettings();
+                        ImageFilesToDownload();
+
+                        if (datePlantDataUpdatedLocally.valuetimestamp == datePlantDataUpdatedOnServer.valuetimestamp)
+                        {
+                            DownloadButtonText = "Plant DB Up To Date";
+                            downloadImagesButton.Text = "(Local Database Up To Date)";
+                            downloadImagesLabel.TextColor = Color.Green;
+                            updatePlants = false;
+                        }
+                        else
+                        {
+                            if (numberOfPlants == 0)
+                            {
+                                DownloadButtonText = "Download Plant DB";
+                                downloadImagesButton.Text = "Download (No Local Database)";
+                                downloadImagesLabel.TextColor = Color.Red;
+                                updatePlants = true;
+                            }
+                            else
+                            {
+                                DownloadButtonText = "New Plant DB Available";
+                                downloadImagesButton.Text = "Re-Sync (New Database Available)";
+                                downloadImagesLabel.TextColor = Color.Yellow;
+                                updatePlants = true;
+                            }
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("Canceled UpdatePlants {0}", e.Message);
+                    }
+                }
+                else
+                {
+                    if (numberOfPlants == 0)
+                    {
+                        await DisplayAlert("No Local Database Detected", "Please connect to WiFi or cell network to download or use CO Wetlands App", "OK");
+                        updatePlants = false;
+                    }
+                    else
+                    {
+                        downloadImagesButton.Text = "No Internet Connection";
                     }
                 }
 
-                // If there are image zip files to download and the user has selected to downloaded images (and updatePlants has not triggered adding of download page to the stack)
-                if (imageFilesToDownload != null && downloadImages == true && !updatePlants)
-                {
-                    updatePlants = false;
-                    if (imageFilesToDownload.Count > 0)
-                        ToDownloadPage();
-                }
+                /* // If valid date comparison and date on server is more recent than local date, show download button
+                 if (datePlantDataUpdatedLocally != null && datePlantDataUpdatedOnServer != null)
+                 {
+                     if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || numberOfPlants == 0)
+                     {
+                         updatePlants = true;
+                         ToDownloadPage();
+                     }
+                 }
 
-                //// If can't get setting on server, add connection error message
-                //else if (datePlantDataUpdatedOnServer == null)
-                //{
-                //    innerContainer.Children.Add(new Label { Text = "Could not connect to server, please try again at a later time.", TextColor = Color.White, FontSize = 13, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(20, 0, 20, 0) }, 0, 2);
-                //}
-                //// If in doubt, add button to ensure data is updated
-                //else
-                //{
-                //    if (datePlantDataUpdatedLocally == null) { updatePlants = true; }
-                //    innerContainer.Children.Add(downloadDataButton, 0, 2);
-                //}
+                 // If there are image zip files to download and the user has selected to downloaded images (and updatePlants has not triggered adding of download page to the stack)
+                 if (imageFilesToDownload != null && downloadImages == true && !updatePlants)
+                 {
+                     updatePlants = false;
+                     if (imageFilesToDownload.Count > 0)
+                         ToDownloadPage();
+                 }
 
-                // If image data needs to be downloaded, show button
+                 //// If can't get setting on server, add connection error message
+                 //else if (datePlantDataUpdatedOnServer == null)
+                 //{
+                 //    innerContainer.Children.Add(new Label { Text = "Could not connect to server, please try again at a later time.", TextColor = Color.White, FontSize = 13, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(20, 0, 20, 0) }, 0, 2);
+                 //}
+                 //// If in doubt, add button to ensure data is updated
+                 //else
+                 //{
+                 //    if (datePlantDataUpdatedLocally == null) { updatePlants = true; }
+                 //    innerContainer.Children.Add(downloadDataButton, 0, 2);
+                 //}
+
+                 // If image data needs to be downloaded, show button*/
+
             }
-            else
-            {
-                if (numberOfPlants == 0)
-                    await DisplayAlert("Connection Needed", "Please connect to WiFi or cell network to download plant data and images", "OK");
+            else {
+                canceledDownload = false;
             }
-
-            IsLoading = false;
 
             base.OnAppearing();
+            
         }
 
         public MainPage()
-        {/*
-            var activityIndicator = new ActivityIndicator
-            {
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                Color = Color.Black,
-            };
-            activityIndicator.IsRunning = true;
-            activityIndicator.IsEnabled = true;
-            activityIndicator.BindingContext = this;
-            activityIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, "IsBusy");
-            activityIndicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsBusy");
-            */
+        {
+
 
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);
@@ -180,14 +240,15 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
             innerContainer.Children.Add(acknowledgementsButton, 0, 7);
 
-            // Switch for downloading images
-            StackLayout downloadImagesLayout = new StackLayout { Orientation = StackOrientation.Horizontal, Margin = new Thickness(20, 0, 20, 0), HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
-            downloadImagesSwitch = new Switch { BackgroundColor = Color.FromHex("66000000") };
-            downloadImagesSwitch.Toggled += ToggleDownloadImagesSwitch;
-            Label downloadImagesLabel = new Label { Text = "Download Images", TextColor = Color.White };
-            downloadImagesLayout.Children.Add(downloadImagesLabel);
-            downloadImagesLayout.Children.Add(downloadImagesSwitch);            
-            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
+            var semiTransparentBlack = new Color(0, 0, 0, 0.4);
+            StackLayout downloadImagesLayout = new StackLayout { BackgroundColor = Color.Transparent, Orientation = StackOrientation.Vertical, Padding = new Thickness(5, 5, 5, 5), HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
+    
+                     //Button to download images
+        
+            downloadImagesButton.Clicked += DownloadImagesPressed;
+                      downloadImagesLayout.Children.Add(downloadImagesButton);
+          //  downloadImagesLayout.Children.Add(downloadImagesLabel);
+            innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(85) });
             innerContainer.Children.Add(downloadImagesLayout, 0, 8);
 
             // Add empty space
@@ -216,6 +277,7 @@ namespace PortableApp
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
+            System.GC.Collect();
         }
 
         private async void ToDownloadPage()
@@ -248,17 +310,20 @@ namespace PortableApp
             }
         }
 
-        private async void ToggleDownloadImagesSwitch(object sender, ToggledEventArgs e)
+        private async void DownloadImagesPressed(object sender, EventArgs e)
         {
-            if (downloadImagesSwitch.IsToggled == true)
+            // If valid date comparison and date on server is more recent than local date, show download button
+            if (datePlantDataUpdatedLocally != null && datePlantDataUpdatedOnServer != null)
             {
-                downloadImagesSetting.valuebool = true;
-                if (imageFilesToDownload.Count > 0)
+                if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || numberOfPlants == 0)
+                {
+                    updatePlants = true;
                     ToDownloadPage();
-            }                
-            else
-                downloadImagesSetting.valuebool = false;
-            
+                }
+            }
+
+      
+
             await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(downloadImagesSetting);
         }
     }

@@ -43,8 +43,11 @@ namespace PortableApp
         public SearchCharacteristic()
         {
             TextColor = Color.White;
+            //HorizontalOptions = LayoutOptions.CenterAndExpand;
+            this.ContentLayout = new ButtonContentLayout(ButtonContentLayout.ImagePosition.Top,5);
             BorderColor = Color.White;
             BackgroundColor = Color.Transparent;
+            WidthRequest = Device.OnPlatform(150, 0, 0);
         }
 
     }

@@ -12,6 +12,7 @@ namespace PortableApp.Views
 
         public WetlandPlantDetailPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants = null)
         {
+            GC.Collect();
             NavigationPage.SetHasNavigationBar(this, false);
             var helpers = new ViewHelpers();
 
@@ -29,6 +30,7 @@ namespace PortableApp.Views
                 SelectedItem = Children[0];
 
             this.CurrentPageChanged += RememberPageChange;
+           
         }
 
         private async void RememberPageChange(object sender, EventArgs e)

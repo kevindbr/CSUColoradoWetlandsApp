@@ -39,14 +39,24 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Assets\WetlandGlossaryRepository.cs" />
+    <Compile Include="Assets\WetlandGlossaryRepositoryLocal.cs" />
     <Compile Include="Assets\WetlandMapOverlayRepository.cs" />
+    <Compile Include="Assets\WetlandMapOverlayRepositoryLocal.cs" />
+    <Compile Include="Assets\WetlandPlantFruitsRepository.cs" />
+    <Compile Include="Assets\WetlandPlantImageRepositoryLocal.cs" />
+    <Compile Include="Assets\WetlandPlantReferenceRepositoryLocal.cs" />
+    <Compile Include="Assets\WetlandPlantRepositoryLocal.cs" />
     <Compile Include="Assets\WetlandPlantSimilarSpeciesRepository.cs" />
     <Compile Include="Assets\WetlandPlantImageRepository.cs" />
     <Compile Include="Assets\WetlandPlantReferenceRepository.cs" />
+    <Compile Include="Assets\WetlandPlantSimilarSpeciesRepositoryLocal.cs" />
     <Compile Include="Assets\WetlandSearchRepository.cs" />
+    <Compile Include="Assets\WetlandSearchRepositoryLocal.cs" />
     <Compile Include="Assets\WetlandSettingRepository.cs" />
+    <Compile Include="Assets\WetlandSettingRepositoryLocal.cs" />
     <Compile Include="Assets\WetlandTypeRepository.cs" />
     <Compile Include="Assets\WetlandPlantRepository.cs" />
+    <Compile Include="Assets\WetlandTypeRepositoryLocal.cs" />
     <Compile Include="Data\Connectivity.cs" />
     <Compile Include="Data\DBConnection.cs" />
     <Compile Include="Data\ExternalDBConnection.cs" />
@@ -54,8 +64,10 @@
     <Compile Include="Helpers\PredicateBuilder.cs" />
     <Compile Include="Helpers\ZoomImage.cs" />
     <Compile Include="Helpers\SearchCharacteristic.cs" />
+    <Compile Include="Models\WetlandImage.cs" />
     <Compile Include="Models\WetlandMapOverlay.cs" />
     <Compile Include="Models\WetlandGlossary.cs" />
+    <Compile Include="Models\WetlandPlantFruits.cs" />
     <Compile Include="Models\WetlandPlantSimilarSpecies.cs" />
     <Compile Include="Models\WetlandPlantReference.cs" />
     <Compile Include="Models\WetlandSearch.cs" />
@@ -64,6 +76,7 @@
     <Compile Include="Helpers\ViewHelpers.cs" />
     <Compile Include="Views\MainPage.cs" />
     <Compile Include="Views\TransparentWebView.cs" />
+    <Compile Include="Views\WetlandCell.cs" />
     <Compile Include="Views\WetlandPlantDetailPage.cs" />
     <Compile Include="Views\WetlandGlossaryPage.cs" />
     <Compile Include="Views\WetlandPlantSimilarPage.cs" />
@@ -92,9 +105,24 @@
       <HintPath>..\..\packages\ExifLib.PCL.1.0.1\lib\portable-net45+sl50+win+WindowsPhoneApp81+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\ExifLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FFImageLoading, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.FFImageLoading.2.2.20\lib\portable-net45+win8+wpa81+wp8\FFImageLoading.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FFImageLoading.Forms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.FFImageLoading.Forms.2.2.20\lib\portable-net45+win8+wpa81+wp8+netstandard1.0\FFImageLoading.Forms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FFImageLoading.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.FFImageLoading.2.2.20\lib\portable-net45+win8+wpa81+wp8\FFImageLoading.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib.Portable, Version=0.86.0.51803, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SharpZipLib.Portable.0.86.0.0003\lib\portable-net45+netcore45+wp8+win8+wpa81+MonoTouch+MonoAndroid+Xamarin.iOS10\ICSharpCode.SharpZipLib.Portable.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v7.1\Mono.Android.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
@@ -319,6 +347,39 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\HTML\HowToUseMaps.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\linear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\alternate.png" />
+    <EmbeddedResource Include="Resources\Icons\aquatic.png" />
+    <EmbeddedResource Include="Resources\Icons\bipinnate.png" />
+    <EmbeddedResource Include="Resources\Icons\dicot.png" />
+    <EmbeddedResource Include="Resources\Icons\extra.png" />
+    <EmbeddedResource Include="Resources\Icons\fern.png" />
+    <EmbeddedResource Include="Resources\Icons\grass.png" />
+    <EmbeddedResource Include="Resources\Icons\lanceolate_eliptical.png" />
+    <EmbeddedResource Include="Resources\Icons\lobed.png" />
+    <EmbeddedResource Include="Resources\Icons\lobed2.png" />
+    <EmbeddedResource Include="Resources\Icons\monocot.png" />
+    <EmbeddedResource Include="Resources\Icons\opposite.png" />
+    <EmbeddedResource Include="Resources\Icons\palmate.png" />
+    <EmbeddedResource Include="Resources\Icons\pinnate.png" />
+    <EmbeddedResource Include="Resources\Icons\round.png" />
+    <EmbeddedResource Include="Resources\Icons\rush2.png" />
+    <EmbeddedResource Include="Resources\Icons\rush_no_fill.png" />
+    <EmbeddedResource Include="Resources\Icons\sedge.png" />
+    <EmbeddedResource Include="Resources\Icons\shrub.png" />
+    <EmbeddedResource Include="Resources\Icons\tree.png" />
+    <EmbeddedResource Include="Resources\Icons\tripinnate.png" />
+    <EmbeddedResource Include="Resources\Icons\whorled.png" />
+    <EmbeddedResource Include="Resources\Icons\wide_base1.png" />
+    <EmbeddedResource Include="Resources\Icons\wide_base2.png" />
+    <EmbeddedResource Include="Resources\Icons\wide_tip1.png" />
+    <EmbeddedResource Include="Resources\Icons\wide_tip2.png" />
+    <EmbeddedResource Include="Resources\Icons\basal.png" />
+    <Content Include="Resources\Icons\download.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

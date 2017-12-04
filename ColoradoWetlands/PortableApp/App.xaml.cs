@@ -22,19 +22,28 @@ namespace PortableApp
         public static WetlandTypeRepository WetlandTypeRepo { get; private set; }
         public static WetlandSettingRepository WetlandSettingsRepo { get; private set; }
         public static WetlandSearchRepository WetlandSearchRepo { get; private set; }
-      //  public static WetlandPlantFruitsRepository WetlandPlantFruitsRepo { get; private set; }
+        public static WetlandPlantFruitsRepository WetlandPlantFruitsRepo { get; private set; }
+        public static WetlandPlantDivisionRepository WetlandPlantDivisionRepo { get; private set; }
+        public static WetlandPlantShapeRepository WetlandPlantShapeRepo { get; private set; }
+        public static WetlandPlantLeafArrangementRepository WetlandPlantLeafArrangementRepo { get; private set; }
+        public static WetlandPlantSizeRepository WetlandPlantSizeRepo { get; private set; }
 
-        public static WetlandPlantRepositoryLocal WetlandPlantRepoLocal { get; private set; }
-        public static WetlandPlantImageRepositoryLocal WetlandPlantImageRepoLocal { get; private set; }
+        public static WetlandPlantRepositoryLocal WetlandPlantRepoLocal { get;  set; }
+        public static WetlandPlantImageRepositoryLocal WetlandPlantImageRepoLocal { get;  set; }
        // public static WetlandPlantSimilarSpeciesRepositoryLocal WetlandPlantSimilarSpeciesRepoLocal { get; private set; }
-        public static WetlandPlantReferenceRepositoryLocal WetlandPlantReferenceRepoLocal { get; private set; }
+        public static WetlandPlantReferenceRepositoryLocal WetlandPlantReferenceRepoLocal { get;  set; }
        // public static WetlandMapOverlayCoordinateRepositoryLocal WetlandMapOverlayCoordinateRepoLocal { get; private set; }
-        public static WetlandMapOverlayRepositoryLocal WetlandMapOverlayRepoLocal { get; private set; }
-        public static WetlandGlossaryRepositoryLocal WetlandGlossaryRepoLocal { get; private set; }
-        public static WetlandTypeRepositoryLocal WetlandTypeRepoLocal { get; private set; }
-        public static WetlandSettingRepositoryLocal WetlandSettingsRepoLocal { get; private set; }
-        public static WetlandSearchRepositoryLocal WetlandSearchRepoLocal { get; private set; }
-        public static WetlandPlantFruitsRepositoryLocal WetlandPlantFruitsRepoLocal { get; private set; }
+        public static WetlandMapOverlayRepositoryLocal WetlandMapOverlayRepoLocal { get;  set; }
+        public static WetlandGlossaryRepositoryLocal WetlandGlossaryRepoLocal { get;  set; }
+        public static WetlandTypeRepositoryLocal WetlandTypeRepoLocal { get;  set; }
+        public static WetlandSettingRepositoryLocal WetlandSettingsRepoLocal { get;  set; }
+        public static WetlandSearchRepositoryLocal WetlandSearchRepoLocal { get;  set; }
+        public static WetlandPlantFruitsRepositoryLocal WetlandPlantFruitsRepoLocal { get; set; }
+        public static WetlandPlantDivisionRepositoryLocal WetlandPlantDivisionRepoLocal { get; set; }
+        public static WetlandPlantShapeRepositoryLocal WetlandPlantShapeRepoLocal { get; set; }
+        public static WetlandPlantLeafArrangementRepositoryLocal WetlandPlantLeafArrangementRepoLocal { get; set; }
+        public static WetlandPlantSizeRepositoryLocal WetlandPlantSizeRepoLocal { get; set; }
+        //public static WetlandPlantFruitsRepositoryLocal WetlandPlantFruitsRepoLocal { get; private set; }
 
         /*
          New starting workflow
@@ -63,7 +72,7 @@ namespace PortableApp
             WetlandPlantRepo = new WetlandPlantRepository();
             WetlandPlantImageRepo = new WetlandPlantImageRepository();
             WetlandPlantSimilarSpeciesRepo = new WetlandPlantSimilarSpeciesRepository();
-            //WetlandPlantFruitsRepo = new WetlandPlantFruitsRepository();
+            WetlandPlantFruitsRepo = new WetlandPlantFruitsRepository();
             WetlandPlantReferenceRepo = new WetlandPlantReferenceRepository();
             WetlandMapOverlayCoordinateRepo = new WetlandMapOverlayCoordinateRepository();
             WetlandMapOverlayRepo = new WetlandMapOverlayRepository();
@@ -71,8 +80,20 @@ namespace PortableApp
             WetlandTypeRepo = new WetlandTypeRepository();
             WetlandSettingsRepo = new WetlandSettingRepository();
             WetlandSearchRepo = new WetlandSearchRepository();
+            WetlandPlantDivisionRepo = new WetlandPlantDivisionRepository();
+            WetlandPlantShapeRepo = new WetlandPlantShapeRepository();
+            WetlandPlantLeafArrangementRepo = new WetlandPlantLeafArrangementRepository();
+            WetlandPlantSizeRepo = new WetlandPlantSizeRepository();
 
-            WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(WetlandPlantRepo.GetAllWetlandPlants());
+
+
+        WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(WetlandPlantRepo.GetAllWetlandPlants());
+            WetlandPlantImageRepoLocal = new WetlandPlantImageRepositoryLocal(WetlandPlantImageRepo.GetAllWetlandPlantImages());
+            WetlandPlantFruitsRepoLocal = new WetlandPlantFruitsRepositoryLocal(WetlandPlantFruitsRepo.GetAllWetlandFruits());
+            WetlandPlantDivisionRepoLocal = new WetlandPlantDivisionRepositoryLocal(WetlandPlantDivisionRepo.GetAllDivisions());
+            WetlandPlantShapeRepoLocal = new WetlandPlantShapeRepositoryLocal(WetlandPlantShapeRepo.GetAllShapes());
+            WetlandPlantLeafArrangementRepoLocal = new WetlandPlantLeafArrangementRepositoryLocal(WetlandPlantLeafArrangementRepo.GetAllArrangements());
+            WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(WetlandPlantSizeRepo.GetAllPlantSizes());
 
 
             // Set MainPage

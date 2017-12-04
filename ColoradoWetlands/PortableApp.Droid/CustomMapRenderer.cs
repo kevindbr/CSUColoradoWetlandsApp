@@ -54,8 +54,8 @@ namespace PortableApp.Droid
                 basemap.BaseLayers.Add(satelliteMap);
                 basemap.BaseLayers.Add(wetlandsMap);
 
-                // create a new Map to display the basemap and assign to mapView, add to layout
-                var map = new Esri.ArcGISRuntime.Mapping.Map { Basemap = basemap, InitialViewpoint = new Viewpoint(40.5592, -105.0781, 100000000) };
+                // create a new Map to display the basemap and assign to mapView, add to layout                                         //100000000
+                var map = new Esri.ArcGISRuntime.Mapping.Map { Basemap = basemap, InitialViewpoint = new Viewpoint(40.5592, -105.0781, 100000) };
                 mapView.Map = map;
                 mapContainer.AddView(mapView);
 
@@ -68,6 +68,9 @@ namespace PortableApp.Droid
                 locationButton.Click += delegate {
                     ToggleLocation();
                 };
+                ToggleLocation();
+
+
                 mapContainer.AddView(locationButton);
 
                 // add map to layout container
@@ -115,8 +118,8 @@ namespace PortableApp.Droid
                         return;
 
                     mapView.LocationDisplay.IsEnabled = true;
-                    locationButton.SetImageResource(Resource.Drawable.gpsfilled);
-                    await mapView.SetViewpointAsync(new Viewpoint(position.Latitude, position.Longitude, 10000000));
+                    locationButton.SetImageResource(Resource.Drawable.gpsfilled);                       //10000000
+                    await mapView.SetViewpointAsync(new Viewpoint(position.Latitude, position.Longitude, 5000));
                 }
                 catch (Exception ex)
                 {

@@ -74,6 +74,7 @@ namespace PortableApp
                 HeightRequest = App.ScreenHeight
             };
 
+       
             // Add map to layout
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             innerContainer.Children.Add(customMap, 0, 1);

@@ -42,7 +42,14 @@ namespace PortableApp
         // (async) get an individual setting based on its name
         public async Task<WetlandSetting> GetSettingAsync(string settingName)
         {
-            return await connAsync.Table<WetlandSetting>().Where(s => s.name.Equals(settingName)).FirstOrDefaultAsync();
+
+             var setting = await connAsync.Table<WetlandSetting>().Where(s => s.name.Equals(settingName)).FirstOrDefaultAsync();
+
+            if (setting != null)
+                return setting;
+
+            else
+                return null;
         }
 
         public WetlandSetting GetImageZipFileSetting(string fileName)

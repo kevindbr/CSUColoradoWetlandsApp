@@ -36,6 +36,13 @@ namespace PortableApp
             return JsonConvert.DeserializeObject<IList<WetlandPlant>>(result);
         }
 
+        
+        public async Task<IEnumerable<WetlandPlantFruits>> GetAllFruits()
+        {
+            result = await client.GetStringAsync(Url + "_fruits");
+            return JsonConvert.DeserializeObject<IList<WetlandPlantFruits>>(result);
+        }
+
         public async Task<IEnumerable<WetlandGlossary>> GetAllTerms()
         {
             result = await client.GetStringAsync(Url + "_glossary");
@@ -48,11 +55,16 @@ namespace PortableApp
             {
                 result = await client.GetStringAsync(Url + "_settings/DatePlantDataUpdatedOnServer");
             }
-            catch
+            catch(Exception e)
             {
                 return null;
             }
             return JsonConvert.DeserializeObject<WetlandSetting>(result);
+           // WetlandSetting ws = new WetlandSetting();
+
+
+
+            //return ws;
         }
 
         public async Task<IEnumerable<WetlandSetting>> GetImageZipFileSettings()

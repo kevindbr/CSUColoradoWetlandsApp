@@ -17,6 +17,7 @@ namespace PortableApp.Models
         public string Column1 { get; set; }
         public string Column2 { get; set; }
         public string Column3 { get; set; }
+        public int SearchInt1 { get; set; }
         public string SearchString1 { get; set; }
         public string SearchString2 { get; set; }
         public string SearchString3 { get; set; }

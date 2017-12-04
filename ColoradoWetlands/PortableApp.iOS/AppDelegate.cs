@@ -24,6 +24,7 @@ namespace PortableApp.iOS
             global::Xamarin.Forms.Forms.Init();
             Xamarin.FormsMaps.Init();
             CarouselViewRenderer.Init();
+            FFImageLoading.Forms.Touch.CachedImageRenderer.Init();
 
             string dbPath = FileAccessHelper.GetLocalFilePath("db.db3");
             var platform = new SQLitePlatformIOS();

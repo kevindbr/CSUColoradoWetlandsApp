@@ -1,4 +1,5 @@
 ﻿using CarouselView.FormsPlugin.Abstractions;
+using FFImageLoading.Forms;
 using PortableApp.Helpers;
 using PortableApp.Models;
 using System.Collections.ObjectModel;
@@ -11,7 +12,7 @@ namespace PortableApp
 
         public WetlandPlantImagesPage(WetlandPlant plant, ObservableCollection<WetlandPlant> plants)
         {
-
+            System.GC.Collect();
             // Turn off navigation bar and initialize pageContainer
             NavigationPage.SetHasNavigationBar(this, false);
             AbsoluteLayout pageContainer = ConstructPageContainer();
@@ -45,7 +46,29 @@ namespace PortableApp
                 // Add image
                 var image = new ZoomImage { Margin = new Thickness(10, 0, 10, 0) };
                 string imageBinding = downloadImages ? "ImagePathDownloaded" : "ImagePathStreamed";
+                var cachedImage = new CachedImage()
+                {
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    WidthRequest = 300,
+                    HeightRequest = 300,
+                    Aspect = Aspect.AspectFill,
+                    Margin = new Thickness(10, 0, 10, 0),
+                    CacheDuration = System.TimeSpan.FromDays(30),
+                    DownsampleToViewSize = true,
+                   RetryCount = 0,
+                   
+                    RetryDelay = 250,
+                    TransparencyEnabled = false,
+                    LoadingPlaceholder = "loading.png",
+                    ErrorPlaceholder = "error.png",
+                };
                 image.SetBinding(Image.SourceProperty, new Binding(imageBinding));
+
+
+                if (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages() != null)
+                    if (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages().Count > 0)
+                        imageBinding = "ThumbnailPathDownloaded";
 
                 cell.Children.Add(image, 0, 1);
 
@@ -62,7 +85,10 @@ namespace PortableApp
 
             // Add inner container to page container and set as page content
             pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
+
             Content = pageContainer;
+            System.GC.Collect();
+
         }
         
     }

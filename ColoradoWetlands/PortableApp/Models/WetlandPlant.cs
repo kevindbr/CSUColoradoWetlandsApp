@@ -62,6 +62,7 @@ namespace PortableApp.Models
         public string leafshape { get; set; }
         public string leafarrangement { get; set; }
         public string plantsize { get; set; }
+        //public string FruitWetland { get; set; }
 
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
@@ -74,20 +75,20 @@ namespace PortableApp.Models
         public List<WetlandPlantSimilarSpecies> SimilarSpecies { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
-       // public List<WetlandPlantFruits> fruits { get; set; }
-        /*
+        public List<WetlandPlantFruits> FruitWetland { get; set; }
+        
         [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<WetlandPlantSize> size { get; set; }
+        public List<WetlandPlantSize> SizeWetland { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<WetlandPlantShape> shape { get; set; }
+        public List<WetlandPlantShape> ShapeWetland { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<WetlandPlantArrangement> arrangement { get; set; }
+        public List<WetlandPlantArrangement> ArrangementWetland { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<WetlandPlantDivision> division { get; set; }
-        */
+        public List<WetlandPlantDivision> DivisionWetland { get; set; }
+        
 
 
         public IFolder rootFolder { get { return FileSystem.Current.LocalStorage; } }

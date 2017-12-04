@@ -18,6 +18,7 @@ namespace PortableApp.Droid
             global::Xamarin.Forms.Forms.Init(this, bundle);
             Xamarin.FormsMaps.Init(this, bundle);
             CarouselViewRenderer.Init();
+            FFImageLoading.Forms.Droid.CachedImageRenderer.Init();
 
             string dbPath = FileAccessHelper.GetLocalFilePath("db.db3");
             var platform = new SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid();
