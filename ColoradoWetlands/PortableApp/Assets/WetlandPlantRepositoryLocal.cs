@@ -12,13 +12,13 @@ namespace PortableApp
 {
 
     public class WetlandPlantRepositoryLocal
-	{
+    {
 
         public string StatusMessage { get; set; }
         private List<WetlandPlant> allWetlandPlants;
 
         public WetlandPlantRepositoryLocal(List<WetlandPlant> allPlantsDB)
-		{
+        {
             allWetlandPlants = allPlantsDB;
 
         }
@@ -85,8 +85,8 @@ namespace PortableApp
         {
             // get search criteria and plants
             List<WetlandSearch> selectCritList = await App.WetlandSearchRepo.GetQueryableSearchCriteriaAsync();
-           List<WetlandPlant> plants;
-           // List<WetlandPlantFruits> fruits = App.WetlandPlantFruitsRepo.GetAllWetlandFruits();
+            List<WetlandPlant> plants;
+            // List<WetlandPlantFruits> fruits = App.WetlandPlantFruitsRepo.GetAllWetlandFruits();
             // execute filtering
             if (selectCritList.Count() > 0)
             {
@@ -95,7 +95,7 @@ namespace PortableApp
                     plants = GetSearchedPlants(selectCritList);
 
                 }
-                catch(NullReferenceException e)
+                catch (NullReferenceException e)
                 {
                     List<WetlandPlant> emptyPlants = new List<WetlandPlant>();
                     plants = emptyPlants;
@@ -111,6 +111,40 @@ namespace PortableApp
 
         }
 
+        public async Task<ObservableCollection<WetlandPlant>> FilterPlantsByElevation(int elevation,string choice)
+        {
+            ObservableCollection<WetlandPlant> allPlants = new ObservableCollection<WetlandPlant>(GetAllWetlandPlants());
+            ObservableCollection<WetlandPlant> searchCombined = new ObservableCollection<WetlandPlant>();
+            List<WetlandPlant> elevationPlants;
+
+            try
+            {
+                if (choice.Equals("min"))
+                {
+                    elevationPlants = App.WetlandPlantRepoLocal.GetAllWetlandPlants().AsQueryable().Where(x => x.elevminm >= elevation).ToList();
+                }
+                else if (choice.Equals("max"))
+                {
+                    elevationPlants = App.WetlandPlantRepoLocal.GetAllWetlandPlants().AsQueryable().Where(x => x.elevminm <= elevation).ToList();
+                }
+                else
+                {
+                    List<WetlandPlant> emptyPlants = new List<WetlandPlant>();
+                    elevationPlants = emptyPlants;
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                List<WetlandPlant> emptyPlants = new List<WetlandPlant>();
+                elevationPlants = emptyPlants;
+            }
+
+            ObservableCollection<WetlandPlant> elevationCollection = new ObservableCollection<WetlandPlant>(elevationPlants);
+
+            return elevationCollection;
+
+        }
+
         // return a list of WetlandPlants saved to the WetlandPlant table in the database
         public async Task<ObservableCollection<WetlandPlant>> GetAllWetlandPlantsAsync()
         {
@@ -118,76 +152,10 @@ namespace PortableApp
             return new ObservableCollection<WetlandPlant>(list);
         }
 
-        // Construct Predicate for plants query, filtering based on selected criteria
-        // Solution taken from http://www.albahari.com/nutshell/predicatebuilder.aspx
-        /* private Expression<Func<WetlandPlant, bool>> ConstructPredicate(List<WetlandSearch> selectCritList)
-         {
-             var overallQuery = PredicateBuilder.True<WetlandPlant>();
-
-             // Add selected Leaf Type characteristics
-             var queryColors = selectCritList.Where(x => x.Characteristic.Contains("color"));
-             if (queryColors.Count() > 0)
-             {
-                 List<WetlandPlantFruits> fruits = App.WetlandPlantFruitsRepo.GetAllWetlandFruits().AsQueryable().Where(ConstructFruitPredicate(selectCritList)).ToList();
-                 //overallQuery = 
-
-                 var colorQuery = PredicateBuilder.False<WetlandPlant>();
-                 foreach (var color in queryColors)
-                 {
-
-                    // foreach(var fruit in colorQuery.Or(x => x.FruitWetland))
-
-
-                         colorQuery = colorQuery.Or(x => x.color == (color.SearchString1));
-                 }
-                 overallQuery = overallQuery.And(colorQuery);
-
-             }
-
-             //Add selected Flower Color characteristics
-             var queryLeafDivision = selectCritList.Where(x => x.Characteristic.Contains("leafdivision"));
-             if (queryLeafDivision.Count() > 0)
-             {
-                 var leafdivisionQuery = PredicateBuilder.False<WetlandPlant>();
-                 foreach (var leafdivision in queryLeafDivision) { leafdivisionQuery = leafdivisionQuery.Or(x => x.leafdivision == (leafdivision.SearchString1)); }
-                 overallQuery = overallQuery.And(leafdivisionQuery);
-             }
-
-             // Add selected Flower Color characteristics
-             var queryLeafShape = selectCritList.Where(x => x.Characteristic.Contains("leafshape"));
-             if (queryLeafShape.Count() > 0)
-             {
-                 var leafShapeQuery = PredicateBuilder.False<WetlandPlant>();
-                 foreach (var leafshape in queryLeafShape) { leafShapeQuery = leafShapeQuery.Or(x => x.leafshape ==  (leafshape.SearchString1)); }
-                 overallQuery = overallQuery.And(leafShapeQuery);
-             }
-
-             // Add selected Flower Color characteristics
-             var queryLeafArrangement = selectCritList.Where(x => x.Characteristic.Contains("leafarrangement"));
-             if (queryLeafArrangement.Count() > 0)
-             {
-                 var leafArrangementeQuery = PredicateBuilder.False<WetlandPlant>();
-                 foreach (var leafarrangement in queryLeafArrangement) { leafArrangementeQuery = leafArrangementeQuery.Or(x => x.leafarrangement == (leafarrangement.SearchString1)); }
-                 overallQuery = overallQuery.And(leafArrangementeQuery);
-             }
-
-             // Add selected Flower Color characteristics
-             var queryPlantSize = selectCritList.Where(x => x.Characteristic.Contains("plantsize"));
-             if (queryPlantSize.Count() > 0)
-             {
-                 var plantSizeQuery = PredicateBuilder.False<WetlandPlant>();
-                 foreach (var plantsize in queryPlantSize) { plantSizeQuery = plantSizeQuery.Or(x => x.plantsize == (plantsize.SearchString1)); }
-                 overallQuery = overallQuery.And(plantSizeQuery);
-             }
-
-             //if(overallQuery)
-
-             return overallQuery;
-         }*/
-
 
         private List<WetlandPlant> GetSearchedPlants(List<WetlandSearch> selectCritList)
         {
+            List<WetlandPlant> searchPlantsOther = GetAllWetlandPlants();
             List<WetlandPlant> searchPlantsColor = GetAllWetlandPlants();
             List<WetlandPlant> searchPlantsDivision = GetAllWetlandPlants();
             List<WetlandPlant> searchPlantsShape = GetAllWetlandPlants();
@@ -196,15 +164,23 @@ namespace PortableApp
             List<WetlandPlant> searchCombined = new List<WetlandPlant>();
             List<WetlandPlant> allPlants = GetAllWetlandPlants();
             // Add selected Leaf Type characteristics
+
+            var queryWetlandOther = selectCritList.Where(x => x.Characteristic.Contains("wetlandtype") || x.Characteristic.Contains("group") || x.Characteristic.Contains("nativity") || x.Characteristic.Contains("federal"));
+            if (queryWetlandOther.Count() > 0)
+            {
+                searchPlantsOther = App.WetlandPlantRepoLocal.GetAllWetlandPlants().AsQueryable().Where(ConstructPredicate(selectCritList)).ToList();
+
+            }
+
             var queryColors = selectCritList.Where(x => x.Characteristic.Contains("color"));
             if (queryColors.Count() > 0)
             {
                 searchPlantsColor = new List<WetlandPlant>();
 
                 List<WetlandPlantFruits> fruits = App.WetlandPlantFruitsRepo.GetAllWetlandFruits().AsQueryable().Where(ConstructFruitPredicate(selectCritList)).ToList();
-                foreach(var fruit in fruits)
+                foreach (var fruit in fruits)
                 {
-                    if(!searchPlantsColor.Contains(GetWetlandPlantByAltId(fruit.plantid)))
+                    if (!searchPlantsColor.Contains(GetWetlandPlantByAltId(fruit.plantid)))
                     {
                         searchPlantsColor.Add(GetWetlandPlantByAltId(fruit.plantid));
                     }
@@ -275,7 +251,7 @@ namespace PortableApp
 
 
             foreach (var plant in allPlants)
-                if (searchPlantsColor.Contains(plant) && searchPlantsDivision.Contains(plant) && searchPlantsShape.Contains(plant) && searchPlantsArrangement.Contains(plant) && searchPlantsSize.Contains(plant))
+                if (searchPlantsColor.Contains(plant) && searchPlantsDivision.Contains(plant) && searchPlantsShape.Contains(plant) && searchPlantsArrangement.Contains(plant) && searchPlantsSize.Contains(plant) && searchPlantsOther.Contains(plant))
                     searchCombined.Add(plant);
 
             return searchCombined;
@@ -376,5 +352,44 @@ namespace PortableApp
             return overallQuery;
         }
 
+        private Expression<Func<WetlandPlant, bool>> ConstructPredicate(List<WetlandSearch> selectCritList)
+        {
+            var overallQuery = PredicateBuilder.True<WetlandPlant>();
+            // Add selected Flower Color characteristics
+            var queryWetlandType = selectCritList.Where(x => x.Characteristic.Contains("wetlandtype"));
+            if (queryWetlandType.Count() > 0)
+            {
+                var wetlandTypeQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var wetlandtype in queryWetlandType) { wetlandTypeQuery = wetlandTypeQuery.Or(x => x.ecologicalsystems.Contains(wetlandtype.SearchString1)); }
+                overallQuery = overallQuery.And(wetlandTypeQuery);
+            }
+
+            var queryGroup = selectCritList.Where(x => x.Characteristic.Contains("group"));
+            if (queryGroup.Count() > 0)
+            {
+                var groupQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var group in queryGroup) { groupQuery = groupQuery.Or(x => x.sections.Contains(group.SearchString1)); }
+                overallQuery = overallQuery.And(groupQuery);
+            }
+
+            var queryNativity = selectCritList.Where(x => x.Characteristic.Contains("nativity"));
+            if (queryNativity.Count() > 0)
+            {
+                var nativityQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var native in queryNativity) { nativityQuery = nativityQuery.Or(x => x.nativity.Contains(native.SearchString1)); }
+                overallQuery = overallQuery.And(nativityQuery);
+            }
+
+            var queryFederal = selectCritList.Where(x => x.Characteristic.Contains("federal"));
+            if (queryFederal.Count() > 0)
+            {
+                var federalQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var federal in queryFederal) { federalQuery = federalQuery.Or(x => x.federalstatus.Contains(federal.SearchString1)); }
+                overallQuery = overallQuery.And(federalQuery);
+            }
+
+            return overallQuery;
+
+        }
     }
 }

@@ -234,11 +234,11 @@ namespace PortableApp
                 Grid cell = new Grid
                 {
                     BackgroundColor = Color.FromHex("DD000000"),
-                    Padding = new Thickness(20, 5, 20, 5),
+                    Padding = new Thickness(5, 5, 5, 5),
                     Margin = new Thickness(0, 0, 0, 2)
                 };
-                cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.3, GridUnitType.Star) });
-                cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.7, GridUnitType.Star) });
+                cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(0.6, GridUnitType.Star) });
+                cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.0, GridUnitType.Star) });
                 cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(100) });
 
                 // Add image
@@ -246,12 +246,12 @@ namespace PortableApp
                 string imageBinding = downloadImages ? "ThumbnailPathDownloaded" : "ThumbnailPathStreamed";
                 var cachedImage = new CachedImage()
                 {
-                    HorizontalOptions = LayoutOptions.Center,
+                    HorizontalOptions = LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.Center,
                     WidthRequest = 300,
                     HeightRequest = 300,
                     Aspect = Aspect.AspectFill,
-                    Margin = new Thickness(0, 0, 0, 20),
+                    Margin = new Thickness(0, 0, 0, 10),
                     CacheDuration = TimeSpan.FromDays(30),
                     DownsampleToViewSize = true,
                     RetryCount = 0,
@@ -271,9 +271,9 @@ namespace PortableApp
                 cell.Children.Add(cachedImage, 0, 0);
 
                 // Add text section
-                StackLayout textSection = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 2 };
+                StackLayout textSection = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 2};
 
-                Label label1 = new Label { TextColor = Color.White, FontSize = 12, FontAttributes = FontAttributes.Bold };
+                Label label1 = new Label { TextColor = Color.White, FontSize = 12, FontAttributes = FontAttributes.Bold, FontFamily = "sans serif" };
                 label1.SetBinding(Label.TextProperty, new Binding(labelValues[0]));
                 if (labelValues[0] == "scinamenoauthorstripped") label1.FontAttributes = FontAttributes.Italic;
                 textSection.Children.Add(label1);
@@ -281,16 +281,16 @@ namespace PortableApp
                 var headerDivider = new BoxView { HeightRequest = 1, WidthRequest = 500, BackgroundColor = Color.White };
                 textSection.Children.Add(headerDivider);
 
-                Label label2 = new Label { TextColor = Color.White, FontSize = 12 };
+                Label label2 = new Label { TextColor = Color.White, FontSize = 12, FontFamily = "sans serif" };
                 label2.SetBinding(Label.TextProperty, new Binding(labelValues[1]));
                 if (labelValues[1] == "scinamenoauthorstripped") label2.FontAttributes = FontAttributes.Italic;
                 textSection.Children.Add(label2);
 
-                Label label3 = new Label { TextColor = Color.White, FontSize = 12 };
+                Label label3 = new Label { TextColor = Color.White, FontSize = 12, FontFamily = "sans serif" };
                 label3.SetBinding(Label.TextProperty, new Binding(labelValues[2]));
                 textSection.Children.Add(label3);
 
-                Label label4 = new Label { TextColor = Color.White, FontSize = 12 };
+                Label label4 = new Label { TextColor = Color.White, FontSize = 12, FontFamily = "sans serif" };
                 label4.SetBinding(Label.TextProperty, new Binding(labelValues[3]));
                 textSection.Children.Add(label4);
 

@@ -352,6 +352,12 @@
     <EmbeddedResource Include="Resources\Icons\linear.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\linears.png" />
+    <EmbeddedResource Include="Resources\Icons\rushes.png" />
+    <EmbeddedResource Include="Resources\Icons\lobedcombined.png" />
+    <EmbeddedResource Include="Resources\Icons\wide_bases.png" />
+    <EmbeddedResource Include="Resources\Icons\wide_tips.png" />
+    <EmbeddedResource Include="Resources\Icons\shrubtree.png" />
     <EmbeddedResource Include="Resources\Icons\alternate.png" />
     <EmbeddedResource Include="Resources\Icons\aquatic.png" />
     <EmbeddedResource Include="Resources\Icons\bipinnate.png" />
@@ -376,7 +382,6 @@
     <EmbeddedResource Include="Resources\Icons\whorled.png" />
     <EmbeddedResource Include="Resources\Icons\wide_base1.png" />
     <EmbeddedResource Include="Resources\Icons\wide_base2.png" />
-    <EmbeddedResource Include="Resources\Icons\wide_tip1.png" />
     <EmbeddedResource Include="Resources\Icons\wide_tip2.png" />
     <EmbeddedResource Include="Resources\Icons\basal.png" />
     <Content Include="Resources\Icons\download.png" />

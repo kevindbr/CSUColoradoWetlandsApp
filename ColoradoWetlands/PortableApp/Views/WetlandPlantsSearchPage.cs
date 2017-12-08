@@ -16,7 +16,11 @@ namespace PortableApp
         public ObservableCollection<WetlandPlant> plants;
         public ObservableCollection<WetlandSearch> searchCriteriaDB;
         public ObservableCollection<SearchCharacteristic> searchCriteria;
-
+        Entry minElev;
+        Entry maxElev;
+        ObservableCollection<WetlandPlant> elevOverlap = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
+        ObservableCollection<WetlandPlant> minElevPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
+        ObservableCollection<WetlandPlant> maxElevPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
         Button searchButton;
 
         public WetlandPlantsSearchPage()
@@ -30,15 +34,16 @@ namespace PortableApp
             AbsoluteLayout pageContainer = ConstructPageContainer();
 
             // Initialize grid for inner container
-
+            /*
             ScrollView contentScrollView = new ScrollView
             {
                 Padding = new Thickness(20, Device.OnPlatform(30, 20, 20), 20, 20),
                 BackgroundColor = Color.FromHex("88000000"),
-            };
+            };*/
 
             Grid innerContainer = new Grid {
-                RowSpacing = 10
+                RowSpacing = 10,
+                BackgroundColor = Color.FromHex("88000000"),
             };
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
@@ -46,7 +51,41 @@ namespace PortableApp
             StackLayout searchFilters = new StackLayout
             {
                 Spacing = 3,
+                Orientation = StackOrientation.Vertical
             };
+
+            //Plant Size
+            Label groupLabel = new Label { Text = "Plant Group:", Style = Application.Current.Resources["sectionHeader"] as Style };
+            searchFilters.Children.Add(groupLabel);
+
+            WrapLayout groupLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+
+            SearchCharacteristic woodyGroup = searchCriteria.First(x => x.Characteristic == "group-Woody");
+            groupLayout.Children.Add(woodyGroup);
+
+            SearchCharacteristic dicotGroup = searchCriteria.First(x => x.Characteristic == "group-Dicot");
+            groupLayout.Children.Add(dicotGroup);
+
+            SearchCharacteristic monocotGroup = searchCriteria.First(x => x.Characteristic == "group-Monocot");
+            groupLayout.Children.Add(monocotGroup);
+
+            SearchCharacteristic aquaticGroup = searchCriteria.First(x => x.Characteristic == "group-Aquatic");
+            groupLayout.Children.Add(aquaticGroup);
+
+            SearchCharacteristic rushesGroup = searchCriteria.First(x => x.Characteristic == "group-Rushes");
+            groupLayout.Children.Add(rushesGroup);
+
+            SearchCharacteristic grassesGroup = searchCriteria.First(x => x.Characteristic == "group-Grasses");
+            groupLayout.Children.Add(grassesGroup);
+
+            SearchCharacteristic fernsGroup = searchCriteria.First(x => x.Characteristic == "group-Ferns");
+            groupLayout.Children.Add(fernsGroup);
+
+            SearchCharacteristic sedgesGroup = searchCriteria.First(x => x.Characteristic == "group-Sedges");
+            groupLayout.Children.Add(sedgesGroup);
+
+            searchFilters.Children.Add(groupLayout);
+
 
             // Flower Color
             Label flowerColorLabel = new Label { Text = "Flower Color:", Style = Application.Current.Resources["sectionHeader"] as Style };
@@ -54,8 +93,7 @@ namespace PortableApp
 
             WrapLayout flowerColorLayout1 = new WrapLayout
             {
-                Orientation = StackOrientation.Horizontal,
-                Margin = Device.OnPlatform(5, 0, 0)
+                Orientation = StackOrientation.Horizontal
 
             };
 
@@ -89,7 +127,7 @@ namespace PortableApp
             Label leafDivisonLabel = new Label { Text = "Leaf Division:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(leafDivisonLabel);
 
-            WrapLayout leafDivisionLayout = new WrapLayout { Orientation = StackOrientation.Horizontal, Margin = Device.OnPlatform(5, 0, 0) };
+            WrapLayout leafDivisionLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
 
             SearchCharacteristic simpleDivision = searchCriteria.First(x => x.Characteristic == "leafdivision-Simple");
             leafDivisionLayout.Children.Add(simpleDivision);
@@ -103,7 +141,7 @@ namespace PortableApp
             Label leafShapeLabel = new Label { Text = "Leaf Shape:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(leafShapeLabel);
 
-            WrapLayout leafShapeLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal, Margin = Device.OnPlatform(5, 0, 0) };
+            WrapLayout leafShapeLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal};
 
             SearchCharacteristic linearShape = searchCriteria.First(x => x.Characteristic == "leafshape-Linear");
             leafShapeLayout1.Children.Add(linearShape);
@@ -132,7 +170,7 @@ namespace PortableApp
             Label leafArrangementLabel = new Label { Text = "Leaf Arrangement:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(leafArrangementLabel);
 
-            WrapLayout leafArrangementLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal, Margin = Device.OnPlatform(5, 0, 0) };
+            WrapLayout leafArrangementLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal};
 
             SearchCharacteristic altArr = searchCriteria.First(x => x.Characteristic == "leafarrangement-Alternate");
             leafArrangementLayout1.Children.Add(altArr);
@@ -152,7 +190,7 @@ namespace PortableApp
             Label plantSizeLabel = new Label { Text = "Plant Size:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(plantSizeLabel);
 
-            WrapLayout plantSizeLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal, Margin = Device.OnPlatform(5, 0, 0) };
+            WrapLayout plantSizeLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal};
 
             SearchCharacteristic verySmallSize = searchCriteria.First(x => x.Characteristic == "plantsize-VerySmall");
             plantSizeLayout1.Children.Add(verySmallSize);
@@ -167,6 +205,109 @@ namespace PortableApp
             plantSizeLayout1.Children.Add(largeSize);
             
             searchFilters.Children.Add(plantSizeLayout1);
+
+
+            //Plant Size
+            Label wetlandTypeLabel = new Label { Text = "Wetland Type:", Style = Application.Current.Resources["sectionHeader"] as Style };
+            searchFilters.Children.Add(wetlandTypeLabel);
+
+            WrapLayout wetLandTypeLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+
+            SearchCharacteristic marshType = searchCriteria.First(x => x.Characteristic == "wetlandtype-Marsh");
+            wetLandTypeLayout.Children.Add(marshType);
+
+            SearchCharacteristic wetMeadowType = searchCriteria.First(x => x.Characteristic == "wetlandtype-WetMeadow");
+            wetLandTypeLayout.Children.Add(wetMeadowType);
+
+            SearchCharacteristic mesicMeadow = searchCriteria.First(x => x.Characteristic == "wetlandtype-MesicMeadow");
+            wetLandTypeLayout.Children.Add(mesicMeadow);
+
+            SearchCharacteristic fenType = searchCriteria.First(x => x.Characteristic == "wetlandtype-Fen");
+            wetLandTypeLayout.Children.Add(fenType);
+
+            SearchCharacteristic playaType = searchCriteria.First(x => x.Characteristic == "wetlandtype-Playa");
+            wetLandTypeLayout.Children.Add(playaType);
+
+            SearchCharacteristic subalpineRiparianWoodland = searchCriteria.First(x => x.Characteristic == "wetlandtype-SubalpineRiparianWoodland");
+            wetLandTypeLayout.Children.Add(subalpineRiparianWoodland);
+
+            SearchCharacteristic subalpineRiparianShrublandType = searchCriteria.First(x => x.Characteristic == "wetlandtype-SubalpineRiparianShrubland");
+            wetLandTypeLayout.Children.Add(subalpineRiparianShrublandType);
+
+            SearchCharacteristic foothillsRiparianType = searchCriteria.First(x => x.Characteristic == "wetlandtype-FoothillsRiparian");
+            wetLandTypeLayout.Children.Add(foothillsRiparianType);
+
+            SearchCharacteristic plainsRiparianType = searchCriteria.First(x => x.Characteristic == "wetlandtype-PlainsRiparian");
+            wetLandTypeLayout.Children.Add(plainsRiparianType);
+
+            SearchCharacteristic plainsFloodplainType = searchCriteria.First(x => x.Characteristic == "wetlandtype-PlainsFloodplain");
+            wetLandTypeLayout.Children.Add(plainsFloodplainType);
+
+            SearchCharacteristic greasewoodFlatsType = searchCriteria.First(x => x.Characteristic == "wetlandtype-GreasewoodFlats");
+            wetLandTypeLayout.Children.Add(greasewoodFlatsType);
+
+            SearchCharacteristic hangingGardenType = searchCriteria.First(x => x.Characteristic == "wetlandtype-HangingGarden");
+            wetLandTypeLayout.Children.Add(hangingGardenType);
+
+            searchFilters.Children.Add(wetLandTypeLayout);
+
+           
+
+            //Plant Size
+            Label nativeLabel = new Label { Text = "Nativity:", Style = Application.Current.Resources["sectionHeader"] as Style };
+            searchFilters.Children.Add(nativeLabel);
+
+            WrapLayout nativityLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+
+            SearchCharacteristic nativePlants = searchCriteria.First(x => x.Characteristic == "nativity-Native");
+            nativityLayout.Children.Add(nativePlants);
+
+            SearchCharacteristic nonNativePlants = searchCriteria.First(x => x.Characteristic == "nativity-Non");
+            nativityLayout.Children.Add(nonNativePlants);
+
+            searchFilters.Children.Add(nativityLayout);
+
+            Label federalLabel = new Label { Text = "Federal Status:", Style = Application.Current.Resources["sectionHeader"] as Style };
+            searchFilters.Children.Add(federalLabel);
+
+            WrapLayout federalLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+
+            SearchCharacteristic usfsFederal = searchCriteria.First(x => x.Characteristic == "federal-USFS");
+            federalLayout.Children.Add(usfsFederal);
+
+            SearchCharacteristic threatenedFederal= searchCriteria.First(x => x.Characteristic == "federal-Threatened");
+            federalLayout.Children.Add(threatenedFederal);
+
+            SearchCharacteristic blmFederal = searchCriteria.First(x => x.Characteristic == "federal-BLM");
+            federalLayout.Children.Add(blmFederal);
+
+            searchFilters.Children.Add(federalLayout);
+
+            Label elevationLabel = new Label { Text = "Elevation (meters):", Style = Application.Current.Resources["sectionHeader"] as Style };
+            searchFilters.Children.Add(elevationLabel);
+
+            StackLayout elavtionLayout = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand };
+
+            minElev = new Entry
+            {
+                Placeholder = "Minimum",
+                TextColor = Color.Black,
+                BackgroundColor = Color.White
+            };
+            elavtionLayout.Children.Add(minElev);
+            minElev.TextChanged += ProcessElevation;
+    
+
+            maxElev = new Entry
+            {
+                Placeholder = "Maximum",
+                TextColor = Color.Black,
+                BackgroundColor = Color.White
+            };
+            elavtionLayout.Children.Add(maxElev);
+            maxElev.TextChanged += ProcessElevation;
+
+            searchFilters.Children.Add(elavtionLayout);
 
             ScrollView scrollView = new ScrollView()
             {
@@ -185,10 +326,6 @@ namespace PortableApp
             Button resetButton = new Button { Text = "RESET", Style = Application.Current.Resources["semiTransparentWhiteButton"] as Style };
             resetButton.Clicked += ResetSearchFilters;
             searchButtons.Children.Add(resetButton, 0, 0);
-
-            /*Button searchButton = new Button { Text = "SEARCH", Style = Application.Current.Resources["semiTransparentWhiteButton"] as Style };
-            searchButton.Clicked += RunSearch;
-            searchButtons.Children.Add(searchButton, 1, 0);*/
 
             searchButton = new Button { Style = Application.Current.Resources["semiTransparentWhiteButton2"] as Style };
             searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
@@ -209,10 +346,8 @@ namespace PortableApp
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(45) });
             innerContainer.Children.Add(closeButton, 0, 2);
 
-            contentScrollView.Content = innerContainer;
-
             // Add inner container to page container and set as page content
-            pageContainer.Children.Add(contentScrollView, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
+            pageContainer.Children.Add(innerContainer, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             Content = pageContainer;
         }
 
@@ -226,27 +361,56 @@ namespace PortableApp
                 correspondingDBRecord.Query = false;
                 await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(correspondingDBRecord);
             }
+            minElev.Text = "";
+            maxElev.Text = "";
             plants = await App.WetlandPlantRepoLocal.GetAllWetlandPlantsAsync();
+            searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
+        }
+
+        private async void ProcessElevation(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                if (minElev.Equals(sender))
+                {
+                    minElevPlants = await App.WetlandPlantRepoLocal.FilterPlantsByElevation(Int32.Parse(minElev.Text), "min");
+                }
+            }
+            catch (FormatException error)
+            {
+                minElevPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
+               
+                plants = await App.WetlandPlantRepoLocal.FilterPlantsBySearchCriteria();
+            }
+            try
+            {
+                if (maxElev.Equals(sender))
+                {
+                    maxElevPlants = await App.WetlandPlantRepoLocal.FilterPlantsByElevation(Int32.Parse(maxElev.Text), "max");
+                }
+            }
+            catch (FormatException error)
+            {
+                maxElevPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());    
+            }
+
+            elevOverlap =  new ObservableCollection<WetlandPlant>(minElevPlants.Intersect(maxElevPlants));
+            ObservableCollection<WetlandPlant> allPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
+            ObservableCollection<WetlandPlant> searchPlants = await App.WetlandPlantRepoLocal.FilterPlantsBySearchCriteria();
+            ObservableCollection<WetlandPlant> searchCombined = new ObservableCollection<WetlandPlant>();
+
+
+            foreach (var plant in allPlants)
+                if (elevOverlap.Contains(plant) && searchPlants.Contains(plant))
+                    searchCombined.Add(plant);
+
+            plants = searchCombined;
+
             searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
         }
 
         private async void ProcessSearchFilter(object sender, EventArgs e)
         {
-            /*
-            var button = (SearchCharacteristic)sender;
-            var correspondingDBRecord = (WetlandSearch)sender;
-            if (button.Query == true)
-            {
-                correspondingDBRecord.Query = false;
-                button.BorderWidth = 0;
-            }
-            else if (button.Query == false)
-            {
-                correspondingDBRecord.Query = true;
-                button.BorderWidth = 1;
-            }
-            await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(correspondingDBRecord);*/
-            // Update record in database and add or remove border
             SearchCharacteristic button = (SearchCharacteristic)sender;
             WetlandSearch correspondingDBRecord = searchCriteriaDB.First(x => x.Characteristic == button.Characteristic);
             if (button.Query == true)
@@ -261,9 +425,18 @@ namespace PortableApp
             }
             await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(correspondingDBRecord);
 
-            plants = await App.WetlandPlantRepoLocal.FilterPlantsBySearchCriteria();
-            searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
+            ObservableCollection<WetlandPlant> allPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
+            ObservableCollection<WetlandPlant> searchPlants = await App.WetlandPlantRepoLocal.FilterPlantsBySearchCriteria();
+            ObservableCollection<WetlandPlant> searchCombined = new ObservableCollection<WetlandPlant>();
 
+
+            foreach (var plant in allPlants)
+                if (elevOverlap.Contains(plant) && searchPlants.Contains(plant))
+                    searchCombined.Add(plant);
+
+            plants = searchCombined;
+
+            searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
         }
 
         private void RunSearch(object sender, EventArgs e)

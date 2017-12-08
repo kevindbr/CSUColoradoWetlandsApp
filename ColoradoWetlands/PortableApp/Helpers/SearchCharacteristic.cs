@@ -47,7 +47,8 @@ namespace PortableApp
             this.ContentLayout = new ButtonContentLayout(ButtonContentLayout.ImagePosition.Top,5);
             BorderColor = Color.White;
             BackgroundColor = Color.Transparent;
-            WidthRequest = Device.OnPlatform(150, 0, 0);
+            //FIX!!!!!!!!!!!!!!!!!!!
+            WidthRequest = Device.OnPlatform(175, 150, 0);
         }
 
     }

@@ -57,7 +57,7 @@ namespace PortableApp.iOS
                 basemap.BaseLayers.Add(wetlandsMap);
 
                 // create a new Map to display the basemap and assign to mapView, add to layout
-                var map = new Esri.ArcGISRuntime.Mapping.Map { Basemap = basemap, InitialViewpoint = new Viewpoint(40.5592, -105.0781, 100000000) };
+                var map = new Esri.ArcGISRuntime.Mapping.Map { Basemap = basemap, InitialViewpoint = new Viewpoint(40.5592, -105.0781, 100000) };
                 mapView.Map = map;
                 layout.AddSubview(mapView);
 
@@ -121,7 +121,7 @@ namespace PortableApp.iOS
 
                     mapView.LocationDisplay.IsEnabled = true;
                     locationButton.SetImage(UIImage.FromFile("location-white.png"), UIControlState.Normal);
-                    await mapView.SetViewpointAsync(new Viewpoint(position.Latitude, position.Longitude, 10000000));
+                    await mapView.SetViewpointAsync(new Viewpoint(position.Latitude, position.Longitude, 5000));
                 }
                 catch (Exception ex)
                 {
