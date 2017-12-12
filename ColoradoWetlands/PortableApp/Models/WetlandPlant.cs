@@ -88,8 +88,10 @@ namespace PortableApp.Models
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<WetlandPlantDivision> DivisionWetland { get; set; }
-        
 
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<WetlandCountyPlant> CountyPlantWetland { get; set; }
+       
 
         public IFolder rootFolder { get { return FileSystem.Current.LocalStorage; } }
 

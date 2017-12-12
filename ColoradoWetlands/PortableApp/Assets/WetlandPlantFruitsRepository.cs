@@ -114,6 +114,28 @@ namespace PortableApp
     }
 
 
+    public class WetlandCountyPlantRepository : DBConnection
+    {
+        public WetlandCountyPlantRepository()
+        {
+            // Create the Wetland Plant SimilarSpecies table
+            conn.CreateTable<WetlandCountyPlant>();
+        }
+
+        // return a list of Wetland Plant SimilarSpecies saved to the WetlandPlantSimilarSpecies table in the database
+        public List<WetlandCountyPlant> GetAllCounties()
+        {
+            return (from p in conn.Table<WetlandCountyPlant>() select p).ToList();
+        }
+
+        // return a list of Wetland Plant SimilarSpecies for the plant specified
+        public List<WetlandCountyPlant> PlantCounty(int plantId)
+        {
+            return conn.Table<WetlandCountyPlant>().Where(p => p.plantid.Equals(plantId)).ToList();
+        }
+    }
+
+
     public class WetlandPlantFruitsRepositoryLocal 
     {
         private List<WetlandPlantFruits> allItems;
@@ -225,6 +247,29 @@ namespace PortableApp
 
         // return a list of Wetland Plant SimilarSpecies for the plant specified
         public List<WetlandPlantSize> PlantsShape(int plantId)
+        {
+            return allItems.Where(p => p.plantid.Equals(plantId)).ToList();
+        }
+    }
+
+    public class WetlandCountyPlantRepositoryLocal
+    {
+        private List<WetlandCountyPlant> allItems;
+
+        public WetlandCountyPlantRepositoryLocal(List<WetlandCountyPlant> fromDB)
+        {
+            // Create the Wetland Plant SimilarSpecies table
+            allItems = fromDB;
+        }
+
+        // return a list of Wetland Plant SimilarSpecies saved to the WetlandPlantSimilarSpecies table in the database
+        public List<WetlandCountyPlant> GetAllCounties()
+        {
+            return (from p in allItems select p).ToList();
+        }
+
+        // return a list of Wetland Plant SimilarSpecies for the plant specified
+        public List<WetlandCountyPlant> PlantCounty(int plantId)
         {
             return allItems.Where(p => p.plantid.Equals(plantId)).ToList();
         }

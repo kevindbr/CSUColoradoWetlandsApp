@@ -16,6 +16,7 @@ namespace PortableApp
 
         public string StatusMessage { get; set; }
         private List<WetlandPlant> allWetlandPlants;
+        private List<WetlandPlant> searchPlants;
 
         public WetlandPlantRepositoryLocal(List<WetlandPlant> allPlantsDB)
         {
@@ -27,6 +28,17 @@ namespace PortableApp
         public List<WetlandPlant> GetAllWetlandPlants()
         {
             return allWetlandPlants;
+        }
+
+        // return a list of Wetlandplants saved to the WetlandPlant table in the database
+        public async Task<ObservableCollection<WetlandPlant>> GetAllSearchPlants()
+        {
+            return new ObservableCollection<WetlandPlant>(searchPlants);
+        }
+
+        public void setSearchPlants(List<WetlandPlant> searchPlants)
+        {
+            this.searchPlants = searchPlants;
         }
 
         public List<string> GetPlantJumpList()
@@ -113,8 +125,6 @@ namespace PortableApp
 
         public async Task<ObservableCollection<WetlandPlant>> FilterPlantsByElevation(int elevation,string choice)
         {
-            ObservableCollection<WetlandPlant> allPlants = new ObservableCollection<WetlandPlant>(GetAllWetlandPlants());
-            ObservableCollection<WetlandPlant> searchCombined = new ObservableCollection<WetlandPlant>();
             List<WetlandPlant> elevationPlants;
 
             try
@@ -145,6 +155,26 @@ namespace PortableApp
 
         }
 
+        public async Task<ObservableCollection<WetlandPlant>> FilterPlantsByCounty(string county)
+        {
+            List<WetlandCountyPlant> countyPlants;
+            List<WetlandPlant> searchPlantsCounty =  new List<WetlandPlant>();
+
+
+            countyPlants = App.WetlandCountyPlantRepoLocal.GetAllCounties().AsQueryable().Where(x => county.Contains(x.name)).ToList();
+            foreach (var count in countyPlants)
+            {
+                if (!searchPlantsCounty.Contains(GetWetlandPlantByAltId(count.plantid)))
+                {
+                    searchPlantsCounty.Add(GetWetlandPlantByAltId(count.plantid));
+                }
+            }
+
+
+
+            return new ObservableCollection<WetlandPlant>(searchPlantsCounty);
+        }
+
         // return a list of WetlandPlants saved to the WetlandPlant table in the database
         public async Task<ObservableCollection<WetlandPlant>> GetAllWetlandPlantsAsync()
         {
@@ -165,7 +195,7 @@ namespace PortableApp
             List<WetlandPlant> allPlants = GetAllWetlandPlants();
             // Add selected Leaf Type characteristics
 
-            var queryWetlandOther = selectCritList.Where(x => x.Characteristic.Contains("wetlandtype") || x.Characteristic.Contains("group") || x.Characteristic.Contains("nativity") || x.Characteristic.Contains("federal"));
+            var queryWetlandOther = selectCritList.Where(x => x.Characteristic.Contains("wetlandtype") || x.Characteristic.Contains("group") || x.Characteristic.Contains("nativity") || x.Characteristic.Contains("federal") || x.Characteristic.Contains("status"));
             if (queryWetlandOther.Count() > 0)
             {
                 searchPlantsOther = App.WetlandPlantRepoLocal.GetAllWetlandPlants().AsQueryable().Where(ConstructPredicate(selectCritList)).ToList();
@@ -386,6 +416,14 @@ namespace PortableApp
                 var federalQuery = PredicateBuilder.False<WetlandPlant>();
                 foreach (var federal in queryFederal) { federalQuery = federalQuery.Or(x => x.federalstatus.Contains(federal.SearchString1)); }
                 overallQuery = overallQuery.And(federalQuery);
+            }
+
+            var queryStatus = selectCritList.Where(x => x.Characteristic.Contains("status"));
+            if (queryStatus.Count() > 0)
+            {
+                var statusQuery = PredicateBuilder.False<WetlandPlant>();
+                foreach (var status in queryStatus) { statusQuery = statusQuery.Or(x => x.awwetcode.Contains(status.SearchString1) || x.gpwetcode.Contains(status.SearchString1) || x.wmvcwetcode.Contains(status.SearchString1)); }
+                overallQuery = overallQuery.And(statusQuery);
             }
 
             return overallQuery;

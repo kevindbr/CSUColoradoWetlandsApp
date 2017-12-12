@@ -94,7 +94,42 @@ namespace PortableApp
             conn.Insert(new WetlandSearch() { Characteristic = "plantsize-Small", Name = "Small", Query = false, Column1 = "plantsize", SearchString1 = "small" });
             conn.Insert(new WetlandSearch() { Characteristic = "plantsize-Medium", Name = "Medium", Query = false, Column1 = "plantsize", SearchString1 = "medium" });
             conn.Insert(new WetlandSearch() { Characteristic = "plantsize-Large", Name = "Large", Query = false, Column1 = "plantsize", SearchString1 = "large" });
-            
+
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-Marsh", Name = "Marsh", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Marsh" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-WetMeadow", Name = "Wet Meadow", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Wet Meadow" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-MesicMeadow", Name = "Mesic Meadow", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Mesic Meadow" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-Fen", Name = "Fen", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Fen" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-Playa", Name = "Playa", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Playa" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-SubalpineRiparianWoodland", Name = "Subalpine Riparian Woodland", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Subalpine Riparian Woodland" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-SubalpineRiparianShrubland", Name = "Subalpine Riparian Shrubland", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Subalpine Riparian Shrubland" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-FoothillsRiparian", Name = "Foothills Riparian", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Foothills Riparian" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-PlainsRiparian", Name = "Plains Riparian", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Plains Riparian" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-PlainsFloodplain", Name = "Plains Floodplain", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Plains Floodplain" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-GreasewoodFlats", Name = "Greasewood Flats", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Greasewood Flats" });
+            conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-HangingGarden", Name = "Hanging Garden", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Hanging Garden" });
+
+            conn.Insert(new WetlandSearch() { Characteristic = "group-Woody", Name = "Woody Plants", Query = false, Column1 = "sections", SearchString1 = "Woody", IconFileName = "shrubtree.png" });
+            conn.Insert(new WetlandSearch() { Characteristic = "group-Dicot", Name = "Dicot Herbs", Query = false, Column1 = "sections", SearchString1 = "Dicot", IconFileName = "dicot.png" });
+            conn.Insert(new WetlandSearch() { Characteristic = "group-Monocot", Name = "Monocot Herbs", Query = false, Column1 = "sections", SearchString1 = "Monocot", IconFileName = "monocot.png" });
+            conn.Insert(new WetlandSearch() { Characteristic = "group-Aquatic", Name = "Aquatic Herbs", Query = false, Column1 = "sections", SearchString1 = "Aquatic", IconFileName = "aquatic.png" });
+            conn.Insert(new WetlandSearch() { Characteristic = "group-Rushes", Name = "Rushes", Query = false, Column1 = "sections", SearchString1 = "Rushes", IconFileName = "rushes.png" });
+            conn.Insert(new WetlandSearch() { Characteristic = "group-Sedges", Name = "Sedges", Query = false, Column1 = "sections", SearchString1 = "Sedges", IconFileName = "sedge.png" });
+            conn.Insert(new WetlandSearch() { Characteristic = "group-Grasses", Name = "Grasses", Query = false, Column1 = "sections", SearchString1 = "Grasses", IconFileName = "grass.png" });
+            conn.Insert(new WetlandSearch() { Characteristic = "group-Ferns", Name = "Ferns", Query = false, Column1 = "sections", SearchString1 = "Ferns", IconFileName = "fern.png" });
+
+            conn.Insert(new WetlandSearch() { Characteristic = "nativity-Native", Name = "Native", Query = false, Column1 = "nativity", SearchString1 = "Native" });
+            conn.Insert(new WetlandSearch() { Characteristic = "nativity-Non", Name = "Non-native", Query = false, Column1 = "nativity", SearchString1 = "Non-native" });
+
+            conn.Insert(new WetlandSearch() { Characteristic = "federal-USFS", Name = "USFS Sensitive", Query = false, Column1 = "federalstatus", SearchString1 = "USFS" });
+            conn.Insert(new WetlandSearch() { Characteristic = "federal-Threatened", Name = "Listed Threatened", Query = false, Column1 = "federalstatus", SearchString1 = "Threatened" });
+            conn.Insert(new WetlandSearch() { Characteristic = "federal-BLM", Name = "BLM Sensitive", Query = false, Column1 = "federalstatus", SearchString1 = "BLM" });
+
+            conn.Insert(new WetlandSearch() { Characteristic = "status-FAC", Name = "FAC", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "FAC" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-FACW", Name = "FACW", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "FACW" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-FACU", Name = "FACU", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "FACU" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-OBL", Name = "OBL", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "OBL" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-NI", Name = "NI", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "NI" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-UPL", Name = "UPL", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "UPL" });
         }
     }
 }

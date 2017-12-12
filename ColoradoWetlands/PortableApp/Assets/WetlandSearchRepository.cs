@@ -124,6 +124,13 @@ namespace PortableApp
             conn.Insert(new WetlandSearch() { Characteristic = "federal-Threatened", Name = "Listed Threatened", Query = false, Column1 = "federalstatus", SearchString1 = "Threatened" });
             conn.Insert(new WetlandSearch() { Characteristic = "federal-BLM", Name = "BLM Sensitive", Query = false, Column1 = "federalstatus", SearchString1 = "BLM" });
 
+            conn.Insert(new WetlandSearch() { Characteristic = "status-FAC", Name = "FAC", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "FAC" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-FACW", Name = "FACW", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "FACW" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-FACU", Name = "FACU", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "FACU" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-OBL", Name = "OBL", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "OBL" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-NI", Name = "NI", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "NI" });
+            conn.Insert(new WetlandSearch() { Characteristic = "status-UPL", Name = "UPL", Query = false, Column1 = "awwetcode", Column2 = "gpwetcode", Column3 = "wmvcwetcode", SearchString1 = "UPL" });
+
 
 
 

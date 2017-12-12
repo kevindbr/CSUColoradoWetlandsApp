@@ -43,8 +43,7 @@ namespace PortableApp
         public SearchCharacteristic()
         {
             TextColor = Color.White;
-            //HorizontalOptions = LayoutOptions.CenterAndExpand;
-            this.ContentLayout = new ButtonContentLayout(ButtonContentLayout.ImagePosition.Top,5);
+            ContentLayout = new ButtonContentLayout(ButtonContentLayout.ImagePosition.Top,5);
             BorderColor = Color.White;
             BackgroundColor = Color.Transparent;
             //FIX!!!!!!!!!!!!!!!!!!!

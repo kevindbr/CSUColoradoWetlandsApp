@@ -27,6 +27,7 @@ namespace PortableApp
         public static WetlandPlantShapeRepository WetlandPlantShapeRepo { get; private set; }
         public static WetlandPlantLeafArrangementRepository WetlandPlantLeafArrangementRepo { get; private set; }
         public static WetlandPlantSizeRepository WetlandPlantSizeRepo { get; private set; }
+        public static WetlandCountyPlantRepository WetlandCountyPlantRepo { get; private set; }
 
         public static WetlandPlantRepositoryLocal WetlandPlantRepoLocal { get;  set; }
         public static WetlandPlantImageRepositoryLocal WetlandPlantImageRepoLocal { get;  set; }
@@ -43,7 +44,7 @@ namespace PortableApp
         public static WetlandPlantShapeRepositoryLocal WetlandPlantShapeRepoLocal { get; set; }
         public static WetlandPlantLeafArrangementRepositoryLocal WetlandPlantLeafArrangementRepoLocal { get; set; }
         public static WetlandPlantSizeRepositoryLocal WetlandPlantSizeRepoLocal { get; set; }
-        //public static WetlandPlantFruitsRepositoryLocal WetlandPlantFruitsRepoLocal { get; private set; }
+        public static WetlandCountyPlantRepositoryLocal WetlandCountyPlantRepoLocal { get; set; }
 
         /*
          New starting workflow
@@ -84,17 +85,17 @@ namespace PortableApp
             WetlandPlantShapeRepo = new WetlandPlantShapeRepository();
             WetlandPlantLeafArrangementRepo = new WetlandPlantLeafArrangementRepository();
             WetlandPlantSizeRepo = new WetlandPlantSizeRepository();
+            WetlandCountyPlantRepo = new WetlandCountyPlantRepository();
 
 
-
-        WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(WetlandPlantRepo.GetAllWetlandPlants());
+            WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(WetlandPlantRepo.GetAllWetlandPlants());
             WetlandPlantImageRepoLocal = new WetlandPlantImageRepositoryLocal(WetlandPlantImageRepo.GetAllWetlandPlantImages());
             WetlandPlantFruitsRepoLocal = new WetlandPlantFruitsRepositoryLocal(WetlandPlantFruitsRepo.GetAllWetlandFruits());
             WetlandPlantDivisionRepoLocal = new WetlandPlantDivisionRepositoryLocal(WetlandPlantDivisionRepo.GetAllDivisions());
             WetlandPlantShapeRepoLocal = new WetlandPlantShapeRepositoryLocal(WetlandPlantShapeRepo.GetAllShapes());
             WetlandPlantLeafArrangementRepoLocal = new WetlandPlantLeafArrangementRepositoryLocal(WetlandPlantLeafArrangementRepo.GetAllArrangements());
             WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(WetlandPlantSizeRepo.GetAllPlantSizes());
-
+            WetlandCountyPlantRepoLocal = new WetlandCountyPlantRepositoryLocal(WetlandCountyPlantRepo.GetAllCounties());
 
             // Set MainPage
             this.MainPage = new NavigationPage(new MainPage());

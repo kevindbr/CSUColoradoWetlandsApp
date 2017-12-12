@@ -349,7 +349,7 @@ namespace PortableApp
 
         private async void HandleRunSearch(object sender, EventArgs e)
         {
-            plants = await App.WetlandPlantRepoLocal.FilterPlantsBySearchCriteria();
+            plants = await App.WetlandPlantRepoLocal.GetAllSearchPlants();
             wetlandPlantsList.ItemsSource = plants;
             cameFromSearch = true;
             await App.Current.MainPage.Navigation.PopModalAsync();

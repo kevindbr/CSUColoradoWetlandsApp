@@ -68,4 +68,19 @@ namespace PortableApp.Models
         public int valueid { get; set; }
 
     }
+
+    [Table("wetland_county_plant")]
+    public class WetlandCountyPlant
+    {
+        [PrimaryKey]
+        public int countyplantid { get; set; }
+
+        public int county_id { get; set; }
+
+        [ForeignKey(typeof(WetlandPlant))]
+        public int plantid { get; set; }
+
+        public string name { get; set; }
+
+    }
 }
