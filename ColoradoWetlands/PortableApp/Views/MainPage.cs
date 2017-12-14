@@ -19,7 +19,7 @@ namespace PortableApp
         private bool isConnectedToWiFi;
         private Grid innerContainer;
         // private Switch downloadImagesSwitch;
-        private Button downloadImagesButton = new Button { Style = Application.Current.Resources["semiTransparentButton"] as Style, Text = "Download" };
+        private Button downloadImagesButton = new Button { Style = Application.Current.Resources["semiTransparentButton"] as Style, Text = "Trying To Connect To Server..." };
         private WetlandSetting downloadImagesSetting;
         private int numberOfPlants;
         private bool updatePlants = false;
