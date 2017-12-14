@@ -96,10 +96,10 @@ namespace PortableApp.Models
         public IFolder rootFolder { get { return FileSystem.Current.LocalStorage; } }
 
         public string ThumbnailPathDownloaded { get { return rootFolder.Path + "/Images/" + plantscode + "_icon.jpg"; } }
-        public string ThumbnailPathStreamed { get { return "http://sdt1.cas.colostate.edu/mobileapi/api/wetland/image_icons/" + plantscode; } }
+        public string ThumbnailPathStreamed { get { return "http://sdt1.agsci.colostate.edu/mobileapi/api/wetland/image_icons/" + plantscode; } }
 
         public string RangePathDownloaded { get { return rootFolder.Path + "/Images/" + mapimg; } }
-        public string RangePathStreamed { get { return "http://sdt1.cas.colostate.edu/mobileapi/api/wetland/range_images/" + mapimg.Replace(".png", ""); } }
+        public string RangePathStreamed { get { return "http://sdt1.agsci.colostate.edu/mobileapi/api/wetland/range_images/" + mapimg.Replace(".png", ""); } }
         
         public string scinameauthorstripped
         {
