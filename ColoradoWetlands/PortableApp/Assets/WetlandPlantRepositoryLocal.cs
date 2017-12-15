@@ -161,7 +161,7 @@ namespace PortableApp
             List<WetlandPlant> searchPlantsCounty =  new List<WetlandPlant>();
 
 
-            countyPlants = App.WetlandCountyPlantRepoLocal.GetAllCounties().AsQueryable().Where(x => county.Contains(x.name)).ToList();
+            countyPlants = App.WetlandCountyPlantRepoLocal.GetAllCounties().AsQueryable().Where(x => county.Equals(x.name)).ToList();
             foreach (var count in countyPlants)
             {
                 if (!searchPlantsCounty.Contains(GetWetlandPlantByAltId(count.plantid)))

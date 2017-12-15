@@ -27,23 +27,11 @@ namespace PortableApp
 
         Picker countyPicker = new Picker();
         Button countyButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "All Counties", BorderRadius = Device.OnPlatform(0, 1, 0) };
-        List<String> countyOptions = new List<string>() {"Republican","Upper Arkansas","Rio Grande Headwaters","Colorado Headwaters","Gunnison","Upper Colorado-Dolores","White-Yampa-Green",
-            "Upper San Juan","North Platte Headwaters","Upper North Platte","Upper Laramie","South Platte Headwater","Upper South Platte","Middle South Platte-Cherry Creek","Clear Creek","St. Vrain",
-            "Big Thompson","Cache La Poudre","Lone Tree-Owl","Crow","Kiowa","Bijou","Middle South Platte-Sterling","Beaver","Pawnee","Upper Lodgepole","Lower Lodgepole","Sidney Draw",
-            "Lower South Platte","Arikaree","North Fork Republican","South Fork Republican","Frenchman","Stinking Water","South Fork Beaver","Little Beaver","Smoky Hill Headwaters","North Fork Smoky Hill",
-            "Ladder","Arkansas Headwaters","Upper Arkansas","Fountain","Chico","Upper Arkansas-Lake Meredith","Huerfano","Apishapa","Horse","Upper Arkansas-John Martin Reservoir","Purgatorie",
-            "Big Sandy","Rush","Two Butte","Middle Arkansas-Lake McKinney","Whitewoman","Cimarron Headwaters","Upper Cimarron","North Fork Cimarron","Sand Arroyo","Bear","Canadian Headwaters",
-            "Rio Grande Headwaters","Alamosa-Trinchera","San Luis","Saguache","Conejos","Upper Rio Grande","Rio Chama","Colorado Headwaters","Blue","Eagle","Roaring Fork","Colorado Headwaters-Plateau",
-            "East-Taylor","Upper Gunnison","Tomichi","North Fork Gunnison","Lower Gunnison","Uncompahange","Westwater Canyon","Upper Dolores","San Miguel","Lower Dolores","Upper Colorado-Kane Springs",
-            "Upper Green-Flaming Gorge Reservoir","Vermilion","Upper Yampa","Lower Yampa","Little Snake","Upper White","Piceance-Yellow","Lower White","Lower Green-Diamond","Upper San Juan","Piedra",
-            "Animas","Middle San Juan","Mancos","Lower San Juan-Four Corners","McElmo","Montezuma","Adams","Alamosa","Arapahoe","Archuleta","Baca","Bent","Boulder","Broomfield","Chaffee","Cheyenne",
-            "Clear creek","Conejos","Costilla","Crowley","Custer","Delta","Denver","Dolores","Douglas","Eagle","El Paso","Elbert","Fremont","Garfield","Gilpin","Grand","Gunnison","Hinsdale","Huerfano",
-            "Jackson","Jefferson","Kiowa","Kit Carson","La Plata","Lake","Larimer","Las Animas","Lincoln","Logan","Mesa","Mineral","Moffat","Montezuma","Montrose","Morgan","Otero","Ouray","Park",
-            "Phillips","Pitkin","Prowers","Pueblo","Rio Blanco","Rio Grande","Routt","Saguache","San Juan","San Miguel","Sedgwick","Summit","Teller","Washington","Weld","Yuma","Colorado River Valley Field Office",
-            "Grand Junction Field Office","Gunnison Field Office","Kremmling Field Office","Little Snake Field Office","Royal Gorge Field Office","San Luis Valley Field Office","Tres Rio Field Office",
-            "Uncompahgre Field Office","White River Field Office","Arapaho - Roosevelt National Forest","Comanche National Grassland","Grand Mesa - Uncompahgre - Gunnison National Forest",
-            "Pawnee National Grassland","Pike - San Isabel National Forest","Rio Grande National Forest","Routt National Forest","San Juan National Forest","White River National Forest","Colorado",
-            "Eastern Plains","Rocky Mountains","Colorado Plateau","Alpine","Barrens","Cliffs and Canyons","Forest","Grassland","Riparian and Wetlands","Shrubland" };
+        List<String> countyOptions = new List<string>() { "Adams", "Alamosa", "Arapahoe", "Archuleta", "Baca", "Bent", "Boulder", "Broomfield", "Chaffee", "Cheyenne", "Clear Creek",
+            "Conejos", "Costilla", "Crowley", "Custer", "Delta", "Denver", "Dolores", "Douglas", "Eagle", "Elbert", "El Paso", "Fremont", "Garfield", "Gilpin", "Grand", "Gunnison",
+            "Hinsdale", "Huerfano", "Jackson", "Jefferson", "Kiowa", "Kit Carson", "La Plata", "Lake", "Larimer", "Las Animas", "Lincoln", "Logan", "Mesa ", "Mineral", "Moffat",
+            "Montezuma", "Montrose", "Morgan", "Otero", "Ouray", "Park", "Phillips", "Pitkin", "Prowers", "Pueblo", "Rio Blanco", "Rio Grande", "Routt", "Saguache", "San Juan",
+            "San Miguel", "Sedgwick", "Summit", "Teller", "Washington", "Weld", "Yuma" };
        
 
 
