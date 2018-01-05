@@ -47,7 +47,7 @@ namespace PortableApp
             BorderColor = Color.White;
             BackgroundColor = Color.Transparent;
             //FIX!!!!!!!!!!!!!!!!!!!
-            WidthRequest = Device.OnPlatform(175, 150, 0);
+            WidthRequest = Device.OnPlatform(150, 150, 0);
         }
 
     }

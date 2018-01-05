@@ -34,16 +34,23 @@ namespace PortableApp
         Button favoritesFilter;
         SearchBar searchBar;
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             IsLoading = true;
             // Get filtered plant list if came from search
             if (!cameFromSearch)
             {
-                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
-                if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
-                ChangeFilterColors(browseFilter);
-                base.OnAppearing();
+                if (App.WetlandPlantRepo.GetAllWetlandPlants().Count > 0)
+                {
+                    plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
+                    if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
+                    ChangeFilterColors(browseFilter);
+                    base.OnAppearing();
+                }
+                else
+                {
+                    plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAllPlants());
+                }
             } 
             else
                 ChangeFilterColors(searchFilter);
@@ -257,6 +264,7 @@ namespace PortableApp
                     RetryCount = 0,
                     RetryDelay = 250,
                     TransparencyEnabled = false,
+                    FadeAnimationEnabled = false,
                     LoadingPlaceholder = "loading.png",
                     ErrorPlaceholder = "error.png",
                 };

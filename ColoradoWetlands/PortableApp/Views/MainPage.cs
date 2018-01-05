@@ -121,39 +121,6 @@ namespace PortableApp
                         downloadImagesButton.Text = "No Internet Connection";
                     }
                 }
-
-                /* // If valid date comparison and date on server is more recent than local date, show download button
-                 if (datePlantDataUpdatedLocally != null && datePlantDataUpdatedOnServer != null)
-                 {
-                     if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || numberOfPlants == 0)
-                     {
-                         updatePlants = true;
-                         ToDownloadPage();
-                     }
-                 }
-
-                 // If there are image zip files to download and the user has selected to downloaded images (and updatePlants has not triggered adding of download page to the stack)
-                 if (imageFilesToDownload != null && downloadImages == true && !updatePlants)
-                 {
-                     updatePlants = false;
-                     if (imageFilesToDownload.Count > 0)
-                         ToDownloadPage();
-                 }
-
-                 //// If can't get setting on server, add connection error message
-                 //else if (datePlantDataUpdatedOnServer == null)
-                 //{
-                 //    innerContainer.Children.Add(new Label { Text = "Could not connect to server, please try again at a later time.", TextColor = Color.White, FontSize = 13, HorizontalTextAlignment = TextAlignment.Center, Margin = new Thickness(20, 0, 20, 0) }, 0, 2);
-                 //}
-                 //// If in doubt, add button to ensure data is updated
-                 //else
-                 //{
-                 //    if (datePlantDataUpdatedLocally == null) { updatePlants = true; }
-                 //    innerContainer.Children.Add(downloadDataButton, 0, 2);
-                 //}
-
-                 // If image data needs to be downloaded, show button*/
-
             }
             else {
                 canceledDownload = false;
@@ -246,7 +213,7 @@ namespace PortableApp
                      //Button to download images
         
             downloadImagesButton.Clicked += DownloadImagesPressed;
-                      downloadImagesLayout.Children.Add(downloadImagesButton);
+              downloadImagesLayout.Children.Add(downloadImagesButton);
           //  downloadImagesLayout.Children.Add(downloadImagesLabel);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(85) });
             innerContainer.Children.Add(downloadImagesLayout, 0, 8);

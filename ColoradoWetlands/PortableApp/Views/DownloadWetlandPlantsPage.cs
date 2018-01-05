@@ -133,9 +133,9 @@ namespace PortableApp
             try
             {
 
-                downloadLabel.Text = "Downloading Plants...";
+                downloadLabel.Text = "Connecting ...";
                 int plantsSaved = 0;
-                foreach (var plant in plants)
+            /*    foreach (var plant in plants)
                 {
                     if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
                     await App.WetlandPlantRepo.AddOrUpdatePlantAsync(plant);
@@ -143,18 +143,25 @@ namespace PortableApp
                     await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
                     Double percent = (double)plantsSaved / (plants.Count + terms.Count);
                     downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent* 100) + "%";
-                }
-                foreach (var term in terms)
-                {
-                    if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
-                    await App.WetlandGlossaryRepo.AddOrUpdateTermAsync(term);
-                    plantsSaved += 1;
-                    await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
-                    Double percent = (double)plantsSaved / (plants.Count + terms.Count);
-                    downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent* 100)+"%";
-                }
+                }*/
 
-                downloadLabel.Text = "Download Finished!";
+
+                await App.WetlandPlantRepo.AddOrUpdateAllPlantsAsync(plants);
+                plantsSaved = plants.Count;
+
+                /*  foreach (var term in terms)
+                  {
+                      if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
+                      await App.WetlandGlossaryRepo.AddOrUpdateTermAsync(term);
+                      plantsSaved += 1;
+                      await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
+                      Double percent = (double)plantsSaved / (plants.Count + terms.Count);
+                      downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent* 100)+"%";
+                  }*/
+
+                await App.WetlandGlossaryRepo.AddOrUpdateAllTermsAsync(terms);
+
+            
                 datePlantDataUpdatedLocally.valuetimestamp = datePlantDataUpdatedOnServer.valuetimestamp;
                 await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(datePlantDataUpdatedLocally);
                 App.WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(App.WetlandPlantRepo.GetAllWetlandPlants());
@@ -165,6 +172,7 @@ namespace PortableApp
                 App.WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(App.WetlandPlantSizeRepo.GetAllPlantSizes());
                 App.WetlandCountyPlantRepoLocal = new WetlandCountyPlantRepositoryLocal(App.WetlandCountyPlantRepo.GetAllCounties());
 
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 var allImages = App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages();
 
                 await UpdatePlantImages(token);

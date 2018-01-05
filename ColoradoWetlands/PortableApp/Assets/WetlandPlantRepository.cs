@@ -82,13 +82,35 @@ namespace PortableApp
             {
                 if (string.IsNullOrEmpty(plant.commonname))
                     throw new Exception("Valid plant required");
-                await connAsync.InsertOrReplaceWithChildrenAsync(plant);
+
+                await connAsync.RunInTransactionAsync((SQLite.Net.SQLiteConnection tran) =>
+                {
+                     connAsync.InsertOrReplaceWithChildrenAsync(plant);
+                });
+                //  await connAsync.InsertOrReplaceAllWithChildrenAsync(plant);
             }
             catch (Exception ex)
             {
                 StatusMessage = string.Format("Failed to add {0}. Error: {1}", plant, ex.Message);
             }
             
+        }
+
+        public async Task AddOrUpdateAllPlantsAsync(IList<WetlandPlant> plants)
+        {
+            try
+            {
+                // await connAsync.InsertOrReplaceWithChildrenAsync(plant);
+                await connAsync.RunInTransactionAsync((SQLite.Net.SQLiteConnection tran) =>
+                {
+                    connAsync.InsertOrReplaceAllWithChildrenAsync(plants);
+                });
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = string.Format("Failed to add {0}. Error: {1}", "plants", ex.Message);
+            }
+
         }
 
         public async Task UpdatePlantAsync(WetlandPlant plant)

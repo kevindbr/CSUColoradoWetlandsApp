@@ -39,6 +39,23 @@ namespace PortableApp
             }
 
         }
-        
+
+        public async Task AddOrUpdateAllTermsAsync(IList<WetlandGlossary> terms)
+        {
+            try
+            {
+                // await connAsync.InsertOrReplaceWithChildrenAsync(plant);
+                await connAsync.RunInTransactionAsync((SQLite.Net.SQLiteConnection tran) =>
+                {
+                    connAsync.InsertOrReplaceAllAsync(terms);
+                });
+            }
+            catch (Exception ex)
+            {
+               // StatusMessage = string.Format("Failed to add {0}. Error: {1}", "plants", ex.Message);
+            }
+
+        }
+
     }
 }

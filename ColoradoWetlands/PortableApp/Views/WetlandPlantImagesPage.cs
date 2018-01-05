@@ -45,7 +45,13 @@ namespace PortableApp
 
                 // Add image
                 var image = new ZoomImage { Margin = new Thickness(10, 0, 10, 0) };
-                string imageBinding = downloadImages ? "ImagePathDownloaded" : "ImagePathStreamed";
+                
+                string imageBinding = "ImagePathStreamed";
+
+                if (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages() != null)
+                    if (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages().Count > 0)
+                        imageBinding = "ImagePathDownloaded";
+
                 var cachedImage = new CachedImage()
                 {
                     HorizontalOptions = LayoutOptions.Center,
@@ -63,12 +69,11 @@ namespace PortableApp
                     LoadingPlaceholder = "loading.png",
                     ErrorPlaceholder = "error.png",
                 };
+
+
+
                 image.SetBinding(Image.SourceProperty, new Binding(imageBinding));
-
-
-                if (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages() != null)
-                    if (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages().Count > 0)
-                        imageBinding = "ThumbnailPathDownloaded";
+                cachedImage.SetBinding(CachedImage.SourceProperty, new Binding(imageBinding));
 
                 cell.Children.Add(image, 0, 1);
 
