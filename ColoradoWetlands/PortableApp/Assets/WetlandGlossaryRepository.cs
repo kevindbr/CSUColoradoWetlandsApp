@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using SQLiteNetExtensions.Extensions;
 
 namespace PortableApp
 {
@@ -47,7 +48,7 @@ namespace PortableApp
                 // await connAsync.InsertOrReplaceWithChildrenAsync(plant);
                 await connAsync.RunInTransactionAsync((SQLite.Net.SQLiteConnection tran) =>
                 {
-                    connAsync.InsertOrReplaceAllAsync(terms);
+                    tran.InsertOrReplaceAllWithChildren(terms);
                 });
             }
             catch (Exception ex)

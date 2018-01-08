@@ -135,7 +135,7 @@ namespace PortableApp
 
                 downloadLabel.Text = "Connecting ...";
                 int plantsSaved = 0;
-                foreach (var plant in plants)
+            /*    foreach (var plant in plants)
                 {
                     if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
                     await App.WetlandPlantRepo.AddOrUpdatePlantAsync(plant);
@@ -143,13 +143,13 @@ namespace PortableApp
                     await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
                     Double percent = (double)plantsSaved / (plants.Count + terms.Count);
                     downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent* 100) + "%";
-                }
+                }*/
 
 
-                //await App.WetlandPlantRepo.AddOrUpdateAllPlantsAsync(plants);
+                await App.WetlandPlantRepo.AddOrUpdateAllPlantsAsync(plants);
                 plantsSaved = plants.Count;
 
-                  foreach (var term in terms)
+          /*        foreach (var term in terms)
                   {
                       if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
                       await App.WetlandGlossaryRepo.AddOrUpdateTermAsync(term);
@@ -157,9 +157,9 @@ namespace PortableApp
                       await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
                       Double percent = (double)plantsSaved / (plants.Count + terms.Count);
                       downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent* 100)+"%";
-                  }
+                  }*/
 
-                //await App.WetlandGlossaryRepo.AddOrUpdateAllTermsAsync(terms);
+                await App.WetlandGlossaryRepo.AddOrUpdateAllTermsAsync(terms);
 
             
                 datePlantDataUpdatedLocally.valuetimestamp = datePlantDataUpdatedOnServer.valuetimestamp;

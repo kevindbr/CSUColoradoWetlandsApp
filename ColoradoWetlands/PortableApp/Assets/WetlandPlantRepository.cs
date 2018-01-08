@@ -87,6 +87,7 @@ namespace PortableApp
                 {
                      connAsync.InsertOrReplaceWithChildrenAsync(plant);
                 });
+
                 //  await connAsync.InsertOrReplaceAllWithChildrenAsync(plant);
             }
             catch (Exception ex)
@@ -103,8 +104,9 @@ namespace PortableApp
                 // await connAsync.InsertOrReplaceWithChildrenAsync(plant);
                 await connAsync.RunInTransactionAsync((SQLite.Net.SQLiteConnection tran) =>
                 {
-                    connAsync.InsertOrReplaceAllWithChildrenAsync(plants);
-                });
+                    tran.InsertOrReplaceAllWithChildren(plants);
+                                    });
+
             }
             catch (Exception ex)
             {
