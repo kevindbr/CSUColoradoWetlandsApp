@@ -40,7 +40,8 @@ namespace PortableApp
             // Get filtered plant list if came from search
             if (!cameFromSearch)
             {
-                if (App.WetlandPlantRepo.GetAllWetlandPlants().Count > 0)
+                //changed this to local
+                if (App.WetlandPlantRepoLocal.GetAllWetlandPlants().Count > 0)
                 {
                     plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
                     if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
