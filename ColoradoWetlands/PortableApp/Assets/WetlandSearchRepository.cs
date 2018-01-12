@@ -119,6 +119,22 @@ namespace PortableApp
 
             conn.Insert(new WetlandSearch() { Characteristic = "nativity-Native", Name = "Native", Query = false, Column1 = "nativity", SearchString1 = "Native"});
             conn.Insert(new WetlandSearch() { Characteristic = "nativity-Non", Name = "Non-native", Query = false, Column1 = "nativity", SearchString1 = "Non-native" });
+            conn.Insert(new WetlandSearch() { Characteristic = "noxiousweed-WatchList", Name = "CO Noxious Weed Watch List", Query = false, Column1 = "noxiousweed", SearchString1 = "CO Noxious Weed Watch List" });
+            conn.Insert(new WetlandSearch() { Characteristic = "noxiousweed-ListA", Name = "CO Noxious Weed List A", Query = false, Column1 = "noxiousweed", SearchString1 = "CO Noxious Weed List A" });
+            conn.Insert(new WetlandSearch() { Characteristic = "noxiousweed-ListB", Name = "CO Noxious Weed List B", Query = false, Column1 = "noxiousweed", SearchString1 = "CO Noxious Weed List B" });
+            conn.Insert(new WetlandSearch() { Characteristic = "noxiousweed-ListC", Name = "CO Noxious Weed List C", Query = false, Column1 = "noxiousweed", SearchString1 = "CO Noxious Weed List C" });
+
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Amphibs", Name = "Amphibs, Reptiles", Query = false, Column1 = "animaluse", SearchString1 = "AmphibiansReptiles" });
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Insects", Name = "Insects", Query = false, Column1 = "animaluse", SearchString1 = "Insects" });
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Waterfowl", Name = "Birds: Waterfowl", Query = false, Column1 = "animaluse", SearchString1 = "Anseriformes" });
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Beaver", Name = "Muskrat, Beaver", Query = false, Column1 = "animaluse", SearchString1 = "Muridae" });
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Deer", Name = "Elk, Deer, Moose", Query = false, Column1 = "animaluse", SearchString1 = "Cervidae" });
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Passerines", Name = "Birds: Passerines", Query = false, Column1 = "animaluse", SearchString1 = "Passeriformes" });
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Game", Name = "Birds: Game Fowl", Query = false, Column1 = "animaluse", SearchString1 = "Galliformes" });
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Cranes", Name = "Birds: Cranes and Rails", Query = false, Column1 = "animaluse", SearchString1 = "Gruiformes" });
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Gulls", Name = "Birds: Gulls", Query = false, Column1 = "animaluse", SearchString1 = "Charadriiformes" });
+            conn.Insert(new WetlandSearch() { Characteristic = "animaluse-Grebes", Name = "Birds: Grebes", Query = false, Column1 = "animaluse", SearchString1 = "Podicipediformes" });
+
 
             conn.Insert(new WetlandSearch() { Characteristic = "federal-USFS", Name = "USFS Sensitive", Query = false, Column1 = "federalstatus", SearchString1 = "USFS" });
             conn.Insert(new WetlandSearch() { Characteristic = "federal-Threatened", Name = "Listed Threatened", Query = false, Column1 = "federalstatus", SearchString1 = "Threatened" });

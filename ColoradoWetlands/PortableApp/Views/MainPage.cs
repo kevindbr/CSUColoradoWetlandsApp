@@ -20,6 +20,7 @@ namespace PortableApp
         private Grid innerContainer;
         // private Switch downloadImagesSwitch;
         private Button downloadImagesButton = new Button { Style = Application.Current.Resources["semiTransparentButton"] as Style, Text = "Trying To Connect To Server..." };
+
         private WetlandSetting downloadImagesSetting;
         private int numberOfPlants;
         private bool updatePlants = false;
@@ -31,6 +32,7 @@ namespace PortableApp
         private List<WetlandSetting> imageFilesToDownload = new List<WetlandSetting>();
         private IEnumerable<WetlandSetting> imageFileSettingsOnServer;
         private Label downloadImagesLabel = new Label {TextColor = Color.White, BackgroundColor = Color.Transparent };
+        private Label streamingLabel = new Label { Text = "You Are Streaming Plants", Style = Application.Current.Resources["sectionHeader"] as Style, HorizontalOptions = LayoutOptions.CenterAndExpand, Margin = new Thickness(0, 0, 0, 0) };
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -82,6 +84,7 @@ namespace PortableApp
                         {
                             DownloadButtonText = "Plant DB Up To Date";
                             downloadImagesButton.Text = "(Local Database Up To Date)";
+                            streamingLabel.Text = "You Are Using Your Local Plant Database";
                             downloadImagesLabel.TextColor = Color.Green;
                             updatePlants = false;
                         }
@@ -91,6 +94,7 @@ namespace PortableApp
                             {
                                 DownloadButtonText = "Download Plant DB";
                                 downloadImagesButton.Text = "Download (No Local Database)";
+                                streamingLabel.Text = "You Are Streaming Plants";
                                 downloadImagesLabel.TextColor = Color.Red;
                                 updatePlants = true;
                             }
@@ -98,6 +102,7 @@ namespace PortableApp
                             {
                                 DownloadButtonText = "New Plant DB Available";
                                 downloadImagesButton.Text = "Re-Sync (New Database Available)";
+                                streamingLabel.Text = "You Are Using Your Local Plant Database";
                                 downloadImagesLabel.TextColor = Color.Yellow;
                                 updatePlants = true;
                             }
@@ -208,15 +213,24 @@ namespace PortableApp
             innerContainer.Children.Add(acknowledgementsButton, 0, 7);
 
             var semiTransparentBlack = new Color(0, 0, 0, 0.4);
-            StackLayout downloadImagesLayout = new StackLayout { BackgroundColor = Color.Transparent, Orientation = StackOrientation.Vertical, Padding = new Thickness(5, 5, 5, 5), HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
+            StackLayout downloadImagesLayout = new StackLayout { BackgroundColor = Color.Transparent, Orientation = StackOrientation.Vertical, Padding = new Thickness(5, 5, 5, 0), HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.CenterAndExpand };
     
                      //Button to download images
         
             downloadImagesButton.Clicked += DownloadImagesPressed;
-              downloadImagesLayout.Children.Add(downloadImagesButton);
-          //  downloadImagesLayout.Children.Add(downloadImagesLabel);
+            downloadImagesLayout.Children.Add(downloadImagesButton);
+
+            //  downloadImagesLayout.Children.Add(downloadImagesLabel);
+            
+            downloadImagesLayout.Children.Add(streamingLabel);
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(85) });
             innerContainer.Children.Add(downloadImagesLayout, 0, 8);
+
+
+
+           
+
+
 
             // Add empty space
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });

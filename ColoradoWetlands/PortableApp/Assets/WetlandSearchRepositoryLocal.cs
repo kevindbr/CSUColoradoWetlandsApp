@@ -119,6 +119,10 @@ namespace PortableApp
 
             conn.Insert(new WetlandSearch() { Characteristic = "nativity-Native", Name = "Native", Query = false, Column1 = "nativity", SearchString1 = "Native" });
             conn.Insert(new WetlandSearch() { Characteristic = "nativity-Non", Name = "Non-native", Query = false, Column1 = "nativity", SearchString1 = "Non-native" });
+            conn.Insert(new WetlandSearch() { Characteristic = "noxiousweed-WatchList", Name = "CO Noxious Weed Watch List", Query = false, Column1 = "noxiousweed", SearchString1 = "CO Noxious Weed Watch List" });
+            conn.Insert(new WetlandSearch() { Characteristic = "noxiousweed-ListA", Name = "CO Noxious Weed List A", Query = false, Column1 = "noxiousweed", SearchString1 = "CO Noxious Weed List A" });
+            conn.Insert(new WetlandSearch() { Characteristic = "noxiousweed-ListB", Name = "CO Noxious Weed List B", Query = false, Column1 = "noxiousweed", SearchString1 = "CO Noxious Weed List B" });
+            conn.Insert(new WetlandSearch() { Characteristic = "noxiousweed-ListC", Name = "CO Noxious Weed List C", Query = false, Column1 = "noxiousweed", SearchString1 = "CO Noxious Weed List C" });
 
             conn.Insert(new WetlandSearch() { Characteristic = "federal-USFS", Name = "USFS Sensitive", Query = false, Column1 = "federalstatus", SearchString1 = "USFS" });
             conn.Insert(new WetlandSearch() { Characteristic = "federal-Threatened", Name = "Listed Threatened", Query = false, Column1 = "federalstatus", SearchString1 = "Threatened" });
