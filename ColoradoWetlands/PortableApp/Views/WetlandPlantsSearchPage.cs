@@ -257,6 +257,25 @@ namespace PortableApp
             searchFilters.Children.Add(plantSizeLayout1);
 
 
+            //Plant Size
+            Label regionLabel = new Label { Text = "Plant Region:", Style = Application.Current.Resources["sectionHeader"] as Style };
+            searchFilters.Children.Add(regionLabel);
+
+            WrapLayout plantRegionLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+
+            SearchCharacteristic plainRegion = searchCriteria.First(x => x.Characteristic == "region-Plains");
+            plantRegionLayout.Children.Add(plainRegion);
+
+            SearchCharacteristic mountainRegion = searchCriteria.First(x => x.Characteristic == "region-Mountains");
+            plantRegionLayout.Children.Add(mountainRegion);
+
+            SearchCharacteristic plateauRegion = searchCriteria.First(x => x.Characteristic == "region-Plateau");
+            plantRegionLayout.Children.Add(plateauRegion);
+
+            searchFilters.Children.Add(plantRegionLayout);
+
+
+
             Label countyLabel = new Label { Text = "County:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(countyLabel);
 
@@ -509,7 +528,7 @@ namespace PortableApp
         {
             foreach (var searchCrit in searchCriteria)
             {
-                searchCrit.BorderWidth = 0;
+                searchCrit.BorderColor = Color.White;
                 searchCrit.Query = false;
                 WetlandSearch correspondingDBRecord = searchCriteriaDB.First(x => x.Characteristic == searchCrit.Characteristic);
                 correspondingDBRecord.Query = false;
@@ -697,12 +716,14 @@ namespace PortableApp
             if (button.Query == true)
             {
                 correspondingDBRecord.Query = button.Query = false;
-                button.BorderWidth = 0;
+                button.BorderWidth = 2;
+                button.BorderColor = Color.White;
             }
             else if (button.Query == false)
             {
                 correspondingDBRecord.Query = button.Query = true;
-                button.BorderWidth = 1;
+                button.BorderWidth = 2;
+                button.BorderColor = Color.Green;
             }
             await App.WetlandSearchRepo.UpdateSearchCriteriaAsync(correspondingDBRecord);
 
@@ -744,7 +765,7 @@ namespace PortableApp
                 item.SetBinding(SearchCharacteristic.Column1Property, new Binding("Column1"));
                 item.SetBinding(SearchCharacteristic.SearchString1Property, new Binding("SearchString1"));
                 item.Clicked += ProcessSearchFilter;
-                item.BorderWidth = item.Query ? 1 : 0;
+                item.BorderWidth = 2;
                 searchCriteria.Add(item);
             }            
             return searchCriteria;

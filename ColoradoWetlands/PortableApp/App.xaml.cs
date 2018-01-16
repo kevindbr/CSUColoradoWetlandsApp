@@ -28,6 +28,7 @@ namespace PortableApp
         public static WetlandPlantLeafArrangementRepository WetlandPlantLeafArrangementRepo { get; private set; }
         public static WetlandPlantSizeRepository WetlandPlantSizeRepo { get; private set; }
         public static WetlandCountyPlantRepository WetlandCountyPlantRepo { get; private set; }
+        public static WetlandPlantRegionRepository WetlandRegionRepo { get; private set; }
 
         public static WetlandPlantRepositoryLocal WetlandPlantRepoLocal { get;  set; }
         public static WetlandPlantImageRepositoryLocal WetlandPlantImageRepoLocal { get;  set; }
@@ -45,6 +46,7 @@ namespace PortableApp
         public static WetlandPlantLeafArrangementRepositoryLocal WetlandPlantLeafArrangementRepoLocal { get; set; }
         public static WetlandPlantSizeRepositoryLocal WetlandPlantSizeRepoLocal { get; set; }
         public static WetlandCountyPlantRepositoryLocal WetlandCountyPlantRepoLocal { get; set; }
+        public static WetlandPlantRegionRepositoryLocal WetlandRegionRepoLocal { get; set; }
 
         /*
          New starting workflow
@@ -86,7 +88,7 @@ namespace PortableApp
             WetlandPlantLeafArrangementRepo = new WetlandPlantLeafArrangementRepository();
             WetlandPlantSizeRepo = new WetlandPlantSizeRepository();
             WetlandCountyPlantRepo = new WetlandCountyPlantRepository();
-
+            WetlandRegionRepo = new WetlandPlantRegionRepository();
 
             WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(WetlandPlantRepo.GetAllWetlandPlants());
             WetlandPlantImageRepoLocal = new WetlandPlantImageRepositoryLocal(WetlandPlantImageRepo.GetAllWetlandPlantImages());
@@ -96,7 +98,7 @@ namespace PortableApp
             WetlandPlantLeafArrangementRepoLocal = new WetlandPlantLeafArrangementRepositoryLocal(WetlandPlantLeafArrangementRepo.GetAllArrangements());
             WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(WetlandPlantSizeRepo.GetAllPlantSizes());
             WetlandCountyPlantRepoLocal = new WetlandCountyPlantRepositoryLocal(WetlandCountyPlantRepo.GetAllCounties());
-
+            WetlandRegionRepoLocal = new WetlandPlantRegionRepositoryLocal(WetlandRegionRepo.GetAllWetlandRegions());
             // Set MainPage
             this.MainPage = new NavigationPage(new MainPage());
         }

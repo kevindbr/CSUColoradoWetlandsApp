@@ -83,4 +83,17 @@ namespace PortableApp.Models
         public string name { get; set; }
 
     }
+
+    [Table("wetland_regions")]
+    public class WetlandRegions
+    {
+        [PrimaryKey]
+        public int regionid { get; set; }
+
+        [ForeignKey(typeof(WetlandPlant))]
+        public int plantid { get; set; }
+
+        public int valueid { get; set; }
+
+    }
 }

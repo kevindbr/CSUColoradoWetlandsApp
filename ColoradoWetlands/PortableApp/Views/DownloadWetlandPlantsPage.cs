@@ -171,6 +171,7 @@ namespace PortableApp
                 App.WetlandPlantLeafArrangementRepoLocal = new WetlandPlantLeafArrangementRepositoryLocal(App.WetlandPlantLeafArrangementRepo.GetAllArrangements());
                 App.WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(App.WetlandPlantSizeRepo.GetAllPlantSizes());
                 App.WetlandCountyPlantRepoLocal = new WetlandCountyPlantRepositoryLocal(App.WetlandCountyPlantRepo.GetAllCounties());
+                App.WetlandRegionRepoLocal = new WetlandPlantRegionRepositoryLocal(App.WetlandRegionRepo.GetAllWetlandRegions());
 
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 var allImages = App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages();

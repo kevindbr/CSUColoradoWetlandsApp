@@ -77,6 +77,10 @@ namespace PortableApp
             conn.Insert(new WetlandSearch() { Characteristic = "leafdivision-Simple", Name = "Simple", Query = false, Column1 = "leafdivision", SearchString1 = "simple" });
             conn.Insert(new WetlandSearch() { Characteristic = "leafdivision-Compound", Name = "Compound", Query = false, Column1 = "leafdivision", SearchString1 = "compound" });
 
+            conn.Insert(new WetlandSearch() { Characteristic = "region-EasternPlains", Name = "Eastern Plains", Query = false, Column1 = "RegionWetland", SearchString1 = "plains", SearchInt1 = 0 });
+            conn.Insert(new WetlandSearch() { Characteristic = "region-Mountains", Name = "Rocky Mountains", Query = false, Column1 = "RegionWetland", SearchString1 = "mountains", SearchInt1 = 0 });
+            conn.Insert(new WetlandSearch() { Characteristic = "region-Plateau", Name = "Colorado Plateau", Query = false, Column1 = "RegionWetland", SearchString1 = "plateau", SearchInt1 = 0 });
+
             conn.Insert(new WetlandSearch() { Characteristic = "leafshape-Linear", Name = "Linear", Query = false, Column1 = "leafshape", SearchString1 = "linear" });
             conn.Insert(new WetlandSearch() { Characteristic = "leafshape-Round", Name = "Round", Query = false, Column1 = "leafshape", SearchString1 = "round" });
             conn.Insert(new WetlandSearch() { Characteristic = "leafshape-WideBase", Name = "Wide Base", Query = false, Column1 = "leafshape", SearchString1 = "widebase" });

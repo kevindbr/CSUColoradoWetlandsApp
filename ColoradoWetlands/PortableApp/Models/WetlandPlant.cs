@@ -91,7 +91,10 @@ namespace PortableApp.Models
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<WetlandCountyPlant> CountyPlantWetland { get; set; }
-       
+
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        public List<WetlandRegions> RegionWetland { get; set; }
+
 
         public IFolder rootFolder { get { return FileSystem.Current.LocalStorage; } }
 

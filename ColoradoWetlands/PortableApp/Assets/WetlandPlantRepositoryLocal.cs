@@ -51,10 +51,15 @@ namespace PortableApp
         {
             IEnumerable<WetlandPlant> plants = allWetlandPlants.Where(p => p.plantid.Equals(Id));
 
-            if (plants != null)
+            // if (plants != null)
+            try
+            {
                 return plants.First();
-
-            else return null;
+            }
+            catch(InvalidOperationException)
+            {
+                 return null;
+            }     
         }
 
         // get plants marked as favorites
@@ -232,9 +237,11 @@ namespace PortableApp
             List<WetlandPlant> searchPlantsShape = GetAllWetlandPlants();
             List<WetlandPlant> searchPlantsArrangement = GetAllWetlandPlants();
             List<WetlandPlant> searchPlantsSize = GetAllWetlandPlants();
+            List<WetlandPlant> searchRegion = GetAllWetlandPlants();
             List<WetlandPlant> searchCombined = new List<WetlandPlant>();
             List<WetlandPlant> allPlants = GetAllWetlandPlants();
             // Add selected Leaf Type characteristics
+
 
             var queryWetlandOther = selectCritList.Where(x => x.Characteristic.Contains("group") || x.Characteristic.Contains("nativity") || x.Characteristic.Contains("federal") || x.Characteristic.Contains("status") || x.Characteristic.Contains("noxiousweed") || x.Characteristic.Contains("animaluse"));
             if (queryWetlandOther.Count() > 0)
@@ -320,9 +327,24 @@ namespace PortableApp
                 }
             }
 
+            var queryRegion = selectCritList.Where(x => x.Characteristic.Contains("region"));
+            if (queryRegion.Count() > 0)
+            {
+                searchRegion = new List<WetlandPlant>();
+
+                List<WetlandRegions> regions = App.WetlandRegionRepoLocal.GetAllWetlandRegions().AsQueryable().Where(ConstructRegionPredicate(selectCritList)).ToList();
+                foreach (var region in regions)
+                {
+                    if (!searchRegion.Contains(GetWetlandPlantByAltId(region.plantid)))
+                    {
+                        searchRegion.Add(GetWetlandPlantByAltId(region.plantid));
+                    }
+                }
+            }
+
 
             foreach (var plant in allPlants)
-                if (searchPlantsColor.Contains(plant) && searchPlantsDivision.Contains(plant) && searchPlantsShape.Contains(plant) && searchPlantsArrangement.Contains(plant) && searchPlantsSize.Contains(plant) && searchPlantsOther.Contains(plant))
+                if (searchPlantsColor.Contains(plant) && searchPlantsDivision.Contains(plant) && searchPlantsShape.Contains(plant) && searchPlantsArrangement.Contains(plant) && searchPlantsSize.Contains(plant) && searchRegion.Contains(plant) && searchPlantsOther.Contains(plant))
                     searchCombined.Add(plant);
 
             return searchCombined;
@@ -418,6 +440,25 @@ namespace PortableApp
                     colorQuery = colorQuery.Or(x => x.valueid == (color.SearchInt1));
                 }
                 overallQuery = overallQuery.And(colorQuery);
+            }
+
+            return overallQuery;
+        }
+
+        private Expression<Func<WetlandRegions, bool>> ConstructRegionPredicate(List<WetlandSearch> selectCritList)
+        {
+            var overallQuery = PredicateBuilder.True<WetlandRegions>();
+
+            // Add selected Leaf Type characteristics
+            var queryRegions = selectCritList.Where(x => x.Characteristic.Contains("region"));
+            if (queryRegions.Count() > 0)
+            {
+                var regionQuery = PredicateBuilder.False<WetlandRegions>();
+                foreach (var region in queryRegions)
+                {
+                    regionQuery = regionQuery.Or(x => x.valueid == (region.SearchInt1));
+                }
+                overallQuery = overallQuery.And(regionQuery);
             }
 
             return overallQuery;

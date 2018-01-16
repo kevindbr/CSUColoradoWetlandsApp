@@ -29,6 +29,29 @@ namespace PortableApp
 
     }
 
+    public class WetlandPlantRegionRepository : DBConnection
+    {
+
+        public WetlandPlantRegionRepository()
+        {
+            // Create the Wetland Plant SimilarSpecies table
+            conn.CreateTable<WetlandRegions>();
+        }
+
+        // return a list of Wetland Plant SimilarSpecies saved to the WetlandPlantSimilarSpecies table in the database
+        public List<WetlandRegions> GetAllWetlandRegions()
+        {
+            return (from p in conn.Table<WetlandRegions>() select p).ToList();
+        }
+
+        // return a list of Wetland Plant SimilarSpecies for the plant specified
+        public List<WetlandRegions> PlantsRegions(int plantId)
+        {
+            return conn.Table<WetlandRegions>().Where(p => p.plantid.Equals(plantId)).ToList();
+        }
+
+    }
+
     public class WetlandPlantDivisionRepository : DBConnection
     {
         public WetlandPlantDivisionRepository()
@@ -154,6 +177,30 @@ namespace PortableApp
 
         // return a list of Wetland Plant SimilarSpecies for the plant specified
         public List<WetlandPlantFruits> PlantsFruits(int plantId)
+        {
+            return allItems.Where(p => p.plantid.Equals(plantId)).ToList();
+        }
+
+    }
+
+    public class WetlandPlantRegionRepositoryLocal
+    {
+        private List<WetlandRegions> allItems;
+
+        public WetlandPlantRegionRepositoryLocal(List<WetlandRegions> fromDB)
+        {
+            // Create the Wetland Plant SimilarSpecies table
+            allItems = fromDB;
+        }
+
+        // return a list of Wetland Plant SimilarSpecies saved to the WetlandPlantSimilarSpecies table in the database
+        public List<WetlandRegions> GetAllWetlandRegions()
+        {
+            return (from p in allItems select p).ToList();
+        }
+
+        // return a list of Wetland Plant SimilarSpecies for the plant specified
+        public List<WetlandRegions> PlantsRegions(int plantId)
         {
             return allItems.Where(p => p.plantid.Equals(plantId)).ToList();
         }
