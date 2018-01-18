@@ -299,7 +299,7 @@ namespace PortableApp
             searchFilters.Children.Add(countyLayout);
 
 
-            Label elevationLabel = new Label { Text = "Elevation (meters):", Style = Application.Current.Resources["sectionHeader"] as Style };
+            Label elevationLabel = new Label { Text = "Elevation (feet):", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(elevationLabel);
 
             StackLayout elavtionLayout = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand };

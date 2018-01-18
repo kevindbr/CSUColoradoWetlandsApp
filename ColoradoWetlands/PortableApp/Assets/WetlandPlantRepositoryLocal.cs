@@ -136,11 +136,11 @@ namespace PortableApp
             {
                 if (choice.Equals("min"))
                 {
-                    elevationPlants = App.WetlandPlantRepoLocal.GetAllWetlandPlants().AsQueryable().Where(x => x.elevminm >= elevation).ToList();
+                    elevationPlants = App.WetlandPlantRepoLocal.GetAllWetlandPlants().AsQueryable().Where(x => x.elevminfeet >= elevation).ToList();
                 }
                 else if (choice.Equals("max"))
                 {
-                    elevationPlants = App.WetlandPlantRepoLocal.GetAllWetlandPlants().AsQueryable().Where(x => x.elevminm <= elevation).ToList();
+                    elevationPlants = App.WetlandPlantRepoLocal.GetAllWetlandPlants().AsQueryable().Where(x => x.elevmaxfeet <= elevation).ToList();
                 }
                 else
                 {

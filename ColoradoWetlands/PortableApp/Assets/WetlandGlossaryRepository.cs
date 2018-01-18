@@ -30,9 +30,10 @@ namespace PortableApp
         {
             try
             {
-                if (string.IsNullOrEmpty(term.name))
-                    throw new Exception("Valid term required");
-                await connAsync.InsertOrReplaceAsync(term);
+                await connAsync.RunInTransactionAsync((SQLite.Net.SQLiteConnection tran) =>
+                {
+                    tran.InsertOrReplaceWithChildren(term);
+                });
             }
             catch
             {

@@ -50,6 +50,7 @@ namespace PortableApp
             BorderWidth = 1;
             //FIX!!!!!!!!!!!!!!!!!!!
             WidthRequest = Device.OnPlatform(150, 150, 0);
+            HeightRequest = Device.OnPlatform(150, 150, 0);
         }
 
     }

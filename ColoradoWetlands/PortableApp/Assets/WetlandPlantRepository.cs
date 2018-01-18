@@ -85,7 +85,7 @@ namespace PortableApp
 
                 await connAsync.RunInTransactionAsync((SQLite.Net.SQLiteConnection tran) =>
                 {
-                     connAsync.InsertOrReplaceWithChildrenAsync(plant);
+                     tran.InsertOrReplaceWithChildren(plant);
                 });
 
                 //  await connAsync.InsertOrReplaceAllWithChildrenAsync(plant);
