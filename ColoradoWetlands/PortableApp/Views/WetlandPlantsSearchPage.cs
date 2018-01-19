@@ -756,10 +756,16 @@ namespace PortableApp
             searchCriteria = new ObservableCollection<SearchCharacteristic>();
             foreach (WetlandSearch searchItem in searchCriteriaDB)
             {
+                Label test = new Label { Text = searchItem.Name };
+
                 SearchCharacteristic item = new SearchCharacteristic();
                 item.BindingContext = searchItem;
                 item.SetBinding(SearchCharacteristic.CharacteristicProperty, new Binding("Characteristic"));
-                item.SetBinding(SearchCharacteristic.TextProperty, new Binding("Name"));
+                //item.SetBinding(SearchCharacteristic.TextProperty, new Binding("Name"));
+
+                item.Text = searchItem.Name;
+               
+
                 item.SetBinding(SearchCharacteristic.ImageProperty, new Binding("IconFileName"));
                 item.SetBinding(SearchCharacteristic.QueryProperty, new Binding("Query"));
                 item.SetBinding(SearchCharacteristic.Column1Property, new Binding("Column1"));
