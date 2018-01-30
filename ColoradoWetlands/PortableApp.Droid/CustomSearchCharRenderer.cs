@@ -10,7 +10,7 @@ namespace PortableApp.Droid
 {
     class CustomSearchCharRenderer : ButtonRenderer
     {
-        public CustomSearchCharRenderer(Context context) : base(context)
+        public CustomSearchCharRenderer(Context context) 
         {
             AutoPackage = false;
         }
