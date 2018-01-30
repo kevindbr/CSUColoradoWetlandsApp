@@ -74,99 +74,115 @@ namespace PortableApp
             StackLayout searchFilters = new StackLayout
             {
                 Spacing = 3,
-                Orientation = StackOrientation.Vertical
+                Orientation = StackOrientation.Vertical,
+                HorizontalOptions = LayoutOptions.Center
             };
 
             //Plant Size
             Label groupLabel = new Label { Text = "Plant Group:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(groupLabel);
 
-            StackLayout groupLayout1 = new StackLayout { Orientation = StackOrientation.Horizontal };
+            //StackLayout groupLayout1 = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand };
+            var groupLayout1 = new Grid();
+            groupLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            groupLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            groupLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            groupLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            groupLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            groupLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             SearchCharacteristic woodyGroup = searchCriteria.First(x => x.Characteristic == "group-Woody");
-            groupLayout1.Children.Add(woodyGroup);
+            groupLayout1.Children.Add(woodyGroup, 0, 0);
 
             SearchCharacteristic dicotGroup = searchCriteria.First(x => x.Characteristic == "group-Dicot");
-            groupLayout1.Children.Add(dicotGroup);
+            groupLayout1.Children.Add(dicotGroup, 0, 1);
 
-            StackLayout groupLayout2 = new StackLayout { Orientation = StackOrientation.Horizontal };
+            //StackLayout groupLayout2 = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand };
 
             SearchCharacteristic monocotGroup = searchCriteria.First(x => x.Characteristic == "group-Monocot");
-            groupLayout2.Children.Add(monocotGroup);
+            groupLayout1.Children.Add(monocotGroup, 1, 0);
 
             SearchCharacteristic aquaticGroup = searchCriteria.First(x => x.Characteristic == "group-Aquatic");
-            groupLayout2.Children.Add(aquaticGroup);
+            groupLayout1.Children.Add(aquaticGroup, 1, 1);
 
-            StackLayout groupLayout3 = new StackLayout { Orientation = StackOrientation.Horizontal };
+            ///StackLayout groupLayout3 = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand };
 
             SearchCharacteristic rushesGroup = searchCriteria.First(x => x.Characteristic == "group-Rushes");
-            groupLayout3.Children.Add(rushesGroup);
+            groupLayout1.Children.Add(rushesGroup, 0, 2);
 
             SearchCharacteristic grassesGroup = searchCriteria.First(x => x.Characteristic == "group-Grasses");
-            groupLayout3.Children.Add(grassesGroup);
+            groupLayout1.Children.Add(grassesGroup, 1, 2);
 
-            StackLayout groupLayout4 = new StackLayout { Orientation = StackOrientation.Horizontal };
+            //StackLayout groupLayout4 = new StackLayout { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand };
 
             SearchCharacteristic fernsGroup = searchCriteria.First(x => x.Characteristic == "group-Ferns");
-            groupLayout4.Children.Add(fernsGroup);
+            groupLayout1.Children.Add(fernsGroup, 0, 3);
 
             SearchCharacteristic sedgesGroup = searchCriteria.First(x => x.Characteristic == "group-Sedges");
-            groupLayout4.Children.Add(sedgesGroup);
+            groupLayout1.Children.Add(sedgesGroup, 1, 3);
 
             searchFilters.Children.Add(groupLayout1);
-            searchFilters.Children.Add(groupLayout2);
-            searchFilters.Children.Add(groupLayout3);
-            searchFilters.Children.Add(groupLayout4);
+            //searchFilters.Children.Add(groupLayout2);
+            //searchFilters.Children.Add(groupLayout3);
+            //searchFilters.Children.Add(groupLayout4);
 
             // Flower Color
             Label flowerColorLabel = new Label { Text = "Flower Color:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(flowerColorLabel);
 
-            WrapLayout flowerColorLayout1 = new WrapLayout
+            /*StackLayout flowerColorLayout1 = new StackLayout
             {
-                Orientation = StackOrientation.Horizontal
+                Orientation = StackOrientation.Horizontal,
+                HorizontalOptions = LayoutOptions.FillAndExpand
+            };*/
 
-            };
+            var flowerColorLayout1 = new Grid();
+            flowerColorLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            flowerColorLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            flowerColorLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            flowerColorLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            flowerColorLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            flowerColorLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             SearchCharacteristic yellowFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Yellow");
             yellowFlowerColor.BackgroundColor = Color.Yellow;
             yellowFlowerColor.TextColor = Color.Black;
-            flowerColorLayout1.Children.Add(yellowFlowerColor);
+            flowerColorLayout1.Children.Add(yellowFlowerColor, 0, 0);
 
             SearchCharacteristic blueFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Blue");
             blueFlowerColor.BackgroundColor = Color.Blue;
             blueFlowerColor.TextColor = Color.Black;
-            flowerColorLayout1.Children.Add(blueFlowerColor);
+            flowerColorLayout1.Children.Add(blueFlowerColor, 0, 1);
 
             SearchCharacteristic redFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Red");
             redFlowerColor.BackgroundColor = Color.Red;
             redFlowerColor.TextColor = Color.Black;
-            flowerColorLayout1.Children.Add(redFlowerColor);
+            flowerColorLayout1.Children.Add(redFlowerColor, 0, 2);
 
             SearchCharacteristic orangeFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Orange");
             orangeFlowerColor.BackgroundColor = Color.Orange;
             orangeFlowerColor.TextColor = Color.Black;
-            flowerColorLayout1.Children.Add(orangeFlowerColor);    
+            flowerColorLayout1.Children.Add(orangeFlowerColor, 1, 0);    
 
             SearchCharacteristic pinkFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Pink");
             pinkFlowerColor.BackgroundColor = Color.Pink;
             pinkFlowerColor.TextColor = Color.Black;
-            flowerColorLayout1.Children.Add(pinkFlowerColor);
+            flowerColorLayout1.Children.Add(pinkFlowerColor, 1, 1);
 
             SearchCharacteristic greenFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Green");
             greenFlowerColor.BackgroundColor = Color.Green;
             greenFlowerColor.TextColor = Color.Black;
-            flowerColorLayout1.Children.Add(greenFlowerColor);
+            flowerColorLayout1.Children.Add(greenFlowerColor, 1, 2);
 
             SearchCharacteristic purpleFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Purple");
             purpleFlowerColor.BackgroundColor = Color.Purple;
             purpleFlowerColor.TextColor = Color.Black;
-            flowerColorLayout1.Children.Add(purpleFlowerColor);
+            flowerColorLayout1.Children.Add(purpleFlowerColor, 2, 0);
 
             SearchCharacteristic brownFlowerColor = searchCriteria.First(x => x.Characteristic == "color-Brown");
             brownFlowerColor.BackgroundColor = Color.SaddleBrown;
             brownFlowerColor.TextColor = Color.Black;
-            flowerColorLayout1.Children.Add(brownFlowerColor);
+            flowerColorLayout1.Children.Add(brownFlowerColor, 2, 1);
 
             searchFilters.Children.Add(flowerColorLayout1);
                     
@@ -175,19 +191,25 @@ namespace PortableApp
             Label leafArrangementLabel = new Label { Text = "Leaf Arrangement:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(leafArrangementLabel);
 
-            WrapLayout leafArrangementLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal };
+            //WrapLayout leafArrangementLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal };
+            var leafArrangementLayout1 = new Grid();
+            leafArrangementLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            leafArrangementLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            leafArrangementLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            leafArrangementLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            leafArrangementLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             SearchCharacteristic altArr = searchCriteria.First(x => x.Characteristic == "leafarrangement-Alternate");
-            leafArrangementLayout1.Children.Add(altArr);
+            leafArrangementLayout1.Children.Add(altArr, 0, 0);
 
             SearchCharacteristic oppositeArr = searchCriteria.First(x => x.Characteristic == "leafarrangement-Opposite");
-            leafArrangementLayout1.Children.Add(oppositeArr);
+            leafArrangementLayout1.Children.Add(oppositeArr, 1, 0);
 
             SearchCharacteristic whorledArr = searchCriteria.First(x => x.Characteristic == "leafarrangement-Whorled");
-            leafArrangementLayout1.Children.Add(whorledArr);
+            leafArrangementLayout1.Children.Add(whorledArr, 2, 0);
 
             SearchCharacteristic basalArr = searchCriteria.First(x => x.Characteristic == "leafarrangement-Basal");
-            leafArrangementLayout1.Children.Add(basalArr);
+            leafArrangementLayout1.Children.Add(basalArr, 0, 1);
 
             searchFilters.Children.Add(leafArrangementLayout1);
 
@@ -196,13 +218,18 @@ namespace PortableApp
             Label leafDivisonLabel = new Label { Text = "Leaf Division:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(leafDivisonLabel);
 
-            WrapLayout leafDivisionLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+            var leafDivisionLayout = new Grid();
+            leafDivisionLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });   
+            leafDivisionLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+
+            //WrapLayout leafDivisionLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
 
             SearchCharacteristic simpleDivision = searchCriteria.First(x => x.Characteristic == "leafdivision-Simple");
-            leafDivisionLayout.Children.Add(simpleDivision);
+            leafDivisionLayout.Children.Add(simpleDivision, 0, 0);
 
             SearchCharacteristic compDivision = searchCriteria.First(x => x.Characteristic == "leafdivision-Compound");
-            leafDivisionLayout.Children.Add(compDivision);
+            leafDivisionLayout.Children.Add(compDivision, 1, 0);
 
             searchFilters.Children.Add(leafDivisionLayout);
 
@@ -210,28 +237,37 @@ namespace PortableApp
             Label leafShapeLabel = new Label { Text = "Leaf Shape:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(leafShapeLabel);
 
-            WrapLayout leafShapeLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal};
+            //WrapLayout leafShapeLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal };
+
+            var leafShapeLayout1 = new Grid();
+            leafShapeLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            leafShapeLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            leafShapeLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            leafShapeLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            leafShapeLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            leafShapeLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+           
 
             SearchCharacteristic linearShape = searchCriteria.First(x => x.Characteristic == "leafshape-Linear");
-            leafShapeLayout1.Children.Add(linearShape);
+            leafShapeLayout1.Children.Add(linearShape, 0, 0);
 
             SearchCharacteristic roundShape = searchCriteria.First(x => x.Characteristic == "leafshape-Round");
-            leafShapeLayout1.Children.Add(roundShape);
+            leafShapeLayout1.Children.Add(roundShape, 1, 0);
 
             SearchCharacteristic wideBaseShape = searchCriteria.First(x => x.Characteristic == "leafshape-WideBase");
-            leafShapeLayout1.Children.Add(wideBaseShape);
+            leafShapeLayout1.Children.Add(wideBaseShape, 0, 1);
 
             SearchCharacteristic wideTipShape = searchCriteria.First(x => x.Characteristic == "leafshape-WideTip");
-            leafShapeLayout1.Children.Add(wideTipShape);
+            leafShapeLayout1.Children.Add(wideTipShape, 1, 1);
 
             SearchCharacteristic lobedShape = searchCriteria.First(x => x.Characteristic == "leafshape-Lobed");
-            leafShapeLayout1.Children.Add(lobedShape);
+            leafShapeLayout1.Children.Add(lobedShape, 0, 2);
 
             SearchCharacteristic palmateShape = searchCriteria.First(x => x.Characteristic == "leafshape-Palmate");
-            leafShapeLayout1.Children.Add(palmateShape);
+            leafShapeLayout1.Children.Add(palmateShape, 1, 2);
 
             SearchCharacteristic pinnateShape = searchCriteria.First(x => x.Characteristic == "leafshape-Pinnate");
-            leafShapeLayout1.Children.Add(pinnateShape);
+            leafShapeLayout1.Children.Add(pinnateShape, 0, 3);
 
             searchFilters.Children.Add(leafShapeLayout1);
             
@@ -240,19 +276,27 @@ namespace PortableApp
             Label plantSizeLabel = new Label { Text = "Plant Size:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(plantSizeLabel);
 
-            WrapLayout plantSizeLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal};
+            var plantSizeLayout1 = new Grid();
+            plantSizeLayout1.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            plantSizeLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantSizeLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantSizeLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantSizeLayout1.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+
+            //WrapLayout plantSizeLayout1 = new WrapLayout { Orientation = StackOrientation.Horizontal};
 
             SearchCharacteristic verySmallSize = searchCriteria.First(x => x.Characteristic == "plantsize-VerySmall");
-            plantSizeLayout1.Children.Add(verySmallSize);
+            plantSizeLayout1.Children.Add(verySmallSize, 0, 0);
 
             SearchCharacteristic smallSize = searchCriteria.First(x => x.Characteristic == "plantsize-Small");
-            plantSizeLayout1.Children.Add(smallSize);
+            plantSizeLayout1.Children.Add(smallSize, 1, 0);
 
             SearchCharacteristic mediumSize = searchCriteria.First(x => x.Characteristic == "plantsize-Medium");
-            plantSizeLayout1.Children.Add(mediumSize);
+            plantSizeLayout1.Children.Add(mediumSize, 2, 0);
            
             SearchCharacteristic largeSize = searchCriteria.First(x => x.Characteristic == "plantsize-Large");
-            plantSizeLayout1.Children.Add(largeSize);
+            plantSizeLayout1.Children.Add(largeSize, 3, 0);
             
             searchFilters.Children.Add(plantSizeLayout1);
 
@@ -261,16 +305,22 @@ namespace PortableApp
             Label regionLabel = new Label { Text = "Plant Region:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(regionLabel);
 
-            WrapLayout plantRegionLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+            var plantRegionLayout = new Grid();
+            plantRegionLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            plantRegionLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantRegionLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            plantRegionLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            //WrapLayout plantRegionLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
 
             SearchCharacteristic plainRegion = searchCriteria.First(x => x.Characteristic == "region-Plains");
-            plantRegionLayout.Children.Add(plainRegion);
+            plantRegionLayout.Children.Add(plainRegion, 0, 0);
 
             SearchCharacteristic mountainRegion = searchCriteria.First(x => x.Characteristic == "region-Mountains");
-            plantRegionLayout.Children.Add(mountainRegion);
+            plantRegionLayout.Children.Add(mountainRegion, 1, 0);
 
             SearchCharacteristic plateauRegion = searchCriteria.First(x => x.Characteristic == "region-Plateau");
-            plantRegionLayout.Children.Add(plateauRegion);
+            plantRegionLayout.Children.Add(plateauRegion, 2, 0);
 
             searchFilters.Children.Add(plantRegionLayout);
 
@@ -351,25 +401,33 @@ namespace PortableApp
             Label nativeLabel = new Label { Text = "Native Status:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(nativeLabel);
 
-            WrapLayout nativityLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+            //WrapLayout nativityLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+
+            var nativityLayout = new Grid();
+            nativityLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            nativityLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            nativityLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            nativityLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            nativityLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
 
             SearchCharacteristic nativePlants = searchCriteria.First(x => x.Characteristic == "nativity-Native");
-            nativityLayout.Children.Add(nativePlants);
+            nativityLayout.Children.Add(nativePlants, 0, 0);
 
             SearchCharacteristic nonNativePlants = searchCriteria.First(x => x.Characteristic == "nativity-Non");
-            nativityLayout.Children.Add(nonNativePlants);
+            nativityLayout.Children.Add(nonNativePlants, 1, 0);
             
             SearchCharacteristic watchListPlants = searchCriteria.First(x => x.Characteristic == "noxiousweed-WatchList");
-            nativityLayout.Children.Add(watchListPlants);
+            nativityLayout.Children.Add(watchListPlants, 0, 1);
 
             SearchCharacteristic listAPlants = searchCriteria.First(x => x.Characteristic == "noxiousweed-ListA");
-            nativityLayout.Children.Add(listAPlants);
+            nativityLayout.Children.Add(listAPlants, 1, 1);
 
             SearchCharacteristic listBPlants = searchCriteria.First(x => x.Characteristic == "noxiousweed-ListB");
-            nativityLayout.Children.Add(listBPlants);
+            nativityLayout.Children.Add(listBPlants, 0, 2);
 
             SearchCharacteristic listCPlants = searchCriteria.First(x => x.Characteristic == "noxiousweed-ListC");
-            nativityLayout.Children.Add(listCPlants);
+            nativityLayout.Children.Add(listCPlants, 1, 2);
             
             searchFilters.Children.Add(nativityLayout);
 
@@ -377,25 +435,34 @@ namespace PortableApp
             Label statusLabel = new Label { Text = "Wetland Status:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(statusLabel);
 
-            WrapLayout statusLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+           // WrapLayout statusLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+
+            var statusLayout = new Grid();
+            statusLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            statusLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            statusLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            statusLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            statusLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            statusLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            statusLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
 
             SearchCharacteristic statusFAC = searchCriteria.First(x => x.Characteristic == "status-FAC");
-            statusLayout.Children.Add(statusFAC);
+            statusLayout.Children.Add(statusFAC, 0, 0);
 
             SearchCharacteristic statusFACW = searchCriteria.First(x => x.Characteristic == "status-FACW");
-            statusLayout.Children.Add(statusFACW);
+            statusLayout.Children.Add(statusFACW, 1, 0);
 
             SearchCharacteristic statusFACU = searchCriteria.First(x => x.Characteristic == "status-FACU");
-            statusLayout.Children.Add(statusFACU);
+            statusLayout.Children.Add(statusFACU, 2, 0);
 
             SearchCharacteristic statusNI = searchCriteria.First(x => x.Characteristic == "status-NI");
-            statusLayout.Children.Add(statusNI);
+            statusLayout.Children.Add(statusNI, 3, 0);
 
             SearchCharacteristic statusOBL = searchCriteria.First(x => x.Characteristic == "status-OBL");
-            statusLayout.Children.Add(statusOBL);
+            statusLayout.Children.Add(statusOBL, 4, 0);
 
             SearchCharacteristic statusUPL = searchCriteria.First(x => x.Characteristic == "status-UPL");
-            statusLayout.Children.Add(statusUPL);
+            statusLayout.Children.Add(statusUPL, 5, 0);
 
             searchFilters.Children.Add(statusLayout);
 
@@ -430,16 +497,22 @@ namespace PortableApp
             Label federalLabel = new Label { Text = "Federal Status:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(federalLabel);
 
-            WrapLayout federalLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+            //WrapLayout federalLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+
+            var federalLayout = new Grid();
+            federalLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            federalLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            federalLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            federalLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });           
 
             SearchCharacteristic usfsFederal = searchCriteria.First(x => x.Characteristic == "federal-USFS");
-            federalLayout.Children.Add(usfsFederal);
+            federalLayout.Children.Add(usfsFederal, 0, 0);
 
             SearchCharacteristic threatenedFederal= searchCriteria.First(x => x.Characteristic == "federal-Threatened");
-            federalLayout.Children.Add(threatenedFederal);
+            federalLayout.Children.Add(threatenedFederal, 1, 0);
 
             SearchCharacteristic blmFederal = searchCriteria.First(x => x.Characteristic == "federal-BLM");
-            federalLayout.Children.Add(blmFederal);
+            federalLayout.Children.Add(blmFederal, 2, 0);
 
             searchFilters.Children.Add(federalLayout);
 
@@ -448,37 +521,46 @@ namespace PortableApp
             Label animalUseLabel = new Label { Text = "Animal Use:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(animalUseLabel);
 
-            WrapLayout animalUseLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
+            var animalUseLayout = new Grid();
+            animalUseLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            animalUseLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            animalUseLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            animalUseLayout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            animalUseLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            animalUseLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            animalUseLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            //WrapLayout animalUseLayout = new WrapLayout { Orientation = StackOrientation.Horizontal };
           
             SearchCharacteristic amphibUse = searchCriteria.First(x => x.Characteristic == "animaluse-Amphibs");
-            animalUseLayout.Children.Add(amphibUse);
+            animalUseLayout.Children.Add(amphibUse, 0, 0);
 
             SearchCharacteristic insectUse= searchCriteria.First(x => x.Characteristic == "animaluse-Insects");
-            animalUseLayout.Children.Add(insectUse);
+            animalUseLayout.Children.Add(insectUse, 1, 0);
 
             SearchCharacteristic waterfowlUse= searchCriteria.First(x => x.Characteristic == "animaluse-Waterfowl");
-            animalUseLayout.Children.Add(waterfowlUse);
+            animalUseLayout.Children.Add(waterfowlUse, 2, 0);
 
             SearchCharacteristic beaverUse= searchCriteria.First(x => x.Characteristic == "animaluse-Beaver");
-            animalUseLayout.Children.Add(beaverUse);
+            animalUseLayout.Children.Add(beaverUse, 0, 1);
 
             SearchCharacteristic deerUse= searchCriteria.First(x => x.Characteristic == "animaluse-Deer");
-            animalUseLayout.Children.Add(deerUse);
+            animalUseLayout.Children.Add(deerUse, 1, 1);
 
             SearchCharacteristic passerineUse= searchCriteria.First(x => x.Characteristic == "animaluse-Passerines");
-            animalUseLayout.Children.Add(passerineUse);
+            animalUseLayout.Children.Add(passerineUse, 2, 1);
 
             SearchCharacteristic gameUse= searchCriteria.First(x => x.Characteristic == "animaluse-Game");
-            animalUseLayout.Children.Add(gameUse);
+            animalUseLayout.Children.Add(gameUse, 0, 2);
 
             SearchCharacteristic craneUse= searchCriteria.First(x => x.Characteristic == "animaluse-Cranes");
-            animalUseLayout.Children.Add(craneUse);
+            animalUseLayout.Children.Add(craneUse, 1, 2);
 
             SearchCharacteristic gullUse= searchCriteria.First(x => x.Characteristic == "animaluse-Gulls");
-            animalUseLayout.Children.Add(gullUse);
+            animalUseLayout.Children.Add(gullUse, 2, 2);
 
             SearchCharacteristic grebeUse= searchCriteria.First(x => x.Characteristic == "animaluse-Grebes");
-            animalUseLayout.Children.Add(grebeUse);
+            animalUseLayout.Children.Add(grebeUse, 0, 3);
 
             searchFilters.Children.Add(animalUseLayout);
 
@@ -764,7 +846,8 @@ namespace PortableApp
                 //item.SetBinding(SearchCharacteristic.TextProperty, new Binding("Name"));
 
                 item.Text = searchItem.Name;
-               
+
+                //item.But
 
                 item.SetBinding(SearchCharacteristic.ImageProperty, new Binding("IconFileName"));
                 item.SetBinding(SearchCharacteristic.QueryProperty, new Binding("Query"));

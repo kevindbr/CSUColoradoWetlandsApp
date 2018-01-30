@@ -165,7 +165,7 @@ namespace PortableApp
                     plantsSaved += 1;
                     await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
                     Double percent = (double)plantsSaved / (plants.Count + terms.Count);
-                    downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent * 100) + "%";
+                    downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percent * 100) + "%";
                 }
 
 
@@ -179,7 +179,7 @@ namespace PortableApp
                     plantsSaved += 1;
                     await progressBar.ProgressTo((double)plantsSaved / (plants.Count + terms.Count), 1, Easing.Linear);
                     Double percent = (double)plantsSaved / (plants.Count + terms.Count);
-                    downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent * 100) + "%";
+                    downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percent * 100) + "%";
                 }
 
                 //await App.WetlandGlossaryRepo.AddOrUpdateAllTermsAsync(terms);
@@ -214,7 +214,7 @@ namespace PortableApp
                         plantsSaved += 1;
                         Double percent = (((double)plantsSaved * 100000) + (double)receivedBytes)/ (((plants.Count + terms.Count) * 100000) + (double)totalBytes);
                         await progressBar.ProgressTo(percent, 1, Easing.Linear);
-                        downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent * 100) + "%";
+                        downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percent * 100) + "%";
                     }
 
 
@@ -228,7 +228,7 @@ namespace PortableApp
                         plantsSaved += 1;
                         Double percent = (((double)plantsSaved * 100000) + (double)receivedBytes) / (((plants.Count + terms.Count) * 100000) + (double)totalBytes);
                         await progressBar.ProgressTo(percent, 1, Easing.Linear);
-                        downloadLabel.Text = "Downloading Plant Database..." + Math.Round(percent * 100) + "%";
+                        downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percent * 100) + "%";
                     }
 
                     //await App.WetlandGlossaryRepo.AddOrUpdateAllTermsAsync(terms);
@@ -246,7 +246,7 @@ namespace PortableApp
                     App.WetlandRegionRepoLocal = new WetlandPlantRegionRepositoryLocal(App.WetlandRegionRepo.GetAllWetlandRegions());
 
                     // Set progressBar to 0 and downloadLabel text to "Downloading Images..."
-                    downloadLabel.Text = "Downloading Images...";
+                    downloadLabel.Text = "Downloading Plant Data...";
 
                
                     // IFolder interface from PCLStorage; create or open imagesZipped folder (in Library/Images)    
@@ -282,7 +282,16 @@ namespace PortableApp
                             Double percentage = (((double)plantsSaved * 100000) + (double)receivedBytes) / (((plants.Count + terms.Count) * 100000) + (double)totalBytes);
                             await progressBar.ProgressTo(percentage, 1, Easing.Linear);
                             zipEntry = zipInputStream.GetNextEntry();
-                            downloadLabel.Text = "Downloading Images..."+ Math.Round(percentage * 100)+"%";
+                            
+                            if(Math.Round(percentage * 100) < 100)
+                            {
+                                downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percentage * 100) + "%";
+                            }
+                            else
+                            {
+                                downloadLabel.Text = "Downloading Plant Data...100%";
+                            }
+                            
                         }
 
                         downloadImages = true;

@@ -27,7 +27,7 @@ namespace PortableApp.Models
 
         public string ImagePathStreamed { get {
 
-                return "http://sdt1.agsci.colostate.edu/mobileapi/api/wetland/image_name/" + FileName.Split('.');
+                return "http://sdt1.agsci.colostate.edu/mobileapi/api/wetland/image_name/" + FileName.Split('.')[0];
 
             }
 

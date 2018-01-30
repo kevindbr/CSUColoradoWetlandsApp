@@ -112,7 +112,7 @@ namespace PortableApp
             conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-GreasewoodFlats", Name = "Greasewood Flats", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Greasewood Flats" });
             conn.Insert(new WetlandSearch() { Characteristic = "wetlandtype-HangingGarden", Name = "Hanging Garden", Query = false, Column1 = "ecologicalsystems", SearchString1 = "Hanging Garden" });
 
-            conn.Insert(new WetlandSearch() { Characteristic = "group-Woody", Name = "Woody Plants", Query = false, Column1 = "sections", SearchString1 = "Woody", IconFileName = "shrubtree.png" });
+            conn.Insert(new WetlandSearch() { Characteristic = "group-Woody", Name = "Woody", Query = false, Column1 = "sections", SearchString1 = "Woody", IconFileName = "shrubtree.png" });
             conn.Insert(new WetlandSearch() { Characteristic = "group-Dicot", Name = "Dicot Herbs", Query = false, Column1 = "sections", SearchString1 = "Dicot", IconFileName = "dicot.png" });
             conn.Insert(new WetlandSearch() { Characteristic = "group-Monocot", Name = "Monocot Herbs", Query = false, Column1 = "sections", SearchString1 = "Monocot", IconFileName = "monocot.png" });
             conn.Insert(new WetlandSearch() { Characteristic = "group-Aquatic", Name = "Aquatic Herbs", Query = false, Column1 = "sections", SearchString1 = "Aquatic", IconFileName = "aquatic.png" });

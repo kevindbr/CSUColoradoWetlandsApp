@@ -458,50 +458,50 @@ namespace PortableApp
         {
            
             ChangeButtonColor(sender, e);       
-            await Navigation.PushAsync(new WetlandPlantsPage());
+            await Navigation.PushAsync(new WetlandPlantsPage(),false);
         }
 
         public async void ToGlossary(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new WetlandGlossaryPage());
+            await Navigation.PushAsync(new WetlandGlossaryPage(),false);
         }
 
         public async void ToWetlandMaps(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new WetlandMapsPage());
+            await Navigation.PushAsync(new WetlandMapsPage(),false);
         }
 
         public async void ToMapsKey(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushModalAsync(new WetlandMapsKeyPage());
+            await Navigation.PushModalAsync(new WetlandMapsKeyPage(),false);
         }
 
         public async void ToMapsLegend(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushModalAsync(new WetlandMapsLegendPage());
+            await Navigation.PushModalAsync(new WetlandMapsLegendPage(),false);
         }
 
         public async void ToWhatAreWetlands(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new HTMLPage("WhatAreWetlands.html", "WHAT ARE WETLANDS?"));
+            await Navigation.PushAsync(new HTMLPage("WhatAreWetlands.html", "WHAT ARE WETLANDS?"), false);
             //await Navigation.PushAsync(new WhatAreWetlandsPage());
         }
 
         public async void ToWetlandTypes(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new WhatAreWetlandsPage());
+            await Navigation.PushAsync(new WhatAreWetlandsPage(), false);
         }
 
         public async void ToAcknowledgements(object sender, EventArgs e)
         {
             ChangeButtonColor(sender, e);
-            await Navigation.PushAsync(new HTMLPage("Acknowledgements.html", "ACKNOWLEDGEMENTS"));
+            await Navigation.PushAsync(new HTMLPage("Acknowledgements.html", "ACKNOWLEDGEMENTS"),false);
         }
 
     }
