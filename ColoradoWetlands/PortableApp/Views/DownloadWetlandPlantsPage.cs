@@ -133,9 +133,12 @@ namespace PortableApp
             {
 
                 downloadLabel.Text = "Connecting ...";
-                
+
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                var allImages = App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages();
+                //var allImages = App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages();
+
+                //Clear Local Database
+                App.WetlandPlantRepo.ClearWetlandPlants();
 
                 await UpdatePlantImages(token);
                 App.WetlandPlantImageRepoLocal = new WetlandPlantImageRepositoryLocal(App.WetlandPlantImageRepo.GetAllWetlandPlantImages());

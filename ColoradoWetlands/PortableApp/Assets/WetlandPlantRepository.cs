@@ -23,6 +23,12 @@ namespace PortableApp
             conn.CreateTable<WetlandPlant>();
 		}
 
+        public void ClearWetlandPlants()
+        {
+            conn.DropTable<WetlandPlant>();
+            conn.CreateTable<WetlandPlant>();
+        }
+
         // return a list of Wetlandplants saved to the WetlandPlant table in the database
         public List<WetlandPlant> GetAllWetlandPlants()
         {
