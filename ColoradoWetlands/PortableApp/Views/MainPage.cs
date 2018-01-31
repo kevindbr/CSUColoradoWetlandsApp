@@ -1,5 +1,4 @@
-﻿using Plugin.Connectivity;
-using PortableApp.Data;
+﻿using PortableApp.Data;
 using PortableApp.Models;
 using System;
 using System.ComponentModel;

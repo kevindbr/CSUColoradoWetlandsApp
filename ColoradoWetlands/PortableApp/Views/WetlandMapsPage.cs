@@ -1,12 +1,8 @@
-﻿using Plugin.Compass;
-using Plugin.Compass.Abstractions;
+﻿//using Plugin.Compass;
+//using Plugin.Compass.Abstractions;
 using Plugin.Geolocator;
-using PortableApp.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -19,7 +15,7 @@ namespace PortableApp
         Position savedPosition;
         Geocoder geoCoder;
         Label compassDirection;
-        event EventHandler<CompassChangedEventArgs> CompassChanged;
+        //event EventHandler<CompassChangedEventArgs> CompassChanged;
 
         protected override async void OnAppearing()
         {

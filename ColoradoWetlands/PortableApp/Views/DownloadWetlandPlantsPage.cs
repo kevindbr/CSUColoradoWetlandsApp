@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using PCLStorage;
 using System.Linq;
-using System.Net.Http;
+//using System.Net.Http;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.IO;
@@ -30,7 +30,7 @@ namespace PortableApp
         Button cancelButton;
         CancellationTokenSource tokenSource;
         CancellationToken token;
-        HttpClient client = new HttpClient();
+        //HttpClient client = new HttpClient();
 
         protected async override void OnAppearing()
         {

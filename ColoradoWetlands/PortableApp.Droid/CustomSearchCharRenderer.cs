@@ -10,10 +10,10 @@ namespace PortableApp.Droid
 {
     class CustomSearchCharRenderer : ButtonRenderer
     {
-        public CustomSearchCharRenderer(Context context) 
+        /*public CustomSearchCharRenderer(Context context) : base(context)
         {
             AutoPackage = false;
-        }
+        }*/
 
 
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Button> e)

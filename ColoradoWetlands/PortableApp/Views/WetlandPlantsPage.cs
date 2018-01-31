@@ -1,5 +1,4 @@
-﻿using Plugin.Connectivity;
-using PortableApp.Helpers;
+﻿using PortableApp.Helpers;
 using PortableApp.Models;
 using System;
 using System.Collections.Generic;
