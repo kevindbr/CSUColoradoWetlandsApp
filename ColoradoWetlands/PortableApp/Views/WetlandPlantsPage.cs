@@ -35,8 +35,8 @@ namespace PortableApp
 
         protected async override void OnAppearing()
         {
-            List<WetlandPlantImage> imageList= new List<WetlandPlantImage> (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages() );
-            List<WetlandPlantImage> imageListTemp = imageList.OrderBy(item => item.PlantId).ToList();
+            //List<WetlandPlantImage> imageList= new List<WetlandPlantImage> (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages() );
+            //List<WetlandPlantImage> imageListTemp = imageList.OrderBy(item => item.PlantId).ToList();
 
             IsLoading = true;
             // Get filtered plant list if came from search
@@ -53,6 +53,9 @@ namespace PortableApp
                 else
                 {
                     plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAllPlants());
+                    if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
+                    ChangeFilterColors(browseFilter);
+                    base.OnAppearing();
                 }
             } 
             else
@@ -128,6 +131,8 @@ namespace PortableApp
             };
             SearchPage.InitRunSearch += HandleRunSearch;
             SearchPage.InitCloseSearch += HandleCloseSearch;
+            
+
             plantFilterGroup.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             plantFilterGroup.Children.Add(searchFilter, 2, 0);
             
@@ -379,8 +384,11 @@ namespace PortableApp
 
         private async void HandleCloseSearch(object sender, EventArgs e)
         {
-            cameFromSearch = true;
+            cameFromSearch = false;
             await App.Current.MainPage.Navigation.PopModalAsync();
+           // plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
+            //searchFilter.BackgroundColor = Color.FromHex("cc000000");
+            //browseFilter.BackgroundColor = Color.FromHex("66000000");
         }
 
         private void SearchBarOnChange(object sender, TextChangedEventArgs e)

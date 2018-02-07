@@ -20,6 +20,8 @@ namespace PortableApp
         public EventHandler InitFinishedDownload;
         public EventHandler InitCancelDownload;
         bool updatePlants;
+        bool resyncPlants;
+        bool clearDatabase;
         WetlandSetting datePlantDataUpdatedLocally;
         WetlandSetting datePlantDataUpdatedOnServer;
         List<WetlandSetting> imageFilesToDownload;
@@ -30,10 +32,12 @@ namespace PortableApp
         Button cancelButton;
         CancellationTokenSource tokenSource;
         CancellationToken token;
+        IFolder rootFolder = FileSystem.Current.LocalStorage;
         //HttpClient client = new HttpClient();
 
         protected async override void OnAppearing()
         {
+            downloadLabel.Text = "Connecting ...";
             // Initialize CancellationToken
             tokenSource = new CancellationTokenSource();
             token = tokenSource.Token;
@@ -63,9 +67,11 @@ namespace PortableApp
                 FinishDownload();
         }
 
-        public DownloadWetlandPlantsPage(bool updatePlantsNow, WetlandSetting dateLocalPlantDataUpdated, WetlandSetting datePlantDataUpdated, List<WetlandSetting> imageFilesNeedingDownloaded, bool downloadImagesFromServer)
+        public DownloadWetlandPlantsPage(bool updatePlantsNow, WetlandSetting dateLocalPlantDataUpdated, WetlandSetting datePlantDataUpdated, List<WetlandSetting> imageFilesNeedingDownloaded, bool downloadImagesFromServer, bool resyncplants, bool clearDatabase)
         {
             updatePlants = updatePlantsNow;
+            this.resyncPlants = resyncplants;
+            this.clearDatabase = clearDatabase;
             datePlantDataUpdatedLocally = dateLocalPlantDataUpdated;
             datePlantDataUpdatedOnServer = datePlantDataUpdated;
             imageFilesToDownload = (imageFilesNeedingDownloaded == null) ? new List<WetlandSetting>() : imageFilesNeedingDownloaded;
@@ -126,19 +132,57 @@ namespace PortableApp
             InitCancelDownload?.Invoke(this, EventArgs.Empty);
         }
 
+        private void ClearRepositories()
+        {
+            //Clear Repositories
+            App.WetlandPlantRepo.ClearWetlandPlants();
+            App.WetlandGlossaryRepo.ClearWetlandGlossary();
+            App.WetlandPlantImageRepo.ClearWetlandImages();
+            App.WetlandPlantReferenceRepo.ClearWetlandPlantsReferences();
+            App.WetlandPlantLeafArrangementRepo.ClearWetlandArrangements();
+            App.WetlandPlantDivisionRepo.ClearWetlandDivisions();
+            App.WetlandPlantFruitsRepo.ClearWetlandFruits();
+            App.WetlandPlantShapeRepo.ClearWetlandShapes();
+            App.WetlandPlantSizeRepo.ClearWetlandSizes();
+            App.WetlandRegionRepo.ClearWetlandRegions();
+            App.WetlandCountyPlantRepo.ClearWetlandCounties();
+            App.WetlandPlantSimilarSpeciesRepo.ClearWetlandSimilarSpecies();
+            App.WetlandSettingsRepo.ClearWetlandSettings();
+        }
+
+        private void ClearLocalRepositories()
+        {
+            try { App.WetlandPlantRepoLocal.ClearWetlandPlantsLocal(); } catch (Exception e) { }
+            try { App.WetlandGlossaryRepoLocal.ClearWetlandGlossaryLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantImageRepoLocal.ClearWetlandImagesLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantReferenceRepoLocal.ClearWetlandReferencesLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantLeafArrangementRepoLocal.ClearWetlandArrangementsLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantFruitsRepoLocal.ClearWetlandFruitsLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantShapeRepoLocal.ClearWetlandShapesLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantSizeRepoLocal.ClearWetlandSizesLocal(); } catch (Exception e) { }
+            try { App.WetlandRegionRepoLocal.ClearWetlandRegionsLocal(); } catch (Exception e) { }
+            try { App.WetlandCountyPlantRepoLocal.ClearWetlandCountiesLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantDivisionRepoLocal.ClearWetlandDivisionsLocal(); } catch (Exception e) { }
+            //SimilarSpeciesLocal
+        }
+
         // Get plants from MobileApi server and save locally
         public async Task UpdatePlants(CancellationToken token)
         {
             try
             {
+                if (resyncPlants)
+                {
+                    ClearLocalRepositories();
+                }
+                ClearRepositories();
 
-                downloadLabel.Text = "Connecting ...";
-
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //var allImages = App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages();
-
-                //Clear Local Database
-                App.WetlandPlantRepo.ClearWetlandPlants();
+                try
+                {
+                    IFolder folder = await rootFolder.GetFolderAsync("Images");
+                    await folder.DeleteAsync();
+                }catch (Exception e) { }
+              
 
                 await UpdatePlantImages(token);
                 App.WetlandPlantImageRepoLocal = new WetlandPlantImageRepositoryLocal(App.WetlandPlantImageRepo.GetAllWetlandPlantImages());
@@ -253,8 +297,8 @@ namespace PortableApp
 
                
                     // IFolder interface from PCLStorage; create or open imagesZipped folder (in Library/Images)    
-                    IFolder rootFolder = FileSystem.Current.LocalStorage;
-                    IFolder folder = await rootFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);
+                   
+                    IFolder folder = await rootFolder.CreateFolderAsync("Images", CreationCollisionOption.OpenIfExists);                   
                     string folderPath = rootFolder.Path;
 
                     // Get image file setting records from MobileApi to determine which files to download

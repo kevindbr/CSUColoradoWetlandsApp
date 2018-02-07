@@ -3,11 +3,9 @@ using PortableApp.Models;
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using XLabs.Enums;
-using XLabs.Forms.Controls;
 using System.Diagnostics;
+using PCLStorage;
 
 namespace PortableApp
 {
@@ -23,6 +21,11 @@ namespace PortableApp
         private WetlandSetting downloadImagesSetting;
         private int numberOfPlants;
         private bool updatePlants = false;
+        private bool resyncPlants = false;
+        private bool clearDatabase = false;
+
+        IFolder rootFolder = FileSystem.Current.LocalStorage;
+
         DownloadWetlandPlantsPage downloadPage;
         private bool finishedDownload = false;
         private bool canceledDownload = false;
@@ -82,10 +85,12 @@ namespace PortableApp
                         if (datePlantDataUpdatedLocally.valuetimestamp == datePlantDataUpdatedOnServer.valuetimestamp)
                         {
                             DownloadButtonText = "Plant DB Up To Date";
-                            downloadImagesButton.Text = "(Local Database Up To Date)";
+                            downloadImagesButton.Text = "Clear Local Database And Stream Plants";
                             streamingLabel.Text = "You Are Using Your Local Plant Database";
                             downloadImagesLabel.TextColor = Color.Green;
                             updatePlants = false;
+                            resyncPlants = false;
+                            clearDatabase = true;
                         }
                         else
                         {
@@ -96,6 +101,8 @@ namespace PortableApp
                                 streamingLabel.Text = "You Are Streaming Plants";
                                 downloadImagesLabel.TextColor = Color.Red;
                                 updatePlants = true;
+                                resyncPlants = false;
+                                clearDatabase = false;
                             }
                             else
                             {
@@ -104,6 +111,8 @@ namespace PortableApp
                                 streamingLabel.Text = "You Are Using Your Local Plant Database";
                                 downloadImagesLabel.TextColor = Color.Yellow;
                                 updatePlants = true;
+                                resyncPlants = true;
+                                clearDatabase = false;
                             }
                         }
 
@@ -119,6 +128,8 @@ namespace PortableApp
                     {
                         await DisplayAlert("No Local Database Detected", "Please connect to WiFi or cell network to download or use CO Wetlands App", "OK");
                         updatePlants = false;
+                        resyncPlants = false;
+                        clearDatabase = false;
                     }
                     else
                     {
@@ -226,11 +237,6 @@ namespace PortableApp
             innerContainer.Children.Add(downloadImagesLayout, 0, 8);
 
 
-
-           
-
-
-
             // Add empty space
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
@@ -262,7 +268,7 @@ namespace PortableApp
 
         private async void ToDownloadPage()
         {
-            downloadPage = new DownloadWetlandPlantsPage(updatePlants, datePlantDataUpdatedLocally, datePlantDataUpdatedOnServer, imageFilesToDownload, downloadImages);
+            downloadPage = new DownloadWetlandPlantsPage(updatePlants, datePlantDataUpdatedLocally, datePlantDataUpdatedOnServer, imageFilesToDownload, downloadImages, resyncPlants, clearDatabase);
             downloadPage.InitCancelDownload += HandleCancelDownload;
             downloadPage.InitFinishedDownload += HandleFinishedDownload;
             await Navigation.PushModalAsync(downloadPage);
@@ -280,6 +286,7 @@ namespace PortableApp
             await App.Current.MainPage.Navigation.PopModalAsync();
         }
         
+        //Im screwing with this
         public void ImageFilesToDownload()
         {
             foreach (WetlandSetting imageFile in imageFileSettingsOnServer)
@@ -292,19 +299,74 @@ namespace PortableApp
 
         private async void DownloadImagesPressed(object sender, EventArgs e)
         {
+            if(clearDatabase)
+            {             
+                var answer = await DisplayAlert("Warning", "Are you sure you want to clear your database and stream plants?", "Yes", "No");
+                if(answer)
+                {
+                    try
+                    {
+                        IFolder folder = await rootFolder.GetFolderAsync("Images");
+                        await folder.DeleteAsync();
+                    }catch (Exception exception) { }
+
+                    ClearRepositories();
+                    ClearLocalRepositories();
+                    DownloadButtonText = "Download Plant DB";
+                    downloadImagesButton.Text = "Download (No Local Database)";
+                    streamingLabel.Text = "You Are Streaming Plants";
+                    downloadImagesLabel.TextColor = Color.Red;
+                    updatePlants = true;
+                    resyncPlants = false;
+                    clearDatabase = false;
+
+                    datePlantDataUpdatedLocally.valuetimestamp = null;
+                    await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(datePlantDataUpdatedLocally);
+                }
+            }
             // If valid date comparison and date on server is more recent than local date, show download button
-            if (datePlantDataUpdatedLocally != null && datePlantDataUpdatedOnServer != null)
+            else if (datePlantDataUpdatedOnServer.valuetimestamp != null)
             {
-                if (datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp || numberOfPlants == 0)
+                if ((datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp) || numberOfPlants == 0 || datePlantDataUpdatedLocally.valuetimestamp == null)
                 {
                     updatePlants = true;
                     ToDownloadPage();
                 }
             }
-
-      
-
             await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(downloadImagesSetting);
+        }
+
+        private void ClearRepositories()
+        {
+            //Clear Repositories
+            App.WetlandPlantRepo.ClearWetlandPlants();
+            App.WetlandGlossaryRepo.ClearWetlandGlossary();
+            App.WetlandPlantImageRepo.ClearWetlandImages();
+            App.WetlandPlantReferenceRepo.ClearWetlandPlantsReferences();
+            App.WetlandPlantLeafArrangementRepo.ClearWetlandArrangements();
+            App.WetlandPlantDivisionRepo.ClearWetlandDivisions();
+            App.WetlandPlantFruitsRepo.ClearWetlandFruits();
+            App.WetlandPlantShapeRepo.ClearWetlandShapes();
+            App.WetlandPlantSizeRepo.ClearWetlandSizes();
+            App.WetlandRegionRepo.ClearWetlandRegions();
+            App.WetlandCountyPlantRepo.ClearWetlandCounties();
+            App.WetlandPlantSimilarSpeciesRepo.ClearWetlandSimilarSpecies();
+            App.WetlandSettingsRepo.ClearWetlandSettings();
+        }
+
+        private void ClearLocalRepositories()
+        {
+            try { App.WetlandPlantRepoLocal.ClearWetlandPlantsLocal(); } catch (Exception e) { }
+            try { App.WetlandGlossaryRepoLocal.ClearWetlandGlossaryLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantImageRepoLocal.ClearWetlandImagesLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantReferenceRepoLocal.ClearWetlandReferencesLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantLeafArrangementRepoLocal.ClearWetlandArrangementsLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantFruitsRepoLocal.ClearWetlandFruitsLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantShapeRepoLocal.ClearWetlandShapesLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantSizeRepoLocal.ClearWetlandSizesLocal(); } catch (Exception e) { }
+            try { App.WetlandRegionRepoLocal.ClearWetlandRegionsLocal(); } catch (Exception e) { }
+            try { App.WetlandCountyPlantRepoLocal.ClearWetlandCountiesLocal(); } catch (Exception e) { }
+            try { App.WetlandPlantDivisionRepoLocal.ClearWetlandDivisionsLocal(); } catch (Exception e) { } 
         }
     }
 }
