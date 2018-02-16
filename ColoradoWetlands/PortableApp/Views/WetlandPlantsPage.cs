@@ -36,7 +36,7 @@ namespace PortableApp
         protected async override void OnAppearing()
         {
             //List<WetlandPlantImage> imageList= new List<WetlandPlantImage> (App.WetlandPlantImageRepoLocal.GetAllWetlandPlantImages() );
-            //List<WetlandPlantImage> imageListTemp = imageList.OrderBy(item => item.PlantId).ToList();
+           // List<WetlandPlantImage> imageListTemp = imageList.OrderBy(item => item.PlantId).ToList();
 
             IsLoading = true;
             // Get filtered plant list if came from search
@@ -117,17 +117,10 @@ namespace PortableApp
             };
             
             var SearchPage = new WetlandPlantsSearchPage();
-            searchFilter.Clicked += async (s, e) => 
+            searchFilter.Clicked += async (s, e) =>
             {
-                if (App.WetlandPlantRepoLocal.GetAllWetlandPlants().Count > 0)
-                {
-                    await Navigation.PushModalAsync(SearchPage);
-                }
-                else
-                {
-                    await DisplayAlert("Alert", "Please Download Plants To Use 'Search By Characteristic'", "OK");
-                }
-               
+                await Navigation.PushModalAsync(SearchPage, false);
+              
             };
             SearchPage.InitRunSearch += HandleRunSearch;
             SearchPage.InitCloseSearch += HandleCloseSearch;

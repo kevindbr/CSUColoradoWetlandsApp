@@ -35,6 +35,13 @@ namespace PortableApp
             return conn.GetAllWithChildren<WetlandPlant>();
         }
 
+        /*public List<WetlandPlant> GetWetlandPlantsCount()
+        {
+            string queryCount = "SELECT COUNT(*) FROM wetland_plants";
+
+            return conn.ExecuteScalar<Int32>("SELECT COUNT(*) FROM wetland_plants");
+        }*/
+
         public List<string> GetPlantJumpList()
         {
             return GetAllWetlandPlants().Select(x => x.scinameauthorstripped[0].ToString()).Distinct().ToList();

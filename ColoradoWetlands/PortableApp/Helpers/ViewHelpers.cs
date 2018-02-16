@@ -138,6 +138,7 @@ namespace PortableApp
                 var backGestureRecognizer = new TapGestureRecognizer();
                 backGestureRecognizer.Tapped += async (sender, e) =>
                 {
+                    GC.Collect();
                     backImage.Opacity = .5;
                     await Task.Delay(200);
                     backImage.Opacity = 1;

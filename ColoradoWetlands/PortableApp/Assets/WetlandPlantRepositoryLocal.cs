@@ -21,7 +21,6 @@ namespace PortableApp
         public WetlandPlantRepositoryLocal(List<WetlandPlant> allPlantsDB)
         {
             allWetlandPlants = allPlantsDB;
-
         }
 
         public void ClearWetlandPlantsLocal()
@@ -33,7 +32,7 @@ namespace PortableApp
         // return a list of Wetlandplants saved to the WetlandPlant table in the database
         public List<WetlandPlant> GetAllWetlandPlants()
         {
-            return allWetlandPlants;
+            return allWetlandPlants;                       
         }
 
         // return a list of Wetlandplants saved to the WetlandPlant table in the database
@@ -108,15 +107,15 @@ namespace PortableApp
         {
             // get search criteria and plants
             List<WetlandSearch> selectCritList = await App.WetlandSearchRepo.GetQueryableSearchCriteriaAsync();
-            List<WetlandPlant> plants;
+            List<WetlandPlant> plants = GetAllWetlandPlants();
             // List<WetlandPlantFruits> fruits = App.WetlandPlantFruitsRepo.GetAllWetlandFruits();
             // execute filtering
             if (selectCritList.Count() > 0)
             {
-                try
+                try                  
                 {
-                    plants = GetSearchedPlants(selectCritList);
-
+                        plants = GetSearchedPlants(selectCritList);
+                                         
                 }
                 catch (NullReferenceException e)
                 {
@@ -124,10 +123,6 @@ namespace PortableApp
                     plants = emptyPlants;
                 }
 
-            }
-            else
-            {
-                plants = GetAllWetlandPlants();
             }
 
             return new ObservableCollection<WetlandPlant>(plants);
@@ -261,7 +256,7 @@ namespace PortableApp
             {
                 searchPlantsColor = new List<WetlandPlant>();
 
-                List<WetlandPlantFruits> fruits = App.WetlandPlantFruitsRepo.GetAllWetlandFruits().AsQueryable().Where(ConstructFruitPredicate(selectCritList)).ToList();
+                List<WetlandPlantFruits> fruits = App.WetlandPlantFruitsRepoLocal.GetAllWetlandFruits().AsQueryable().Where(ConstructFruitPredicate(selectCritList)).ToList();
                 foreach (var fruit in fruits)
                 {
                     if (!searchPlantsColor.Contains(GetWetlandPlantByAltId(fruit.plantid)))
@@ -526,5 +521,6 @@ namespace PortableApp
             return overallQuery;
 
         }
+
     }
 }

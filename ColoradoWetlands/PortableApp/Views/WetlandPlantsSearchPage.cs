@@ -20,17 +20,20 @@ namespace PortableApp
         Entry maxElev;
         Entry gRank;
         Entry sRank;
-        ObservableCollection<WetlandPlant> allPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
-        ObservableCollection<WetlandPlant> elevOverlap = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
-        ObservableCollection<WetlandPlant> minElevPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
-        ObservableCollection<WetlandPlant> maxElevPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
-        ObservableCollection<WetlandPlant> countyPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
-        ObservableCollection<WetlandPlant> wetlandTypePlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
-        ObservableCollection<WetlandPlant> rankOverlap = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
-        ObservableCollection<WetlandPlant> gRankPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
-        ObservableCollection<WetlandPlant> sRankPlants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
+        ObservableCollection<WetlandPlant> allPlants;
+        ObservableCollection<WetlandPlant> elevOverlap;
+        ObservableCollection<WetlandPlant> minElevPlants;
+        ObservableCollection<WetlandPlant> maxElevPlants;
+        ObservableCollection<WetlandPlant> countyPlants;
+        ObservableCollection<WetlandPlant> wetlandTypePlants;
+        ObservableCollection<WetlandPlant> rankOverlap;
+        ObservableCollection<WetlandPlant> gRankPlants;
+        ObservableCollection<WetlandPlant> sRankPlants;
 
         Button searchButton;
+
+        ScrollView searchScrollView;
+        Grid innerContainer;
 
         Picker countyPicker = new Picker();
         Button countyButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "All Counties", BorderRadius = Device.OnPlatform(0, 1, 0) };
@@ -44,11 +47,65 @@ namespace PortableApp
         Button wetlandTypeButton = new Button { Style = Application.Current.Resources["semiTransparentPlantButton"] as Style, Text = "All Types", BorderRadius = Device.OnPlatform(0, 1, 0) };
         List<String> wetlandTypeOptions = new List<string>() { "Marsh", "Wet Meadow", "Mesic Meadow", "Fen", "Playa", "Subalpine Riparian Woodland", "Subalpine Riparian Shrubland", "Foothills Riparian", "Plains Riparian", "Plains Floodplain", "Greasewood Flats", "Hanging Garden"};
 
+        protected async override void OnAppearing()
+        {
+            IsLoading = true;
 
+            //changed this to local
+            if (App.WetlandPlantRepoLocal.GetAllWetlandPlants().Count > 0)
+            {
+                plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
+
+                allPlants = plants;
+                elevOverlap = plants;
+                minElevPlants = plants;
+                maxElevPlants = plants;
+                countyPlants = plants;
+                wetlandTypePlants = plants;
+                rankOverlap = plants;
+                gRankPlants = plants;
+                sRankPlants = plants;
+
+                base.OnAppearing();
+            }
+            else
+            {
+                plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAllPlants());
+
+                allPlants = plants;
+                elevOverlap = plants;
+                minElevPlants = plants;
+                maxElevPlants = plants;
+                countyPlants = plants;
+                wetlandTypePlants = plants;
+                rankOverlap = plants;
+                gRankPlants = plants;
+                sRankPlants = plants;
+
+                App.WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(new List<WetlandPlant>(plants));
+                App.WetlandPlantFruitsRepoLocal = new WetlandPlantFruitsRepositoryLocal(SetFruitSearch());
+                App.WetlandPlantDivisionRepoLocal = new WetlandPlantDivisionRepositoryLocal(SetDivisionSearch());
+                App.WetlandPlantShapeRepoLocal = new WetlandPlantShapeRepositoryLocal(SetShapeSearch());
+                App.WetlandPlantLeafArrangementRepoLocal = new WetlandPlantLeafArrangementRepositoryLocal(SetArrangementSearch());
+                App.WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(SetSizeSearch());
+                App.WetlandCountyPlantRepoLocal = new WetlandCountyPlantRepositoryLocal(SetCountySearch());
+                App.WetlandRegionRepoLocal = new WetlandPlantRegionRepositoryLocal(SetRegionSearch());
+
+                base.OnAppearing();
+            }
+
+           
+            searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
+
+            IsLoading = false;
+
+
+            innerContainer.BackgroundColor = Color.FromHex("88000000");
+            innerContainer.Children.Add(searchScrollView, 0, 0);
+        }
 
         public WetlandPlantsSearchPage()
         {
-            plants = new ObservableCollection<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants());
             searchCriteriaDB = new ObservableCollection<WetlandSearch>(App.WetlandSearchRepo.GetAllWetlandSearchCriteria());
             searchCriteria = SearchCharacteristicsCollection();
 
@@ -56,17 +113,10 @@ namespace PortableApp
             NavigationPage.SetHasNavigationBar(this, false);
             AbsoluteLayout pageContainer = ConstructPageContainer();
 
-            // Initialize grid for inner container
-            /*
-            ScrollView contentScrollView = new ScrollView
-            {
-                Padding = new Thickness(20, Device.OnPlatform(30, 20, 20), 20, 20),
-                BackgroundColor = Color.FromHex("88000000"),
-            };*/
 
-            Grid innerContainer = new Grid {
+            innerContainer = new Grid {
                 RowSpacing = 10,
-                BackgroundColor = Color.FromHex("88000000"),
+                BackgroundColor = Color.FromHex("00000000")
             };
             innerContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             innerContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
@@ -325,7 +375,6 @@ namespace PortableApp
             searchFilters.Children.Add(plantRegionLayout);
 
 
-
             Label countyLabel = new Label { Text = "County:", Style = Application.Current.Resources["sectionHeader"] as Style };
             searchFilters.Children.Add(countyLabel);
 
@@ -564,13 +613,13 @@ namespace PortableApp
 
             searchFilters.Children.Add(animalUseLayout);
 
-            ScrollView scrollView = new ScrollView()
+            searchScrollView = new ScrollView()
             {
                 Content = searchFilters,
                 Orientation = ScrollOrientation.Vertical,
             };
 
-            innerContainer.Children.Add(scrollView, 0, 0);
+            //innerContainer.Children.Add(searchScrollView, 0, 0);
 
             // Add Search/Reset button group
             Grid searchButtons = new Grid();
@@ -583,7 +632,6 @@ namespace PortableApp
             searchButtons.Children.Add(resetButton, 0, 0);
 
             searchButton = new Button { Style = Application.Current.Resources["semiTransparentWhiteButton2"] as Style };
-            searchButton.Text = "VIEW " + plants.Count() + " RESULTS";
             searchButton.Clicked += RunSearch;
             searchButtons.Children.Add(searchButton, 1, 0);
 
@@ -858,6 +906,97 @@ namespace PortableApp
                 searchCriteria.Add(item);
             }            
             return searchCriteria;
+        }
+
+        private List<WetlandPlantFruits> SetFruitSearch()
+        {
+            List<WetlandPlantFruits> fruits = new List<WetlandPlantFruits>();
+            foreach (WetlandPlant item in plants)
+            {
+                foreach(WetlandPlantFruits fruit in item.FruitWetland)
+                {
+                    fruits.Add(fruit);
+                }              
+            }
+            return fruits;
+        }
+
+        private List<WetlandPlantDivision> SetDivisionSearch()
+        {
+            List<WetlandPlantDivision> divisions = new List<WetlandPlantDivision>();
+            foreach (WetlandPlant item in plants)
+            {
+                foreach (WetlandPlantDivision division in item.DivisionWetland)
+                {
+                    divisions.Add(division);
+                }
+            }
+            return divisions;
+        }
+
+        private List<WetlandPlantShape> SetShapeSearch()
+        {
+            List<WetlandPlantShape> shapes = new List<WetlandPlantShape>();
+            foreach (WetlandPlant item in plants)
+            {
+                foreach (WetlandPlantShape shape in item.ShapeWetland)
+                {
+                    shapes.Add(shape);
+                }
+            }
+            return shapes;
+        }
+
+        private List<WetlandPlantArrangement> SetArrangementSearch()
+        {
+            List<WetlandPlantArrangement> arrangements = new List<WetlandPlantArrangement>();
+            foreach (WetlandPlant item in plants)
+            {
+                foreach (WetlandPlantArrangement arrangement in item.ArrangementWetland)
+                {
+                    arrangements.Add(arrangement);
+                }
+            }
+            return arrangements;
+        }
+
+        private List<WetlandPlantSize> SetSizeSearch()
+        {
+            List<WetlandPlantSize> sizes = new List<WetlandPlantSize>();
+            foreach (WetlandPlant item in plants)
+            {
+                foreach (WetlandPlantSize size in item.SizeWetland)
+                {
+                    sizes.Add(size);
+                }
+            }
+            return sizes;
+        }
+
+        private List<WetlandCountyPlant> SetCountySearch()
+        {
+            List<WetlandCountyPlant> counties = new List<WetlandCountyPlant>();
+            foreach (WetlandPlant item in plants)
+            {
+                foreach (WetlandCountyPlant county in item.CountyPlantWetland)
+                {
+                    counties.Add(county);
+                }
+            }
+            return counties;
+        }
+
+        private List<WetlandRegions> SetRegionSearch()
+        {
+            List<WetlandRegions> regions = new List<WetlandRegions>();
+            foreach (WetlandPlant item in plants)
+            {
+                foreach (WetlandRegions region in item.RegionWetland)
+                {
+                    regions.Add(region);
+                }
+            }
+            return regions;
         }
 
     }

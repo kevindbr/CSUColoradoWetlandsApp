@@ -35,7 +35,6 @@ namespace PortableApp
             result = await client.GetStringAsync(Url);
             return JsonConvert.DeserializeObject<IList<WetlandPlant>>(result);
         }
-
         
         public async Task<IEnumerable<WetlandPlantFruits>> GetAllFruits()
         {

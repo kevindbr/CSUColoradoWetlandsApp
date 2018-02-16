@@ -60,6 +60,7 @@ namespace PortableApp
             }
         }
 
+
         protected override async void OnAppearing()
         {
             if (!canceledDownload)
@@ -70,7 +71,9 @@ namespace PortableApp
                 downloadImagesSetting = await App.WetlandSettingsRepo.GetSettingAsync("Download Images");
                 downloadImages = (bool)downloadImagesSetting.valuebool;
 
-                numberOfPlants = new List<WetlandPlant>(App.WetlandPlantRepoLocal.GetAllWetlandPlants()).Count;
+                //numberOfPlants = new List<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants()).Count;
+                
+
 
                 // if connected to WiFi and updates are needed
                 if (isConnected)
@@ -94,7 +97,7 @@ namespace PortableApp
                         }
                         else
                         {
-                            if (numberOfPlants == 0)
+                            if (datePlantDataUpdatedLocally.valuetimestamp == null)
                             {
                                 DownloadButtonText = "Download Plant DB";
                                 downloadImagesButton.Text = "Download (No Local Database)";
@@ -104,7 +107,7 @@ namespace PortableApp
                                 resyncPlants = false;
                                 clearDatabase = false;
                             }
-                            else
+                            else if((datePlantDataUpdatedLocally.valuetimestamp < datePlantDataUpdatedOnServer.valuetimestamp) && datePlantDataUpdatedLocally.valuetimestamp != null)
                             {
                                 DownloadButtonText = "New Plant DB Available";
                                 downloadImagesButton.Text = "Re-Sync (New Database Available)";
@@ -277,6 +280,8 @@ namespace PortableApp
         private async void HandleFinishedDownload(object sender, EventArgs e)
         {
             finishedDownload = true;
+            datePlantDataUpdatedLocally.valuetimestamp = datePlantDataUpdatedOnServer.valuetimestamp;
+            await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(datePlantDataUpdatedLocally);
             await App.Current.MainPage.Navigation.PopModalAsync();
         }
 
@@ -304,6 +309,11 @@ namespace PortableApp
                 var answer = await DisplayAlert("Warning", "Are you sure you want to clear your database and stream plants?", "Yes", "No");
                 if(answer)
                 {
+                    DownloadButtonText = "Download Plant DB";
+                    downloadImagesButton.Text = "Download (No Local Database)";
+                    streamingLabel.Text = "You Are Streaming Plants";
+                    downloadImagesLabel.TextColor = Color.Red;
+
                     try
                     {
                         IFolder folder = await rootFolder.GetFolderAsync("Images");
@@ -311,11 +321,7 @@ namespace PortableApp
                     }catch (Exception exception) { }
 
                     ClearRepositories();
-                    ClearLocalRepositories();
-                    DownloadButtonText = "Download Plant DB";
-                    downloadImagesButton.Text = "Download (No Local Database)";
-                    streamingLabel.Text = "You Are Streaming Plants";
-                    downloadImagesLabel.TextColor = Color.Red;
+                    ClearLocalRepositories();                   
                     updatePlants = true;
                     resyncPlants = false;
                     clearDatabase = false;
@@ -334,6 +340,7 @@ namespace PortableApp
                 }
             }
             await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(downloadImagesSetting);
+           
         }
 
         private void ClearRepositories()
