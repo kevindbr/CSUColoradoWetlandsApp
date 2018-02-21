@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Views;
 using CarouselView.FormsPlugin.Android;
 
 namespace PortableApp.Droid
@@ -10,6 +11,8 @@ namespace PortableApp.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+            this.Window.SetFlags(WindowManagerFlags.KeepScreenOn, WindowManagerFlags.KeepScreenOn);
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 

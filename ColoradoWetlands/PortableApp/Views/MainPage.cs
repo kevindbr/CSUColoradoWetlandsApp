@@ -288,6 +288,15 @@ namespace PortableApp
         private async void HandleCancelDownload(object sender, EventArgs e)
         {
             canceledDownload = true;
+            //ClearRepositories();
+            //ClearLocalRepositories();
+            try
+            {
+                IFolder folder = await rootFolder.GetFolderAsync("Images");
+                await folder.DeleteAsync();
+            }
+            catch (Exception exception) { }
+
             await App.Current.MainPage.Navigation.PopModalAsync();
         }
         
@@ -309,11 +318,8 @@ namespace PortableApp
                 var answer = await DisplayAlert("Warning", "Are you sure you want to clear your database and stream plants?", "Yes", "No");
                 if(answer)
                 {
-                    DownloadButtonText = "Download Plant DB";
-                    downloadImagesButton.Text = "Download (No Local Database)";
-                    streamingLabel.Text = "You Are Streaming Plants";
-                    downloadImagesLabel.TextColor = Color.Red;
-
+                    DownloadButtonText = "Plant DB Up To Date";
+                    downloadImagesButton.Text = "Clearing Local Database...";
                     try
                     {
                         IFolder folder = await rootFolder.GetFolderAsync("Images");
@@ -328,6 +334,11 @@ namespace PortableApp
 
                     datePlantDataUpdatedLocally.valuetimestamp = null;
                     await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(datePlantDataUpdatedLocally);
+
+                    DownloadButtonText = "Download Plant DB";
+                    downloadImagesButton.Text = "Download (No Local Database)";
+                    streamingLabel.Text = "You Are Streaming Plants";
+                    downloadImagesLabel.TextColor = Color.Red;
                 }
             }
             // If valid date comparison and date on server is more recent than local date, show download button

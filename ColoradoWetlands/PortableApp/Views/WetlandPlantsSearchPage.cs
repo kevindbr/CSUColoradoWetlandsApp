@@ -389,7 +389,7 @@ namespace PortableApp
             foreach (string option in countyOptions) { countyPicker.Items.Add(option); }
             countyPicker.IsVisible = false;
             if (Device.OS == TargetPlatform.iOS)
-                countyPicker.Unfocused += SortOnUnfocused;
+                countyPicker.Unfocused += SortOnUnfocusedCounty;
             else
                 countyPicker.SelectedIndexChanged += CountyItems;
 
@@ -436,8 +436,9 @@ namespace PortableApp
             wetlandTypeOptions.Insert(0, "All Types");
             foreach (string option in wetlandTypeOptions) { wetlandTypePicker.Items.Add(option); }
             wetlandTypePicker.IsVisible = false;
+
             if (Device.OS == TargetPlatform.iOS)
-                wetlandTypePicker.Unfocused += SortOnUnfocused;
+                wetlandTypePicker.Unfocused += SortOnUnfocusedType;
             else
                 wetlandTypePicker.SelectedIndexChanged += WetlandTypeItems;
 
@@ -692,9 +693,14 @@ namespace PortableApp
             wetlandTypePicker.Focus();
         }
 
-        private void SortOnUnfocused(object sender, FocusEventArgs e)
+        private void SortOnUnfocusedCounty(object sender, FocusEventArgs e)
         {
             CountyItems(sender, e);
+        }
+
+        private void SortOnUnfocusedType(object sender, FocusEventArgs e)
+        {
+            WetlandTypeItems(sender, e);
         }
 
         private async void CountyItems(object sender, EventArgs e)

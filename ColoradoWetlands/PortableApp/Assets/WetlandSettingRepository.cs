@@ -145,7 +145,7 @@ namespace PortableApp
             if (GetSetting("Download Images") == null)
                 conn.Insert(new WetlandSetting { name = "Download Images", valuebool = false });
             if (GetSetting("Date Plants Downloaded") == null)
-                conn.Insert(new WetlandSetting { name = "Date Plants Downloaded", valuetimestamp = new DateTime(2000, 1, 1) });
+                conn.Insert(new WetlandSetting { name = "Date Plants Downloaded", valuetimestamp = null });
         }
 
     }
