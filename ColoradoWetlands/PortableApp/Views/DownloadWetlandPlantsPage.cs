@@ -359,6 +359,7 @@ namespace PortableApp
                     App.WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(App.WetlandPlantSizeRepo.GetAllPlantSizes());
                     App.WetlandCountyPlantRepoLocal = new WetlandCountyPlantRepositoryLocal(App.WetlandCountyPlantRepo.GetAllCounties());
                     App.WetlandRegionRepoLocal = new WetlandPlantRegionRepositoryLocal(App.WetlandRegionRepo.GetAllWetlandRegions());
+                    App.WetlandGlossaryRepoLocal = new WetlandGlossaryRepositoryLocal(App.WetlandGlossaryRepo.GetAllWetlandTerms());
                 }
             }
             catch (Exception e) { Debug.WriteLine("ex {0}", e.Message); };

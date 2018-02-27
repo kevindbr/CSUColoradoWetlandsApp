@@ -19,7 +19,7 @@ namespace PortableApp
         public WetlandGlossaryPage()
         {
             // Get terms, sort them and assign them to new collection
-            terms = new ObservableCollection<WetlandGlossary>(App.WetlandGlossaryRepo.GetAllWetlandTerms());
+            terms = new ObservableCollection<WetlandGlossary>(App.WetlandGlossaryRepoLocal.GetAllWetlandTerms());
             var sortedTerms = from term in terms orderby term.name group term by term.firstInitial into termGroup select new Grouping<string, WetlandGlossary>(termGroup.Key, termGroup);
             termsGrouped = new ObservableCollection<Grouping<string, WetlandGlossary>>(sortedTerms);
 

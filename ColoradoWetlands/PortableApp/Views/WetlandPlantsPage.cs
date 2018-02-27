@@ -53,6 +53,7 @@ namespace PortableApp
                 else
                 {
                     plants = new ObservableCollection<WetlandPlant>(await externalConnection.GetAllPlants());
+                    App.WetlandGlossaryRepoLocal = new WetlandGlossaryRepositoryLocal(new List<WetlandGlossary>(await externalConnection.GetAllTerms()));
                     if (plants.Count > 0) { wetlandPlantsList.ItemsSource = plants; };
                     ChangeFilterColors(browseFilter);
                     base.OnAppearing();
