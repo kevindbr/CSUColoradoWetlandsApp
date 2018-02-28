@@ -1,6 +1,4 @@
-﻿//using Plugin.Compass;
-//using Plugin.Compass.Abstractions;
-using Plugin.Geolocator;
+﻿using Plugin.Geolocator;
 using System;
 using System.Diagnostics;
 using Xamarin.Forms;

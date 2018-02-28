@@ -34,6 +34,8 @@ namespace PortableApp
         IFolder rootFolder = FileSystem.Current.LocalStorage;
         //HttpClient client = new HttpClient();
 
+        bool finished = false;
+
         protected async override void OnAppearing()
         {
             downloadLabel.Text = "Connecting ...";
@@ -54,8 +56,8 @@ namespace PortableApp
                 await UpdatePlants(token);
 
             // Save images to the database
-         //   if (imageFilesToDownload.Count > 0 && downloadImages && !token.IsCancellationRequested)
-         //       await UpdatePlantImages(token);
+            //   if (imageFilesToDownload.Count > 0 && downloadImages && !token.IsCancellationRequested)
+            //       await UpdatePlantImages(token);
 
 
 
@@ -63,7 +65,13 @@ namespace PortableApp
                 CancelDownload();
 
             else
+            {
+                while (finished == false)
+                {
+                   
+                }
                 FinishDownload();
+            }
         }
 
         public DownloadWetlandPlantsPage(bool updatePlantsNow, WetlandSetting dateLocalPlantDataUpdated, WetlandSetting datePlantDataUpdated, List<WetlandSetting> imageFilesNeedingDownloaded, bool downloadImagesFromServer, bool resyncplants, bool clearDatabase)
@@ -193,7 +201,9 @@ namespace PortableApp
                     long? totalBytes =  imageFilesToDownload.Sum(x => x.valueint);
 
                     await progressBar.ProgressTo(0, 1, Easing.Linear);
-                    downloadLabel.Text = "Downloading Plant Data...0%";
+                    downloadLabel.Text = "Beginning Download...";
+
+                   
 
                     UpdatePlantConcurrently(token);
 
@@ -305,7 +315,7 @@ namespace PortableApp
                             }
                             else
                             {
-                                downloadLabel.Text = "Downloading Plant Data...100%";
+                                downloadLabel.Text = "Finishing Download...";
                             }
                             
                         }
@@ -337,7 +347,7 @@ namespace PortableApp
             {
                 if (!token.IsCancellationRequested)
                 {
-                    await App.WetlandPlantRepo.AddOrUpdateAllPlantsAsync(plants);
+                   await App.WetlandPlantRepo.AddOrUpdateAllPlantsAsync(plants);
                 }
                 if (!token.IsCancellationRequested)
                 {
@@ -361,8 +371,11 @@ namespace PortableApp
                     App.WetlandRegionRepoLocal = new WetlandPlantRegionRepositoryLocal(App.WetlandRegionRepo.GetAllWetlandRegions());
                     App.WetlandGlossaryRepoLocal = new WetlandGlossaryRepositoryLocal(App.WetlandGlossaryRepo.GetAllWetlandTerms());
                 }
-            }
+
+            }           
             catch (Exception e) { Debug.WriteLine("ex {0}", e.Message); };
+
+            finished = true;
         }
 
         private void ClearRepositories()
