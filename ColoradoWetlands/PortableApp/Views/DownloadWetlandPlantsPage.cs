@@ -203,70 +203,9 @@ namespace PortableApp
                     await progressBar.ProgressTo(0, 1, Easing.Linear);
                     downloadLabel.Text = "Beginning Download...";
 
-
-                    Task.Run(() => { UpdatePlantConcurrently(token); });
-                   
-
-                    /*int plantsSaved = 0;
-                    foreach (var plant in plants)
-                    {
-                        if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
-                        await App.WetlandPlantRepo.AddOrUpdatePlantAsync(plant);
-                        plantsSaved += 1;
-                        Double percent = (((double)plantsSaved * 100000) + (double)receivedBytes)/ (((plants.Count + terms.Count) * 100000) + (double)totalBytes);
-                        await progressBar.ProgressTo(percent, 1, Easing.Linear);
-                        downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percent * 100) + "%";
-                    }*/
-
-                    //here if broken
-                    /*
-                    Double percent = 0;
-                    await progressBar.ProgressTo(percent, 1, Easing.Linear);
-                    downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percent * 100) + "%";
-
-                    await App.WetlandPlantRepo.AddOrUpdateAllPlantsAsync(plants);
-
-                    percent = 0.2;
-                    await progressBar.ProgressTo(percent, 1, Easing.Linear);
-                    downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percent * 100) + "%";
-                    //plantsSaved = plants.Count;*/
-
-                    //int tempCount = plantsSaved;
-
-
-                    /*foreach (var term in terms)
-                    {
-                        if (token.IsCancellationRequested) { token.ThrowIfCancellationRequested(); };
-                        await App.WetlandGlossaryRepo.AddOrUpdateTermAsync(term);
-                        plantsSaved += 1;
-                        Double percent = (((double)plantsSaved * 100000) + (double)receivedBytes) / (((plants.Count + terms.Count) * 100000) + (double)totalBytes);
-                        await progressBar.ProgressTo(percent, 1, Easing.Linear);
-                        downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percent * 100) + "%";
-                    }*/
-
-                    //here if broken
-                    /*
-                    await App.WetlandGlossaryRepo.AddOrUpdateAllTermsAsync(terms);
-                    percent = 0.26;
-                    await progressBar.ProgressTo(percent, 1, Easing.Linear);
-                    downloadLabel.Text = "Downloading Plant Data..." + Math.Round(percent * 100) + "%";
-
-                    datePlantDataUpdatedLocally.valuetimestamp = datePlantDataUpdatedOnServer.valuetimestamp;
-                    await App.WetlandSettingsRepo.AddOrUpdateSettingAsync(datePlantDataUpdatedLocally);
-                    App.WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(App.WetlandPlantRepo.GetAllWetlandPlants());
-                    App.WetlandPlantFruitsRepoLocal = new WetlandPlantFruitsRepositoryLocal(App.WetlandPlantFruitsRepo.GetAllWetlandFruits());
-                    App.WetlandPlantDivisionRepoLocal = new WetlandPlantDivisionRepositoryLocal(App.WetlandPlantDivisionRepo.GetAllDivisions());
-                    App.WetlandPlantShapeRepoLocal = new WetlandPlantShapeRepositoryLocal(App.WetlandPlantShapeRepo.GetAllShapes());
-                    App.WetlandPlantLeafArrangementRepoLocal = new WetlandPlantLeafArrangementRepositoryLocal(App.WetlandPlantLeafArrangementRepo.GetAllArrangements());
-                    App.WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(App.WetlandPlantSizeRepo.GetAllPlantSizes());
-                    App.WetlandCountyPlantRepoLocal = new WetlandCountyPlantRepositoryLocal(App.WetlandCountyPlantRepo.GetAllCounties());
-                    App.WetlandRegionRepoLocal = new WetlandPlantRegionRepositoryLocal(App.WetlandRegionRepo.GetAllWetlandRegions());
-                    */
-
-
-
-                    // Set progressBar to 0 and downloadLabel text to "Downloading Images..."
-                    //downloadLabel.Text = "Downloading Plant Data...";
+                    //Downlod Plant Data
+                    //Task.Run(() => { UpdatePlantConcurrently(token); });
+                    UpdatePlantConcurrently(token);                
 
 
                     // IFolder interface from PCLStorage; create or open imagesZipped folder (in Library/Images)    
