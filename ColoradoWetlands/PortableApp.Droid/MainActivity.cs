@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Views;
 using CarouselView.FormsPlugin.Android;
 
+
 namespace PortableApp.Droid
 {
     [Activity(Label = "Colorado Wetlands", Icon = "@drawable/icon", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
@@ -11,6 +12,10 @@ namespace PortableApp.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+            //Developer License For Maps            
+            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.SetLicense("runtimelite,1000,rud1066723373,none,KGE60RFLTFK4NERL1084");
+            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
+
             this.Window.SetFlags(WindowManagerFlags.KeepScreenOn, WindowManagerFlags.KeepScreenOn);
 
             TabLayoutResource = Resource.Layout.Tabbar;

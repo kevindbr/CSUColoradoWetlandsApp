@@ -70,6 +70,8 @@ namespace PortableApp
             SQLiteAsyncConnection newConnAsync = new SQLiteAsyncConnection(() => new SQLiteConnectionWithLock(sqliteplatform, new SQLiteConnectionString(dbPath, false)));
             DBConnection dbConnAsync = new DBConnection(newConnAsync);
 
+            
+
             // Initialize repositories
             WetlandPlantRepo = new WetlandPlantRepository();
             WetlandPlantImageRepo = new WetlandPlantImageRepository();

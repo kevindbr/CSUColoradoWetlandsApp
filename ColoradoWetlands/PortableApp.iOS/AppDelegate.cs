@@ -28,6 +28,9 @@ namespace PortableApp.iOS
             FFImageLoading.Forms.Touch.CachedImageRenderer.Init();
             UIApplication.SharedApplication.IdleTimerDisabled = true;
 
+            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.SetLicense("runtimelite,1000,rud1066723373,none,KGE60RFLTFK4NERL1084");
+            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
+
             string dbPath = FileAccessHelper.GetLocalFilePath("db.db3");
             var platform = new SQLitePlatformIOS();
             LoadApplication(new PortableApp.App(platform, dbPath));

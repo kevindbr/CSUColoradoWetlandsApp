@@ -66,10 +66,10 @@ namespace PortableApp
 
             else
             {
-                while (finished == false)
+                /*while (finished == false)
                 {
                    
-                }
+                }*/
                 FinishDownload();
             }
         }
@@ -203,9 +203,9 @@ namespace PortableApp
                     await progressBar.ProgressTo(0, 1, Easing.Linear);
                     downloadLabel.Text = "Beginning Download...";
 
-                   
 
-                    UpdatePlantConcurrently(token);
+                    Task.Run(() => { UpdatePlantConcurrently(token); });
+                   
 
                     /*int plantsSaved = 0;
                     foreach (var plant in plants)
