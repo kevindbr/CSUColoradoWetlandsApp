@@ -71,7 +71,7 @@
     <OptimizePNGs>true</OptimizePNGs>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
     <MtouchExtraArgs>--registrar:static</MtouchExtraArgs>
-    <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
+    <MtouchEnableSGenConc>false</MtouchEnableSGenConc>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchFloat32>true</MtouchFloat32>
     <MtouchDebug>false</MtouchDebug>
@@ -102,6 +102,10 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <BuildIpa>true</BuildIpa>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BaseUrl_iOS.cs" />

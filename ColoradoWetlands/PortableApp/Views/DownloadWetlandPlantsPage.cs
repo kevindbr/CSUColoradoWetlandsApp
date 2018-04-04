@@ -204,8 +204,8 @@ namespace PortableApp
                     downloadLabel.Text = "Beginning Download...";
 
                     //Downlod Plant Data
-                    Task.Run(() => { UpdatePlantConcurrently(token); });
-                    //UpdatePlantConcurrently(token);                
+                    //Task.Run(() => { UpdatePlantConcurrently(token); });
+                    UpdatePlantConcurrently(token);                
 
 
                     // IFolder interface from PCLStorage; create or open imagesZipped folder (in Library/Images)    

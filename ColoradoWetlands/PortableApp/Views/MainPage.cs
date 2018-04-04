@@ -1,4 +1,4 @@
-﻿using PortableApp.Data;
+﻿ using PortableApp.Data;
 using PortableApp.Models;
 using System;
 using System.ComponentModel;
@@ -63,6 +63,8 @@ namespace PortableApp
 
         protected override async void OnAppearing()
         {
+
+            if(App.WetlandSettingsRepo != null)
             if (!canceledDownload)
             {
                 // Initiate variables
@@ -72,13 +74,14 @@ namespace PortableApp
                 downloadImages = (bool)downloadImagesSetting.valuebool;
 
                 //numberOfPlants = new List<WetlandPlant>(App.WetlandPlantRepo.GetAllWetlandPlants()).Count;
-                
+               
 
 
                 // if connected to WiFi and updates are needed
                 if (isConnected)
                 {
-                    datePlantDataUpdatedLocally = App.WetlandSettingsRepo.GetSetting("Date Plants Downloaded");
+                        datePlantDataUpdatedLocally = App.WetlandSettingsRepo.GetSetting("Date Plants Downloaded");
+                       // datePlantDataUpdatedLocally.valuetimestamp = null;
                     try
                     {
                         datePlantDataUpdatedOnServer = await externalConnection.GetDateUpdatedDataOnServer();

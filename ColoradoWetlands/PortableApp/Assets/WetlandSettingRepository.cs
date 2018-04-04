@@ -4,6 +4,7 @@ using PortableApp.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System;
+using System.Diagnostics;
 
 namespace PortableApp
 {
@@ -50,14 +51,21 @@ namespace PortableApp
         // (async) get an individual setting based on its name
         public async Task<WetlandSetting> GetSettingAsync(string settingName)
         {
+            try
+            {
+                var setting = await connAsync.Table<WetlandSetting>().Where(s => s.name.Equals(settingName)).FirstOrDefaultAsync();
 
-             var setting = await connAsync.Table<WetlandSetting>().Where(s => s.name.Equals(settingName)).FirstOrDefaultAsync();
+                if (setting != null)
+                    return setting;
 
-            if (setting != null)
-                return setting;
-
-            else
+                else
+                    return null;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Setting Seed DB Error {0}", e.Message);
                 return null;
+            }
         }
 
         public WetlandSetting GetImageZipFileSetting(string fileName)
@@ -140,12 +148,18 @@ namespace PortableApp
         // Seed database with essential settings
         public void SeedDB()
         {
-            if (GetSetting("Sort Field") == null)
-                conn.Insert(new WetlandSetting { name = "Sort Field", valuetext = "Scientific Name", valueint = 0 });
-            if (GetSetting("Download Images") == null)
-                conn.Insert(new WetlandSetting { name = "Download Images", valuebool = false });
-            if (GetSetting("Date Plants Downloaded") == null)
-                conn.Insert(new WetlandSetting { name = "Date Plants Downloaded", valuetimestamp = null });
+            try
+            {
+                if (GetSetting("Sort Field") == null)
+                    conn.Insert(new WetlandSetting { name = "Sort Field", valuetext = "Scientific Name", valueint = 0 });
+                if (GetSetting("Download Images") == null)
+                    conn.Insert(new WetlandSetting { name = "Download Images", valuebool = false });
+                if (GetSetting("Date Plants Downloaded") == null)
+                    conn.Insert(new WetlandSetting { name = "Date Plants Downloaded", valuetimestamp = null });
+            }catch(Exception e)
+            {
+                Debug.WriteLine("Setting Seed DB Error {0}", e.Message);
+            }
         }
 
     }

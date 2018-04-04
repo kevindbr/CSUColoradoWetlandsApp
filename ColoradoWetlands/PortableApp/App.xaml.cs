@@ -4,6 +4,8 @@ using SQLite.Net.Async;
 using SQLite.Net.Interop;
 using System;
 using Xamarin.Forms;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PortableApp
 {
@@ -19,7 +21,7 @@ namespace PortableApp
         public static WetlandMapOverlayCoordinateRepository WetlandMapOverlayCoordinateRepo { get; private set; }
         public static WetlandMapOverlayRepository WetlandMapOverlayRepo { get; private set; }
         public static WetlandGlossaryRepository WetlandGlossaryRepo { get; private set; }
-        public static WetlandSettingRepository WetlandSettingsRepo { get; private set; }
+        public static WetlandSettingRepository WetlandSettingsRepo { get; set; }
         public static WetlandSearchRepository WetlandSearchRepo { get; private set; }
         public static WetlandPlantFruitsRepository WetlandPlantFruitsRepo { get; private set; }
         public static WetlandPlantDivisionRepository WetlandPlantDivisionRepo { get; private set; }
@@ -29,7 +31,6 @@ namespace PortableApp
         public static WetlandCountyPlantRepository WetlandCountyPlantRepo { get; private set; }
         public static WetlandPlantRegionRepository WetlandRegionRepo { get; private set; }
 
-        public static WetlandPlantRepositoryLocal WetlandPlantRepoLocal { get;  set; }
         public static WetlandPlantImageRepositoryLocal WetlandPlantImageRepoLocal { get;  set; }
         //public static WetlandPlantSimilarSpeciesRepositoryLocal WetlandPlantSimilarSpeciesRepoLocal { get; private set; }
         public static WetlandPlantReferenceRepositoryLocal WetlandPlantReferenceRepoLocal { get;  set; }
@@ -45,7 +46,7 @@ namespace PortableApp
         public static WetlandPlantSizeRepositoryLocal WetlandPlantSizeRepoLocal { get; set; }
         public static WetlandCountyPlantRepositoryLocal WetlandCountyPlantRepoLocal { get; set; }
         public static WetlandPlantRegionRepositoryLocal WetlandRegionRepoLocal { get; set; }
-        public static object WetlandSettingRepository { get; internal set; }
+        public static WetlandPlantRepositoryLocal WetlandPlantRepoLocal { get; set; }
 
         /*
          New starting workflow
@@ -63,16 +64,34 @@ namespace PortableApp
         {
             InitializeComponent();
 
+           
+
+            Task.Run(() => initFunc(sqliteplatform, dbPath));
+        
+         
+            // Set MainPage
+            this.MainPage = new NavigationPage(new MainPage());
+        }
+
+       private static void initFunc(ISQLitePlatform sqliteplatform, string dbPath)
+        {
             // Initialize SQLite connection and DBConnection class to hold connection
-            SQLiteConnection newConn = new SQLiteConnection(sqliteplatform, dbPath, false);            
+            SQLiteConnection newConn = new SQLiteConnection(sqliteplatform, dbPath, false);
             DBConnection dbConn = new DBConnection(newConn);
 
             SQLiteAsyncConnection newConnAsync = new SQLiteAsyncConnection(() => new SQLiteConnectionWithLock(sqliteplatform, new SQLiteConnectionString(dbPath, false)));
             DBConnection dbConnAsync = new DBConnection(newConnAsync);
 
-            
+
+            //// Initialize SQLite connection and DBConnection class to hold connection
+            //SQLiteConnection newConn = new SQLiteConnection(sqliteplatform, dbPath, false);
+            //DBConnection dbConn = new DBConnection(newConn);
+
+            //SQLiteAsyncConnection newConnAsync = new SQLiteAsyncConnection(() => new SQLiteConnectionWithLock(sqliteplatform, new SQLiteConnectionString(dbPath, false)));
+            //DBConnection dbConnAsync = new DBConnection(newConnAsync);
 
             // Initialize repositories
+            WetlandSettingsRepo = new WetlandSettingRepository();
             WetlandPlantRepo = new WetlandPlantRepository();
             WetlandPlantImageRepo = new WetlandPlantImageRepository();
             WetlandPlantSimilarSpeciesRepo = new WetlandPlantSimilarSpeciesRepository();
@@ -80,15 +99,14 @@ namespace PortableApp
             WetlandPlantReferenceRepo = new WetlandPlantReferenceRepository();
             WetlandMapOverlayCoordinateRepo = new WetlandMapOverlayCoordinateRepository();
             WetlandMapOverlayRepo = new WetlandMapOverlayRepository();
-            WetlandGlossaryRepo = new WetlandGlossaryRepository();
-            WetlandSettingsRepo = new WetlandSettingRepository();
+            WetlandGlossaryRepo = new WetlandGlossaryRepository();          
             WetlandSearchRepo = new WetlandSearchRepository();
             WetlandPlantDivisionRepo = new WetlandPlantDivisionRepository();
             WetlandPlantShapeRepo = new WetlandPlantShapeRepository();
             WetlandPlantLeafArrangementRepo = new WetlandPlantLeafArrangementRepository();
             WetlandPlantSizeRepo = new WetlandPlantSizeRepository();
             WetlandCountyPlantRepo = new WetlandCountyPlantRepository();
-            WetlandRegionRepo = new WetlandPlantRegionRepository();
+            WetlandRegionRepo = new WetlandPlantRegionRepository();          
 
             WetlandPlantRepoLocal = new WetlandPlantRepositoryLocal(WetlandPlantRepo.GetAllWetlandPlants());
             WetlandPlantImageRepoLocal = new WetlandPlantImageRepositoryLocal(WetlandPlantImageRepo.GetAllWetlandPlantImages());
@@ -99,15 +117,15 @@ namespace PortableApp
             WetlandPlantSizeRepoLocal = new WetlandPlantSizeRepositoryLocal(WetlandPlantSizeRepo.GetAllPlantSizes());
             WetlandCountyPlantRepoLocal = new WetlandCountyPlantRepositoryLocal(WetlandCountyPlantRepo.GetAllCounties());
             WetlandRegionRepoLocal = new WetlandPlantRegionRepositoryLocal(WetlandRegionRepo.GetAllWetlandRegions());
-            // Set MainPage
-            this.MainPage = new NavigationPage(new MainPage());
+            App.WetlandSettingsRepo.AddOrUpdateSetting(new WetlandSetting { name = "Sort Field", valuetext = "Sort", valueint = 0 });
         }
+
 
         protected override void OnStart()
         {
             // Handle when your app starts
 
-            App.WetlandSettingsRepo.AddOrUpdateSetting(new WetlandSetting { name = "Sort Field", valuetext = "Sort", valueint = 0 });
+          //  App.WetlandSettingsRepo.AddOrUpdateSetting(new WetlandSetting { name = "Sort Field", valuetext = "Sort", valueint = 0 });
         }
         /*
         protected override void OnSleep()

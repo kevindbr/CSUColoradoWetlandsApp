@@ -53,7 +53,7 @@ namespace PortableApp
         }
 
         public ExternalDBConnection externalConnection = new ExternalDBConnection();
-        public bool downloadImages = (bool)App.WetlandSettingsRepo.GetSetting("Download Images").valuebool;
+        public bool downloadImages = false;
 
         //
         // VIEWS
@@ -62,55 +62,63 @@ namespace PortableApp
         // Construct Page Container as an AbsoluteLayout with a background image
         public AbsoluteLayout ConstructPageContainer()
         {
-            AbsoluteLayout pageContainer = new AbsoluteLayout { BackgroundColor = Color.Black };
+            if (App.WetlandSettingsRepo != null)
+            {
+                //   downloadImages = (bool)App.WetlandSettingsRepo.GetSetting("Download Images").valuebool;
+                downloadImages = false;
+            }
+                AbsoluteLayout pageContainer = new AbsoluteLayout { BackgroundColor = Color.Black };
 
-            Image backgroundImage = new Image {
-                Source = ImageSource.FromResource("PortableApp.Resources.Images.background.jpg"),
-                Aspect = Aspect.AspectFill,
-                Opacity = 0.6
-            };
+                Image backgroundImage = new Image
+                {
+                    Source = ImageSource.FromResource("PortableApp.Resources.Images.background.jpg"),
+                    Aspect = Aspect.AspectFill,
+                    Opacity = 0.6
+                };
 
-            var loadingLabel = new Label() {
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.End,
-                TextColor = Color.White
-            };
+                var loadingLabel = new Label()
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    VerticalTextAlignment = TextAlignment.End,
+                    TextColor = Color.White
+                };
 
-            loadingLabel.BindingContext = this;
-            loadingLabel.SetBinding(Label.TextProperty, "IsLoadingMessage", BindingMode.TwoWay);
-            loadingLabel.SetBinding(Label.IsVisibleProperty, "IsLoading", BindingMode.OneWay);
-            loadingLabel.TextColor = Color.White;
+                loadingLabel.BindingContext = this;
+                loadingLabel.SetBinding(Label.TextProperty, "IsLoadingMessage", BindingMode.TwoWay);
+                loadingLabel.SetBinding(Label.IsVisibleProperty, "IsLoading", BindingMode.OneWay);
+                loadingLabel.TextColor = Color.White;
+
+
+                var indicator = new ActivityIndicator()
+                {
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.StartAndExpand
+                };
+                indicator.Color = Color.Blue;
+                indicator.BindingContext = this;
+                indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading", BindingMode.TwoWay);
+
+                var grid = new Grid();
+
+                //  grid.BackgroundColor = IsLoading ? Color.Black: Color.Transparent;
+                //  grid.Opacity = .2;
+
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                grid.Children.Add(indicator, 0, 1);
+                grid.Children.Add(loadingLabel, 0, 0);
+                Grid.SetColumnSpan(loadingLabel, 2);
+                Grid.SetColumnSpan(indicator, 2);
+
+                /*    var sl = new StackLayout {
+                        Orientation = StackOrientation.Vertical,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        VerticalOptions = LayoutOptions.CenterAndExpand,
+                        Children = {  loadingLabel, indicator } };
+                    Content = sl;*/
             
-
-            var indicator = new ActivityIndicator() {
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.StartAndExpand
-            };
-            indicator.Color = Color.Blue;
-            indicator.BindingContext = this;
-            indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading", BindingMode.TwoWay);
-
-            var grid = new Grid();
-
-          //  grid.BackgroundColor = IsLoading ? Color.Black: Color.Transparent;
-          //  grid.Opacity = .2;
-
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            grid.Children.Add(indicator, 0, 1);
-            grid.Children.Add(loadingLabel, 0, 0);
-            Grid.SetColumnSpan(loadingLabel, 2);
-            Grid.SetColumnSpan(indicator, 2);
-
-            /*    var sl = new StackLayout {
-                    Orientation = StackOrientation.Vertical,
-                    HorizontalOptions = LayoutOptions.CenterAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand,
-                    Children = {  loadingLabel, indicator } };
-                Content = sl;*/
-
 
             pageContainer.Children.Add(backgroundImage, new Rectangle(0, 0, 1, 1), AbsoluteLayoutFlags.All);
             pageContainer.Children.Add(grid, new Rectangle(0,0,1,1), AbsoluteLayoutFlags.All);

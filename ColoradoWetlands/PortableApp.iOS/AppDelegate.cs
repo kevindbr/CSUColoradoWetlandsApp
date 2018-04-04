@@ -10,7 +10,7 @@ namespace PortableApp.iOS
     // application events from iOS.
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
-    {           
+    {
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
         // method you should instantiate the window, load the UI into it and then make the window
@@ -20,8 +20,7 @@ namespace PortableApp.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-           
-
+          
             global::Xamarin.Forms.Forms.Init();
             Xamarin.FormsMaps.Init();
             CarouselViewRenderer.Init();
@@ -37,5 +36,8 @@ namespace PortableApp.iOS
 
             return base.FinishedLaunching(app, options);
         }
+
+     
+
     }
 }
